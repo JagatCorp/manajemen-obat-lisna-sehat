@@ -7,9 +7,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-
-const Barangdistributor = () => {
-  const [barangdistributor, setBarangdistributor] = useState([]);
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
+const Pasien = () => {
+  const [pasien, setPasien] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,34 +26,39 @@ const Barangdistributor = () => {
   const fileInputRef = useRef(null);
   // add data
   const [formData, setFormData] = useState({
-    nama_barang: "",
-    satuan_barang: "",
-    harga_satuan_barang: "",
-    satuan_stok_barang: "",
-    gambar: null,
+    nama: "",
+    alamat: "",
+    jk: "",
+    no_telp: "",
+    alergi: "",
+    tgl_lahir: "",
+    gol_darah: "",
   });
 
   // update data
   const [updateData, setUpdateData] = useState({
-    nama_barang: "",
-    satuan_barang: "",
-    harga_satuan_barang: "",
-    satuan_stok_barang: "",
+    nama: "",
+    alamat: "",
+    jk: "",
+    no_telp: "",
+    alergi: "",
+    tgl_lahir: "",
+    gol_darah: "",
     gambar: null,
   });
 
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/barangdistributor?page=${currentPage}`,
+        `http://localhost:5000/api/pasien?page=${currentPage}`,
       );
-      setBarangdistributor(response.data.data.data);
+      setPasien(response.data.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
       setTotalCount(response.data.totalCount);
     } catch (error: any) {
       // Menggunakan `any` untuk sementara agar bisa mengakses `message`
-      console.error("Error fetching data barangdistributor:", error);
+      console.error("Error fetching data pasien:", error);
       setError(
         error instanceof Error
           ? error.message
@@ -66,15 +72,15 @@ const Barangdistributor = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/barangdistributor?keyword=${keyword}`,
+        `http://localhost:5000/api/pasien?keyword=${keyword}`,
       );
-      setBarangdistributor(response.data.data.data);
+      setPasien(response.data.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
       setTotalCount(response.data.totalCount);
     } catch (error: any) {
       // Menggunakan `any` untuk sementara agar bisa mengakses `message`
-      console.error("Error fetching data barangdistributor:", error);
+      console.error("Error fetching data pasien:", error);
       setError(
         error instanceof Error
           ? error.message
@@ -114,7 +120,7 @@ const Barangdistributor = () => {
     const id = itemIdToDelete;
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/barangdistributor/${id}`,
+        `http://localhost:5000/api/pasien/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -126,7 +132,7 @@ const Barangdistributor = () => {
         throw new Error("Gagal menghapus data");
       }
 
-      setBarangdistributor(barangdistributor.filter((item) => item.id !== id));
+      setPasien(pasien.filter((item) => item.id !== id));
       showToastMessage("Data berhasil dihapus!");
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
@@ -155,26 +161,25 @@ const Barangdistributor = () => {
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("nama_barang", formData.nama_barang);
-      formDataToSend.append("satuan_barang", formData.satuan_barang);
-      formDataToSend.append(
-        "harga_satuan_barang",
-        formData.harga_satuan_barang,
-      );
-      formDataToSend.append("satuan_stok_barang", formData.satuan_stok_barang);
+      formDataToSend.append("nama", formData.nama);
+      formDataToSend.append("alamat", formData.alamat);
+      formDataToSend.append("jk", formData.jk);
+      formDataToSend.append("no_telp", formData.no_telp);
+      formDataToSend.append("alergi", formData.alergi);
+      formDataToSend.append("tgl_lahir", formData.tgl_lahir);
+      formDataToSend.append("gol_darah", formData.gol_darah);
+
       // Pastikan 'gambar' adalah File, bukan string 'null' atau path file.
       if (formData.gambar !== "null" && formData.gambar) {
         formDataToSend.append("gambar", formData.gambar);
       }
 
       const response = await axios.post(
-        "http://localhost:5000/api/barangdistributor",
+        "http://localhost:5000/api/pasien",
         formDataToSend, // Kirim FormData
         {
           headers: {
-            "Content-Type": "multipart/form-data",
-            // Tidak perlu menentukan 'Content-Type', axios akan menanganinya
-            // karena Anda mengirimkan FormData.
+            "Content-Type": "application/json",
           },
         },
       );
@@ -183,10 +188,13 @@ const Barangdistributor = () => {
         showToastMessage("Data berhasil ditambahkan!");
         setShowModal(false);
         setFormData({
-          nama_barang: "",
-          satuan_barang: "",
-          harga_satuan_barang: "",
-          satuan_stok_barang: "",
+          nama: "",
+          alamat: "",
+          jk: "",
+          no_telp: "",
+          alergi: "",
+          tgl_lahir: "",
+          gol_darah: "",
           gambar: null,
         });
         fetchData();
@@ -201,10 +209,13 @@ const Barangdistributor = () => {
   const handleEdit = (Item) => {
     setUpdateData({
       id: Item.id,
-      nama_barang: Item.attributes.nama_barang,
-      satuan_barang: Item.attributes.satuan_barang,
-      harga_satuan_barang: Item.attributes.harga_satuan_barang,
-      satuan_stok_barang: Item.attributes.satuan_stok_barang,
+      nama: Item.attributes.nama,
+      alamat: Item.attributes.alamat,
+      jk: Item.attributes.jk,
+      no_telp: Item.attributes.no_telp,
+      alergi: Item.attributes.alergi,
+      tgl_lahir: Item.attributes.tgl_lahir,
+      gol_darah: Item.attributes.gol_darah,
       gambar: Item.attributes.null,
     });
     setShowUpdateModal(true);
@@ -215,17 +226,13 @@ const Barangdistributor = () => {
 
     try {
       const formDataToUpdate = new FormData();
-      formDataToUpdate.append("nama_barang", updateData.nama_barang);
-      formDataToUpdate.append("satuan_barang", updateData.satuan_barang);
-      formDataToUpdate.append(
-        "harga_satuan_barang",
-        updateData.harga_satuan_barang,
-      );
-      formDataToUpdate.append(
-        "satuan_stok_barang",
-        updateData.satuan_stok_barang,
-      );
-
+      formDataToUpdate.append("nama", updateData.nama);
+      formDataToUpdate.append("alamat", updateData.alamat);
+      formDataToUpdate.append("jk", updateData.jk);
+      formDataToUpdate.append("no_telp", updateData.no_telp);
+      formDataToUpdate.append("alergi", updateData.alergi);
+      formDataToUpdate.append("tgl_lahir", updateData.tgl_lahir);
+      formDataToUpdate.append("gol_darah", updateData.gol_darah);
       // Cek jika ada file gambar yang baru atau tidak
       if (updateData.gambar && updateData.gambar instanceof File) {
         formDataToUpdate.append("gambar", updateData.gambar);
@@ -235,11 +242,11 @@ const Barangdistributor = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:5000/api/barangdistributor/${updateData.id}`,
+        `http://localhost:5000/api/pasien/${updateData.id}`,
         formDataToUpdate, // Kirim FormData
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
           },
         },
       );
@@ -259,7 +266,7 @@ const Barangdistributor = () => {
   return (
     <>
       <DefaultLayout>
-        <Breadcrumb pageName="Barang Distributor" />
+        <Breadcrumb pageName="Pasien" />
         <div className="flex flex-col gap-10">
           <ToastContainer />
 
@@ -282,14 +289,14 @@ const Barangdistributor = () => {
                   d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                 />
               </svg>
-              Barang Distributor
+              Pasien
             </button>
 
             <div className="mb-4 flex items-center justify-end">
               {/* search */}
               <input
                 type="text"
-                placeholder="Cari Barang Distributor..."
+                placeholder="Cari Pasien..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-48 rounded-l-md border border-[#e0e0e0] bg-white px-6 py-3 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-slate-500 dark:text-white md:w-56"
@@ -299,54 +306,73 @@ const Barangdistributor = () => {
               <table className="w-full table-auto">
                 <thead>
                   <tr className="bg-slate-2 text-left dark:bg-meta-4">
-                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                      Barang
+                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
+                      Nama
                     </th>
                     <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                      Satuan Barang
+                      Jenis Kelamin
+                    </th>
+                    <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
+                      No Telpon
                     </th>
                     <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                      Harga Satuan Barang
+                      Alergi
                     </th>
                     <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                      Satuan Stok Barang
+                      Tanggal Lahir
+                    </th>
+                    <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
+                      Gol Darah
+                    </th>
+                    <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
+                      Alamat
                     </th>
                     <th className="px-4 py-4 font-medium text-black dark:text-white">
                       Actions
                     </th>
                   </tr>
                 </thead>
+
                 <tbody>
-                  {barangdistributor.map((Item, key) => (
+                  {pasien.map((Item, key) => (
                     <tr key={key}>
-                      <td>
-                        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                          <div className="mb-3 mt-3 h-12.5 w-15 rounded-md">
-                            <img
-                              src={Item.attributes.url_gambar}
-                              width={60}
-                              height={50}
-                              alt="Item.attributes"
-                            />
-                          </div>
-                          <p className="text-sm text-black dark:text-white">
-                            {Item.attributes.nama_barang}
-                          </p>
-                        </div>
-                      </td>
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <p className="text-black dark:text-white">
-                          {Item.attributes.satuan_barang}
+                          {Item.attributes.nama}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <p className="text-black dark:text-white">
-                          {Item.attributes.harga_satuan_barang}
+                          {Item.attributes.jk}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <p className="text-black dark:text-white">
-                          {Item.attributes.satuan_stok_barang}
+                          {Item.attributes.no_telp}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {Item.attributes.alergi}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {format(
+                            new Date(Item.attributes.tgl_lahir),
+                            "dd MMMM yyyy",
+                            { locale: id },
+                          )}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {Item.attributes.gol_darah}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {Item.attributes.alamat}
                         </p>
                       </td>
 
@@ -468,7 +494,7 @@ const Barangdistributor = () => {
                 <div className="px-4 py-5 sm:px-6">
                   <div className="px-4 py-5 sm:px-6">
                     <h3 className="text-lg font-medium leading-6 text-slate-900 dark:text-white">
-                      Delete Barangdistributor
+                      Delete Pasien
                     </h3>
                     <p className="mt-1 max-w-2xl text-sm text-slate-500 dark:text-white">
                       Apakah Anda yakin ingin menghapus data ini?
@@ -505,82 +531,139 @@ const Barangdistributor = () => {
               >
                 <div className="relative rounded border border-slate-400 bg-white px-5 py-8 shadow-md dark:bg-slate-700 md:px-10">
                   <h1 className="font-lg mb-4 font-bold leading-tight tracking-normal text-slate-800 dark:text-white">
-                    Add Barangdistributor
+                    Add Pasien
                   </h1>
                   <form onSubmit={handleSubmit}>
                     <label
-                      htmlFor="namabarang"
+                      htmlFor="nama"
                       className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
                     >
-                      Nama Barang
+                      Nama
                     </label>
                     <input
                       type="text"
-                      id="namabarang"
-                      name="nama_barang"
-                      value={formData.nama_barang}
+                      id="nama"
+                      name="nama"
+                      value={formData.nama}
                       onChange={handleChange}
                       className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                      placeholder="Nama Barang"
+                      placeholder="Nama"
                       required
                     />
 
                     <div>
                       <label
-                        htmlFor="satuanBarang"
+                        htmlFor="jk"
                         className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
                       >
-                        Satuan Barang
+                        Jenis Kelamin
                       </label>
-                      <input
-                        type="text"
-                        id="satuanBarang"
-                        name="satuan_barang"
-                        value={formData.satuan_barang}
+                      <select
+                        name="jk"
+                        id="jk" // Menambahkan id untuk label 'for'
+                        value={formData.jk}
                         onChange={handleChange}
                         className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                        placeholder="SatuanBarang"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="hargaSatuanBarang"
-                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
                       >
-                        Harga Satuan Barang
-                      </label>
-                      <input
-                        type="number"
-                        id="hargaSatuanBarang"
-                        name="harga_satuan_barang"
-                        value={formData.harga_satuan_barang}
-                        onChange={handleChange}
-                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                        placeholder="HargaSatuanBarang"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="satuanStokBarang"
-                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
-                      >
-                        Satuan Stok Barang
-                      </label>
-                      <input
-                        type="number"
-                        id="satuanStokBarang"
-                        name="satuan_stok_barang"
-                        value={formData.satuan_stok_barang}
-                        onChange={handleChange}
-                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                        placeholder="SatuanStokBarang"
-                        required
-                      />
+                        <option>-- pilih --</option>{" "}
+                        <option value="L">L</option>{" "}
+                        {/* Menghapus onChange dari option */}
+                        <option value="P">P</option>{" "}
+                        {/* Menghapus onChange dari option */}
+                      </select>
                     </div>
 
                     <div>
+                      <label
+                        htmlFor="No Telpon"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        No Telpon
+                      </label>
+                      <input
+                        type="number"
+                        id="No Telpon"
+                        name="no_telp"
+                        value={formData.no_telp}
+                        onChange={handleChange}
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="No Telpon"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="Alergi"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Alergi
+                      </label>
+                      <input
+                        type="text"
+                        id="Alergi"
+                        name="alergi"
+                        value={formData.alergi}
+                        onChange={handleChange}
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="Alergi"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="Tgl Lahir"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Tgl Lahir
+                      </label>
+                      <input
+                        type="date"
+                        id="Tgl Lahir"
+                        name="tgl_lahir"
+                        value={formData.tgl_lahir}
+                        onChange={handleChange}
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="Tgl Lahir"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="Gol Darah"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Gol Darah
+                      </label>
+                      <input
+                        type="text"
+                        id="Gol Darah"
+                        name="gol_darah"
+                        value={formData.gol_darah}
+                        onChange={handleChange}
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="Gol Darah"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="Alamat"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Alamat
+                      </label>
+                      <textarea
+                        name="alamat"
+                        id="alamat"
+                        cols="30"
+                        rows="10"
+                        value={formData.alamat}
+                        onChange={handleChange}
+                        className="mb-3 mt-2 flex h-auto w-full items-center rounded border border-slate-300 p-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                      ></textarea>
+                    </div>
+
+                    {/* <div>
                       <label
                         htmlFor="gambar"
                         className="text-sm font-bold leading-tight tracking-normal text-slate-800"
@@ -598,7 +681,7 @@ const Barangdistributor = () => {
                         placeholder="gambar"
                         required
                       />
-                    </div>
+                    </div> */}
 
                     <div className="flex w-full items-center justify-start">
                       <button
@@ -655,103 +738,173 @@ const Barangdistributor = () => {
               >
                 <div className="relative rounded border border-slate-400 bg-white px-5 py-8 shadow-md dark:bg-slate-700 md:px-10">
                   <h1 className="font-lg mb-4 font-bold leading-tight tracking-normal text-slate-800 dark:text-white">
-                    Update Barangdistributor
+                    Update Pasien
                   </h1>
                   <form onSubmit={handleUpdate}>
                     <label
-                      htmlFor="nama barang"
+                      htmlFor="nama"
                       className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
                     >
                       Nama Barang
                     </label>
                     <input
                       type="text"
-                      id="nama_barang"
-                      name="nama_barang"
-                      value={updateData.nama_barang}
+                      id="nama"
+                      name="nama"
+                      value={updateData.nama}
                       onChange={(e) =>
                         setUpdateData({
                           ...updateData,
-                          nama_barang: e.target.value,
+                          nama: e.target.value,
                         })
                       }
                       className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                      placeholder="Nama Barang"
+                      placeholder="Nama"
                     />
 
                     <div>
                       <label
-                        htmlFor="satuanBarang"
+                        htmlFor="jk"
                         className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
                       >
-                        SatuanBarang
+                        Jenis Kelamin
                       </label>
-                      <input
-                        type="text"
-                        id="satuanBarang"
-                        name="satuan_barang"
-                        value={updateData.satuan_barang}
+                      <select
+                        name="jk"
+                        id="jk" // Menambahkan id untuk label 'for'
+                        value={updateData.jk}
                         onChange={(e) =>
                           setUpdateData({
                             ...updateData,
-                            satuan_barang: e.target.value,
-                          })
-                        }
-                        className="mb-3 mt-2 flex h-10 w-full items-center rounded  border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                        placeholder="SatuanBarang"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="hargaSatuanBarang"
-                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
-                      >
-                        HargaSatuanBarang
-                      </label>
-                      <input
-                        type="number"
-                        id="hargaSatuanBarang"
-                        name="harga_satuan_barang"
-                        value={updateData.harga_satuan_barang}
-                        onChange={(e) =>
-                          setUpdateData({
-                            ...updateData,
-                            harga_satuan_barang: e.target.value,
-                          })
-                        }
-                        className="mb-3 mt-2 flex h-10 w-full  items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                        placeholder="satuanBarang"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="satuanStokBarang"
-                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
-                      >
-                        SatuanStokBarang
-                      </label>
-                      <input
-                        type="number"
-                        id="satuanStokBarang"
-                        name="satuan_stok_barang"
-                        value={updateData.satuan_stok_barang}
-                        onChange={(e) =>
-                          setUpdateData({
-                            ...updateData,
-                            satuan_stok_barang: e.target.value,
+                            jk: e.target.value,
                           })
                         }
                         className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                        placeholder="satuanStokBarang"
+                      >
+                        <option value="L">L</option>{" "}
+                        {/* Menghapus onChange dari option */}
+                        <option value="P">P</option>{" "}
+                        {/* Menghapus onChange dari option */}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="No Telpon"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        No Telpon
+                      </label>
+                      <input
+                        type="number"
+                        id="No Telpon"
+                        name="no_telp"
+                        value={updateData.no_telp}
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            no_telp: e.target.value,
+                          })
+                        }
+                        className="mb-3 mt-2 flex h-10 w-full  items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="Alergi"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Alergi
+                      </label>
+                      <input
+                        type="text"
+                        id="Alergi"
+                        name="alergi"
+                        value={updateData.alergi}
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            alergi: e.target.value,
+                          })
+                        }
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="Alergi"
                       />
                     </div>
 
                     <div>
                       <label
+                        htmlFor="Tgl Lahir"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Tgl Lahir
+                      </label>
+                      <input
+                        type="date"
+                        id="Tgl Lahir"
+                        name="tgl_lahir"
+                        value={updateData.tgl_lahir}
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            tgl_lahir: e.target.value,
+                          })
+                        }
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="Tgl Lahir"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="Gol Darah"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Gol Darah
+                      </label>
+                      <input
+                        type="text"
+                        id="Gol Darah"
+                        name="gol_darah"
+                        value={updateData.gol_darah}
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            gol_darah: e.target.value,
+                          })
+                        }
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="Gol Darah"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="Alamat"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Alamat
+                      </label>
+                      <textarea
+                        name="alamat"
+                        id="alamat"
+                        cols="30"
+                        rows="10"
+                        value={updateData.alamat}
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            alamat: e.target.value,
+                          })
+                        }
+                        className="mb-3 mt-2 flex h-auto w-full items-center rounded border border-slate-300 p-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                      ></textarea>
+                    </div>
+                    {/* <div>
+                      <label
                         htmlFor="Gambar"
                         className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
                       >
-                        Gambar
+                        Gambar--
                       </label>
                       <input
                         type="file"
@@ -766,7 +919,7 @@ const Barangdistributor = () => {
                         className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 py-[6px] pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                         placeholder="gambar"
                       />
-                    </div>
+                    </div> */}
 
                     <div className="flex w-full items-center justify-start">
                       <button
@@ -818,4 +971,4 @@ const Barangdistributor = () => {
   );
 };
 
-export default Barangdistributor;
+export default Pasien;
