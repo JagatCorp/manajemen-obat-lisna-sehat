@@ -9,8 +9,8 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-const Pasien = () => {
-  const [pasien, setPasien] = useState([]);
+const Spesialisdokter = () => {
+  const [spesialisdokter, setSpesialisdokter] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,39 +26,32 @@ const Pasien = () => {
   const fileInputRef = useRef(null);
   // add data
   const [formData, setFormData] = useState({
-    nama: "",
-    alamat: "",
-    jk: "",
-    no_telp: "",
-    alergi: "",
-    tgl_lahir: "",
-    gol_darah: "",
+    nama_spesialis: "",
+    harga: "",
+    is_dokter_gigi: "",
+
   });
 
   // update data
   const [updateData, setUpdateData] = useState({
-    nama: "",
-    alamat: "",
-    jk: "",
-    no_telp: "",
-    alergi: "",
-    tgl_lahir: "",
-    gol_darah: "",
+    nama_spesialis: "",
+    harga: "",
+    is_dokter_gigi: "",
     gambar: null,
   });
 
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/pasien?page=${currentPage}`,
+        `http://localhost:5000/api/spesialis_dokter?page=${currentPage}`,
       );
-      setPasien(response.data.data.data);
+      setSpesialisdokter(response.data.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
       setTotalCount(response.data.totalCount);
     } catch (error: any) {
       // Menggunakan `any` untuk sementara agar bisa mengakses `message`
-      console.error("Error fetching data pasien:", error);
+      console.error("Error fetching data spesialisdokter:", error);
       setError(
         error instanceof Error
           ? error.message
@@ -72,15 +65,15 @@ const Pasien = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/pasien?keyword=${keyword}`,
+        `http://localhost:5000/api/spesialis_dokter?keyword=${keyword}`,
       );
-      setPasien(response.data.data.data);
+      setSpesialisdokter(response.data.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
       setTotalCount(response.data.totalCount);
     } catch (error: any) {
       // Menggunakan `any` untuk sementara agar bisa mengakses `message`
-      console.error("Error fetching data pasien:", error);
+      console.error("Error fetching data spesialisdokter:", error);
       setError(
         error instanceof Error
           ? error.message
@@ -120,7 +113,7 @@ const Pasien = () => {
     const id = itemIdToDelete;
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/pasien/${id}`,
+        `http://localhost:5000/api/spesialis_dokter/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -132,7 +125,7 @@ const Pasien = () => {
         throw new Error("Gagal menghapus data");
       }
 
-      setPasien(pasien.filter((item) => item.id !== id));
+      setSpesialisdokter(spesialisdokter.filter((item) => item.id !== id));
       showToastMessage("Data berhasil dihapus!");
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
@@ -161,13 +154,10 @@ const Pasien = () => {
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("nama", formData.nama);
-      formDataToSend.append("alamat", formData.alamat);
-      formDataToSend.append("jk", formData.jk);
-      formDataToSend.append("no_telp", formData.no_telp);
-      formDataToSend.append("alergi", formData.alergi);
-      formDataToSend.append("tgl_lahir", formData.tgl_lahir);
-      formDataToSend.append("gol_darah", formData.gol_darah);
+      formDataToSend.append("nama_spesialis", formData.nama_spesialis);
+      formDataToSend.append("harga", formData.harga);
+      formDataToSend.append("is_dokter_gigi", formData.is_dokter_gigi);
+
 
       // Pastikan 'gambar' adalah File, bukan string 'null' atau path file.
       if (formData.gambar !== "null" && formData.gambar) {
@@ -175,7 +165,7 @@ const Pasien = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:5000/api/pasien",
+        "http://localhost:5000/api/spesialis_dokter",
         formDataToSend, // Kirim FormData
         {
           headers: {
@@ -188,13 +178,10 @@ const Pasien = () => {
         showToastMessage("Data berhasil ditambahkan!");
         setShowModal(false);
         setFormData({
-          nama: "",
-          alamat: "",
-          jk: "",
-          no_telp: "",
-          alergi: "",
-          tgl_lahir: "",
-          gol_darah: "",
+          nama_spesialis: "",
+          harga: "",
+          is_dokter_gigi: "",
+
           gambar: null,
         });
         fetchData();
@@ -209,13 +196,9 @@ const Pasien = () => {
   const handleEdit = (Item) => {
     setUpdateData({
       id: Item.id,
-      nama: Item.attributes.nama,
-      alamat: Item.attributes.alamat,
-      jk: Item.attributes.jk,
-      no_telp: Item.attributes.no_telp,
-      alergi: Item.attributes.alergi,
-      tgl_lahir: Item.attributes.tgl_lahir,
-      gol_darah: Item.attributes.gol_darah,
+      nama_spesialis: Item.attributes.nama_spesialis,
+      harga: Item.attributes.harga,
+      is_dokter_gigi: Item.attributes.is_dokter_gigi,
       gambar: Item.attributes.null,
     });
     setShowUpdateModal(true);
@@ -226,13 +209,10 @@ const Pasien = () => {
 
     try {
       const formDataToUpdate = new FormData();
-      formDataToUpdate.append("nama", updateData.nama);
-      formDataToUpdate.append("alamat", updateData.alamat);
-      formDataToUpdate.append("jk", updateData.jk);
-      formDataToUpdate.append("no_telp", updateData.no_telp);
-      formDataToUpdate.append("alergi", updateData.alergi);
-      formDataToUpdate.append("tgl_lahir", updateData.tgl_lahir);
-      formDataToUpdate.append("gol_darah", updateData.gol_darah);
+      formDataToUpdate.append("nama_spesialis", updateData.nama_spesialis);
+      formDataToUpdate.append("harga", updateData.harga);
+      formDataToUpdate.append("is_dokter_gigi", updateData.is_dokter_gigi);
+
       // Cek jika ada file gambar yang baru atau tidak
       if (updateData.gambar && updateData.gambar instanceof File) {
         formDataToUpdate.append("gambar", updateData.gambar);
@@ -242,7 +222,7 @@ const Pasien = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:5000/api/pasien/${updateData.id}`,
+        `http://localhost:5000/api/spesialis_dokter/${updateData.id}`,
         formDataToUpdate, // Kirim FormData
         {
           headers: {
@@ -266,7 +246,7 @@ const Pasien = () => {
   return (
     <>
       <DefaultLayout>
-        <Breadcrumb pageName="Pasien" />
+        <Breadcrumb pageName="Spesialisdokter" />
         <div className="flex flex-col gap-10">
           <ToastContainer />
 
@@ -289,14 +269,14 @@ const Pasien = () => {
                   d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                 />
               </svg>
-              Pasien
+              Spesialisdokter
             </button>
 
             <div className="mb-4 flex items-center justify-end">
               {/* search */}
               <input
                 type="text"
-                placeholder="Cari Pasien..."
+                placeholder="Cari Spesialisdokter..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-48 rounded-l-md border border-[#e0e0e0] bg-white px-6 py-3 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-slate-500 dark:text-white md:w-56"
@@ -307,26 +287,15 @@ const Pasien = () => {
                 <thead>
                   <tr className="bg-slate-2 text-left dark:bg-meta-4">
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
-                      Nama
+                      Nama Spesialis
                     </th>
                     <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                      Jenis Kelamin
+                      Harga
                     </th>
                     <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                      No Telpon
+                      Dokter Gigi
                     </th>
-                    <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                      Alergi
-                    </th>
-                    <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                      Tanggal Lahir
-                    </th>
-                    <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                      Gol Darah
-                    </th>
-                    <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                      Alamat
-                    </th>
+
                     <th className="px-4 py-4 font-medium text-black dark:text-white">
                       Actions
                     </th>
@@ -334,47 +303,26 @@ const Pasien = () => {
                 </thead>
 
                 <tbody>
-                  {pasien.map((Item, key) => (
+                  {spesialisdokter.map((Item, key) => (
                     <tr key={key}>
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <p className="text-black dark:text-white">
-                          {Item.attributes.nama}
+                          {Item.attributes.nama_spesialis}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <p className="text-black dark:text-white">
-                          {Item.attributes.jk}
+                          {Item.attributes.harga}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <p className="text-black dark:text-white">
-                          {Item.attributes.no_telp}
+                          {Item.attributes.is_dokter_gigi ? "Ya" : "Tidak"}
                         </p>
                       </td>
-                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                        <p className="text-black dark:text-white">
-                          {Item.attributes.alergi}
-                        </p>
-                      </td>
-                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                        <p className="text-black dark:text-white">
-                          {format(
-                            new Date(Item.attributes.tgl_lahir),
-                            "dd MMMM yyyy",
-                            { locale: id },
-                          )}
-                        </p>
-                      </td>
-                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                        <p className="text-black dark:text-white">
-                          {Item.attributes.gol_darah}
-                        </p>
-                      </td>
-                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                        <p className="text-black dark:text-white">
-                          {Item.attributes.alamat}
-                        </p>
-                      </td>
+
+
+
 
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <div className="flex items-center space-x-3.5">
@@ -457,11 +405,10 @@ const Pasien = () => {
                         onClick={
                           () => setCurrentPage(firstPage + index) // Memperbarui halaman berdasarkan indeks dan halaman pertama yang ditampilkan
                         }
-                        className={`mx-1 rounded-md px-3 py-1 ${
-                          currentPage === firstPage + index
-                            ? "bg-blue-400 to-slate-600 text-white"
-                            : "bg-slate-200 hover:bg-slate-400"
-                        }`}
+                        className={`mx-1 rounded-md px-3 py-1 ${currentPage === firstPage + index
+                          ? "bg-blue-400 to-slate-600 text-white"
+                          : "bg-slate-200 hover:bg-slate-400"
+                          }`}
                       >
                         {firstPage + index}{" "}
                         {/* Menggunakan halaman pertama yang ditampilkan */}
@@ -494,7 +441,7 @@ const Pasien = () => {
                 <div className="px-4 py-5 sm:px-6">
                   <div className="px-4 py-5 sm:px-6">
                     <h3 className="text-lg font-medium leading-6 text-slate-900 dark:text-white">
-                      Delete Pasien
+                      Delete Spesialisdokter
                     </h3>
                     <p className="mt-1 max-w-2xl text-sm text-slate-500 dark:text-white">
                       Apakah Anda yakin ingin menghapus data ini?
@@ -531,137 +478,70 @@ const Pasien = () => {
               >
                 <div className="relative  rounded-3xl border border-slate-400 bg-white px-5 py-8 shadow-md dark:bg-slate-700 md:px-10">
                   <h1 className="font-lg mb-4 font-bold leading-tight tracking-normal text-slate-800 dark:text-white">
-                    Add Pasien
+                    Add Spesialisdokter
                   </h1>
                   <form onSubmit={handleSubmit}>
-                    <label
-                      htmlFor="nama"
-                      className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
-                    >
-                      Nama
-                    </label>
-                    <input
-                      type="text"
-                      id="nama"
-                      name="nama"
-                      value={formData.nama}
-                      onChange={handleChange}
-                      className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                      placeholder="Nama"
-                      required
-                    />
+                    <div>
+                      <label
+                        htmlFor="nama_spesialis"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Nama Spesialis
+                      </label>
+                      <input
+                        type="text"
+                        id="nama_spesialis"
+                        name="nama_spesialis"
+                        value={formData.nama_spesialis}
+                        onChange={handleChange}
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="Nama_spesialis"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="harga"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Harga
+                      </label>
+                      <input
+                        type="number"
+                        id="harga"
+                        name="harga"
+                        value={formData.harga}
+                        onChange={handleChange}
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="harga"
+                        required
+                      />
+                    </div>
+
 
                     <div>
                       <label
-                        htmlFor="jk"
+                        htmlFor="is_dokter_gigi"
                         className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
                       >
-                        Jenis Kelamin
+                        Dokter Gigi
                       </label>
                       <select
-                        name="jk"
-                        id="jk" // Menambahkan id untuk label 'for'
-                        value={formData.jk}
+                        name="is_dokter_gigi"
+                        id="is_dokter_gigi" // Menambahkan id untuk label 'for'
+                        value={formData.is_dokter_gigi}
                         onChange={handleChange}
                         className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                       >
                         <option>-- pilih --</option>{" "}
-                        <option value="L">L</option>{" "}
+                        <option value="1">Ya</option>{" "}
                         {/* Menghapus onChange dari option */}
-                        <option value="P">P</option>{" "}
+                        <option value="0">Tidak</option>{" "}
                         {/* Menghapus onChange dari option */}
                       </select>
                     </div>
 
-                    <div>
-                      <label
-                        htmlFor="No Telpon"
-                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
-                      >
-                        No Telpon
-                      </label>
-                      <input
-                        type="number"
-                        id="No Telpon"
-                        name="no_telp"
-                        value={formData.no_telp}
-                        onChange={handleChange}
-                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                        placeholder="No Telpon"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="Alergi"
-                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
-                      >
-                        Alergi
-                      </label>
-                      <input
-                        type="text"
-                        id="Alergi"
-                        name="alergi"
-                        value={formData.alergi}
-                        onChange={handleChange}
-                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                        placeholder="Alergi"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="Tgl Lahir"
-                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
-                      >
-                        Tgl Lahir
-                      </label>
-                      <input
-                        type="date"
-                        id="Tgl Lahir"
-                        name="tgl_lahir"
-                        value={formData.tgl_lahir}
-                        onChange={handleChange}
-                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                        placeholder="Tgl Lahir"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="Gol Darah"
-                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
-                      >
-                        Gol Darah
-                      </label>
-                      <input
-                        type="text"
-                        id="Gol Darah"
-                        name="gol_darah"
-                        value={formData.gol_darah}
-                        onChange={handleChange}
-                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                        placeholder="Gol Darah"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="Alamat"
-                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
-                      >
-                        Alamat
-                      </label>
-                      <textarea
-                        name="alamat"
-                        id="alamat"
-                        cols="30"
-                        rows="10"
-                        value={formData.alamat}
-                        onChange={handleChange}
-                        className="mb-3 mt-2 flex h-auto w-full items-center rounded border border-slate-300 p-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                      ></textarea>
-                    </div>
+
 
                     {/* <div>
                       <label
@@ -738,167 +618,84 @@ const Pasien = () => {
               >
                 <div className="relative rounded-3xl border border-slate-400 bg-white px-5 py-8 shadow-md dark:bg-slate-700 md:px-10">
                   <h1 className="font-lg mb-4 font-bold leading-tight tracking-normal text-slate-800 dark:text-white">
-                    Update Pasien
+                    Update Spesialisdokter
                   </h1>
                   <form onSubmit={handleUpdate}>
-                    <label
-                      htmlFor="nama"
-                      className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
-                    >
-                      Nama Barang
-                    </label>
-                    <input
-                      type="text"
-                      id="nama"
-                      name="nama"
-                      value={updateData.nama}
-                      onChange={(e) =>
-                        setUpdateData({
-                          ...updateData,
-                          nama: e.target.value,
-                        })
-                      }
-                      className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                      placeholder="Nama"
-                    />
-
                     <div>
                       <label
-                        htmlFor="jk"
+                        htmlFor="nama_spesialis"
                         className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
                       >
-                        Jenis Kelamin
+                        Nama Spesialis
                       </label>
-                      <select
-                        name="jk"
-                        id="jk" // Menambahkan id untuk label 'for'
-                        value={updateData.jk}
+                      <input
+                        type="text"
+                        id="nama_spesialis"
+                        name="nama_spesialis"
+                        value={updateData.nama_spesialis}
                         onChange={(e) =>
                           setUpdateData({
                             ...updateData,
-                            jk: e.target.value,
+                            nama_spesialis: e.target.value,
+                          })
+                        }
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="Nama_spesialis"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="harga"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Harga
+                      </label>
+                      <input
+                        type="number"
+                        id="harga"
+                        name="harga"
+                        value={updateData.harga}
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            harga: e.target.value,
+                          })
+                        }
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="Nama_spesialis"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="is_dokter_gigi"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Dokter Gigi
+                      </label>
+                      <select
+                        name="is_dokter_gigi"
+                        id="is_dokter_gigi" // Menambahkan id untuk label 'for'
+                        value={updateData.is_dokter_gigi}
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            is_dokter_gigi: e.target.value,
                           })
                         }
                         className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                       >
-                        <option value="L">L</option>{" "}
+                        <option value={updateData.is_dokter_gigi}>{updateData.is_dokter_gigi ? 'Ya' : 'Tidak'}</option>
+                        <option value="1">Ya</option>{" "}
                         {/* Menghapus onChange dari option */}
-                        <option value="P">P</option>{" "}
+                        <option value="0">Tidak</option>{" "}
                         {/* Menghapus onChange dari option */}
                       </select>
                     </div>
 
-                    <div>
-                      <label
-                        htmlFor="No Telpon"
-                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
-                      >
-                        No Telpon
-                      </label>
-                      <input
-                        type="number"
-                        id="No Telpon"
-                        name="no_telp"
-                        value={updateData.no_telp}
-                        onChange={(e) =>
-                          setUpdateData({
-                            ...updateData,
-                            no_telp: e.target.value,
-                          })
-                        }
-                        className="mb-3 mt-2 flex h-10 w-full  items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="Alergi"
-                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
-                      >
-                        Alergi
-                      </label>
-                      <input
-                        type="text"
-                        id="Alergi"
-                        name="alergi"
-                        value={updateData.alergi}
-                        onChange={(e) =>
-                          setUpdateData({
-                            ...updateData,
-                            alergi: e.target.value,
-                          })
-                        }
-                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                        placeholder="Alergi"
-                      />
-                    </div>
 
-                    <div>
-                      <label
-                        htmlFor="Tgl Lahir"
-                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
-                      >
-                        Tgl Lahir
-                      </label>
-                      <input
-                        type="date"
-                        id="Tgl Lahir"
-                        name="tgl_lahir"
-                        value={updateData.tgl_lahir}
-                        onChange={(e) =>
-                          setUpdateData({
-                            ...updateData,
-                            tgl_lahir: e.target.value,
-                          })
-                        }
-                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                        placeholder="Tgl Lahir"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="Gol Darah"
-                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
-                      >
-                        Gol Darah
-                      </label>
-                      <input
-                        type="text"
-                        id="Gol Darah"
-                        name="gol_darah"
-                        value={updateData.gol_darah}
-                        onChange={(e) =>
-                          setUpdateData({
-                            ...updateData,
-                            gol_darah: e.target.value,
-                          })
-                        }
-                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                        placeholder="Gol Darah"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="Alamat"
-                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
-                      >
-                        Alamat
-                      </label>
-                      <textarea
-                        name="alamat"
-                        id="alamat"
-                        cols="30"
-                        rows="10"
-                        value={updateData.alamat}
-                        onChange={(e) =>
-                          setUpdateData({
-                            ...updateData,
-                            alamat: e.target.value,
-                          })
-                        }
-                        className="mb-3 mt-2 flex h-auto w-full items-center rounded border border-slate-300 p-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                      ></textarea>
-                    </div>
+
+
                     {/* <div>
                       <label
                         htmlFor="Gambar"
@@ -971,4 +768,4 @@ const Pasien = () => {
   );
 };
 
-export default Pasien;
+export default Spesialisdokter;
