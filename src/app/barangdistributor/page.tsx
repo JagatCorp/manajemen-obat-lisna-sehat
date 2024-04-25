@@ -810,7 +810,7 @@ const Barangdistributor = () => {
                     <div className="flex w-full items-center justify-start">
                       <button
                         type="button"
-                        className=" rounded border bg-slate-100 px-8 py-2 text-sm text-slate-600 transition duration-150 ease-in-out hover:border-slate-400 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2"
+                        className="rounded border bg-slate-100 px-8 py-2 text-sm text-slate-600 transition duration-150 ease-in-out hover:border-slate-400 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2"
                         onClick={() => setShowUpdateModal(false)}
                       >
                         Cancel
