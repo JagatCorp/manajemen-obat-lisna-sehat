@@ -23,10 +23,33 @@ const Barangdistributor = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef(null);
+  const [satuanbarang, setSatuanbarang] = useState([]);
+  const fetchDataSatuan = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/satuan?page=${currentPage}`,
+      );
+      setSatuanbarang(response.data.data.data);
+      // console.log('data', response.data.data);
+      setTotalPages(response.data.totalPages);
+      setPageSize(response.data.pageSize);
+      setTotalCount(response.data.totalCount);
+    } catch (error: any) {
+      // Menggunakan `any` untuk sementara agar bisa mengakses `message`
+      console.error("Error fetching data satuanbarang:", error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Terjadi kesalahan saat mengambil data",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
   // add data
   const [formData, setFormData] = useState({
     nama_barang: "",
-    satuan_barang: "",
+    satuan_barangId: "",
     harga_satuan_barang: "",
     satuan_stok_barang: "",
     gambar: null,
@@ -35,7 +58,7 @@ const Barangdistributor = () => {
   // update data
   const [updateData, setUpdateData] = useState({
     nama_barang: "",
-    satuan_barang: "",
+    satuan_barangId: "",
     harga_satuan_barang: "",
     satuan_stok_barang: "",
     gambar: null,
@@ -46,7 +69,7 @@ const Barangdistributor = () => {
       const response = await axios.get(
         `http://localhost:5000/api/barangdistributor?page=${currentPage}`,
       );
-      setBarangdistributor(response.data.data.data);
+      setBarangdistributor(response.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
       setTotalCount(response.data.totalCount);
@@ -68,7 +91,7 @@ const Barangdistributor = () => {
       const response = await axios.get(
         `http://localhost:5000/api/barangdistributor?keyword=${keyword}`,
       );
-      setBarangdistributor(response.data.data.data);
+      setBarangdistributor(response.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
       setTotalCount(response.data.totalCount);
@@ -91,6 +114,8 @@ const Barangdistributor = () => {
       fetchDataByKeyword(searchTerm);
     } else {
       fetchData();
+      fetchDataSatuan();
+
     }
   }, [currentPage, searchTerm]);
 
@@ -156,7 +181,7 @@ const Barangdistributor = () => {
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("nama_barang", formData.nama_barang);
-      formDataToSend.append("satuan_barang", formData.satuan_barang);
+      formDataToSend.append("satuan_barangId", formData.satuan_barangId);
       formDataToSend.append(
         "harga_satuan_barang",
         formData.harga_satuan_barang,
@@ -184,7 +209,7 @@ const Barangdistributor = () => {
         setShowModal(false);
         setFormData({
           nama_barang: "",
-          satuan_barang: "",
+          satuan_barangId: "",
           harga_satuan_barang: "",
           satuan_stok_barang: "",
           gambar: null,
@@ -201,11 +226,12 @@ const Barangdistributor = () => {
   const handleEdit = (Item) => {
     setUpdateData({
       id: Item.id,
-      nama_barang: Item.attributes.nama_barang,
-      satuan_barang: Item.attributes.satuan_barang,
-      harga_satuan_barang: Item.attributes.harga_satuan_barang,
-      satuan_stok_barang: Item.attributes.satuan_stok_barang,
-      gambar: Item.attributes.null,
+      nama_barang: Item.nama_barang,
+      satuan_barangId: Item.satuan_barangId,
+      nama_satuan_barang: Item.satuan.nama_satuan,
+      harga_satuan_barang: Item.harga_satuan_barang,
+      satuan_stok_barang: Item.satuan_stok_barang,
+      gambar: Item.null,
     });
     setShowUpdateModal(true);
   };
@@ -216,7 +242,7 @@ const Barangdistributor = () => {
     try {
       const formDataToUpdate = new FormData();
       formDataToUpdate.append("nama_barang", updateData.nama_barang);
-      formDataToUpdate.append("satuan_barang", updateData.satuan_barang);
+      formDataToUpdate.append("satuan_barangId", updateData.satuan_barangId);
       formDataToUpdate.append(
         "harga_satuan_barang",
         updateData.harga_satuan_barang,
@@ -323,30 +349,30 @@ const Barangdistributor = () => {
                         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                           <div className="mb-3 mt-3 h-12.5 w-15 rounded-md">
                             <img
-                              src={Item.attributes.url_gambar}
+                              src={Item.urlGambar}
                               width={60}
                               height={50}
                               alt="Item.attributes"
                             />
                           </div>
                           <p className="text-sm text-black dark:text-white">
-                            {Item.attributes.nama_barang}
+                            {Item.nama_barang}
                           </p>
                         </div>
                       </td>
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <p className="text-black dark:text-white">
-                          {Item.attributes.satuan_barang}
+                          {Item.satuan.nama_satuan}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <p className="text-black dark:text-white">
-                          {Item.attributes.harga_satuan_barang}
+                          {Item.harga_satuan_barang}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <p className="text-black dark:text-white">
-                          {Item.attributes.satuan_stok_barang}
+                          {Item.satuan_stok_barang}
                         </p>
                       </td>
 
@@ -431,11 +457,10 @@ const Barangdistributor = () => {
                         onClick={
                           () => setCurrentPage(firstPage + index) // Memperbarui halaman berdasarkan indeks dan halaman pertama yang ditampilkan
                         }
-                        className={`mx-1 rounded-md px-3 py-1 ${
-                          currentPage === firstPage + index
-                            ? "bg-blue-400 to-slate-600 text-white"
-                            : "bg-slate-200 hover:bg-slate-400"
-                        }`}
+                        className={`mx-1 rounded-md px-3 py-1 ${currentPage === firstPage + index
+                          ? "bg-blue-400 to-slate-600 text-white"
+                          : "bg-slate-200 hover:bg-slate-400"
+                          }`}
                       >
                         {firstPage + index}{" "}
                         {/* Menggunakan halaman pertama yang ditampilkan */}
@@ -464,7 +489,7 @@ const Barangdistributor = () => {
               <div className="fixed inset-0 transition-opacity">
                 <div className="absolute inset-0 bg-slate-500 opacity-75"></div>
               </div>
-              <div className="relative w-full max-w-md transform rounded-lg bg-white shadow-xl  transition dark:bg-slate-700">
+              <div className="relative w-full max-w-md transform rounded-3xl bg-white shadow-xl  transition dark:bg-slate-700">
                 <div className="px-4 py-5 sm:px-6">
                   <div className="px-4 py-5 sm:px-6">
                     <h3 className="text-lg font-medium leading-6 text-slate-900 dark:text-white">
@@ -497,13 +522,13 @@ const Barangdistributor = () => {
 
           {/* modal add */}
           {showModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div className="inset-0 z-50 flex items-center justify-center -mt-100 max-h-full overflow-y-auto">
               <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
               <div
                 role="alert"
                 className="container mx-auto w-11/12 max-w-lg md:w-2/3"
               >
-                <div className="relative rounded border border-slate-400 bg-white px-5 py-8 shadow-md dark:bg-slate-700 md:px-10">
+                <div className="relative rounded-3xl border border-slate-400 bg-white px-5 py-8 shadow-md dark:bg-slate-700 md:px-10">
                   <h1 className="font-lg mb-4 font-bold leading-tight tracking-normal text-slate-800 dark:text-white">
                     Add Barangdistributor
                   </h1>
@@ -525,24 +550,32 @@ const Barangdistributor = () => {
                       required
                     />
 
+
                     <div>
                       <label
-                        htmlFor="satuanBarang"
+                        htmlFor="satuan_barangId"
                         className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
                       >
                         Satuan Barang
                       </label>
-                      <input
-                        type="text"
-                        id="satuanBarang"
-                        name="satuan_barang"
-                        value={formData.satuan_barang}
+                      <select
+                        name="satuan_barangId"
+                        id="satuan_barangId" // Menambahkan id untuk label 'for'
+                        value={formData.satuan_barangId}
                         onChange={handleChange}
                         className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                        placeholder="SatuanBarang"
-                        required
-                      />
+                      >
+                        <option>-- pilih --</option>{" "}
+                        {satuanbarang.map((ItemSatuan) => (
+                          <option key={ItemSatuan.id} value={ItemSatuan.id}>{ItemSatuan.attributes.nama_satuan}</option>
+
+                        ))}
+
+
+                      </select>
                     </div>
+
+
                     <div>
                       <label
                         htmlFor="hargaSatuanBarang"
@@ -647,13 +680,13 @@ const Barangdistributor = () => {
 
           {/* modal update */}
           {showUpdateModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div className="inset-0 z-50 flex items-center justify-center -mt-100 max-h-full overflow-y-auto">
               <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
               <div
                 role="alert"
                 className="container mx-auto mb-5 mt-5 w-11/12 max-w-lg md:w-2/3"
               >
-                <div className="relative rounded border border-slate-400 bg-white px-5 py-8 shadow-md dark:bg-slate-700 md:px-10">
+                <div className="relative rounded-3xl border border-slate-400 bg-white px-5 py-8 shadow-md dark:bg-slate-700 md:px-10">
                   <h1 className="font-lg mb-4 font-bold leading-tight tracking-normal text-slate-800 dark:text-white">
                     Update Barangdistributor
                   </h1>
@@ -681,26 +714,32 @@ const Barangdistributor = () => {
 
                     <div>
                       <label
-                        htmlFor="satuanBarang"
+                        htmlFor="satuan_barangId"
                         className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
                       >
-                        SatuanBarang
+                        Satuan Barang
                       </label>
-                      <input
-                        type="text"
-                        id="satuanBarang"
-                        name="satuan_barang"
-                        value={updateData.satuan_barang}
+                      <select
+                        name="satuan_barangId"
+                        id="satuan_barangId" // Menambahkan id untuk label 'for'
+                        value={updateData.satuan_barangId}
                         onChange={(e) =>
                           setUpdateData({
                             ...updateData,
-                            satuan_barang: e.target.value,
+                            satuan_barangId: e.target.value,
+                            nama_satuan_barang: e.target.options[e.target.selectedIndex].text,
                           })
                         }
-                        className="mb-3 mt-2 flex h-10 w-full items-center rounded  border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                        placeholder="SatuanBarang"
-                      />
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                      >
+                        <option value={updateData.satuan_barangId}>{updateData.nama_satuan_barang}</option>{" "}
+                        {satuanbarang.map((Itemspesialis) => (
+                          <option key={Itemspesialis.id} value={Itemspesialis.id}>{Itemspesialis.attributes.nama_satuan}</option>
+
+                        ))}
+                      </select>
                     </div>
+
                     <div>
                       <label
                         htmlFor="hargaSatuanBarang"
