@@ -1,12 +1,10 @@
-
 import { ModalForm } from "@/components/modal/ModalForm";
 import axios from "axios";
-import { useState } from "react";
+import { use, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 
-const HapusPrinciple = ({ idModal, data, fetchData }) => {
-    // console.log(errorMessages);
+const HapusObat = ({ idModal, fetchData, dataObat }) => {
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -15,31 +13,39 @@ const HapusPrinciple = ({ idModal, data, fetchData }) => {
 
         try {
             const response = await axios.delete(
-                "http://localhost:5000/api/principle/" + data.id,
+                "http://localhost:5000/api/obat/" + dataObat['id'],
             );
 
-
-            
             if (response.status === 200) {
-
+                console.log(response);
+                showToastMessage("Data berhasil ditambahkan!");
+                
                 const modalHapus = document.getElementById(idModal);
                 if(modalHapus instanceof HTMLDialogElement){
                     modalHapus.close();
                 }
 
-                showToastMessage("Data Principle berhasil ditambahkan!");
                 setLoading(false);
                 fetchData();
             } else {
                 console.error("Gagal mengirim data.");
             }
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Error:", error.response.data.message);
+            showErrorMessage(error.response.data.message);
+            setTimeout(() => {
+                setLoading(false);
+            }, 5000);
         }
     };
 
     const showToastMessage = (message: string) => {
         toast.success(message, {
+            position: "top-right",
+        });
+    };
+    const showErrorMessage = (message: string) => {
+        toast.error(message, {
             position: "top-right",
         });
     };
@@ -51,8 +57,7 @@ const HapusPrinciple = ({ idModal, data, fetchData }) => {
                 key={"title"}
                 className="flex gap-1 items-center font-semibold"
             >
-                {/* <IconUserPlus color="#4777F3" /> */}
-                Tambah Data Principle
+                Hapus Data Obat
             </label>,
         ],
         body: [
@@ -77,7 +82,7 @@ const HapusPrinciple = ({ idModal, data, fetchData }) => {
                     ) : (
                         ''                        
                     )}
-                    {loading ? "Loading..." : "Submit"}
+                    {loading ? "Loading..." : "Delete"}
                 </button>
             </>
         ],
@@ -90,4 +95,4 @@ const HapusPrinciple = ({ idModal, data, fetchData }) => {
     );
 };
 
-export default HapusPrinciple;
+export default HapusObat;
