@@ -24,6 +24,7 @@ const Barangdistributor = () => {
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef(null);
   const [satuanbarang, setSatuanbarang] = useState([]);
+
   const fetchDataSatuan = async () => {
     try {
       const response = await axios.get(
@@ -56,12 +57,20 @@ const Barangdistributor = () => {
   });
 
   // update data
-  const [updateData, setUpdateData] = useState({
+  const [updateData, setUpdateData] = useState<{
+    nama_barang: string;
+    satuan_barangId: string;
+    harga_satuan_barang: string;
+    satuan_stok_barang: string;
+    gambar: any;
+    id: string; // tambahkan properti 'id' ke tipe
+  }>({
     nama_barang: "",
     satuan_barangId: "",
     harga_satuan_barang: "",
     satuan_stok_barang: "",
     gambar: null,
+    id: "", // tambahkan nilai awal untuk properti 'id'
   });
 
   const fetchData = async () => {
@@ -115,7 +124,6 @@ const Barangdistributor = () => {
     } else {
       fetchData();
       fetchDataSatuan();
-
     }
   }, [currentPage, searchTerm]);
 
@@ -127,9 +135,7 @@ const Barangdistributor = () => {
   };
 
   if (error) {
-    return (
-      <div className="text-red-500 text-center">Error: {error.message}</div>
-    );
+    return <div className="text-red-500 text-center">Error: {error}</div>;
   }
 
   const firstPage = Math.max(1, currentPage - 4); // Menghitung halaman pertama yang akan ditampilkan
@@ -151,7 +157,9 @@ const Barangdistributor = () => {
         throw new Error("Gagal menghapus data");
       }
 
-      setBarangdistributor(barangdistributor.filter((item) => item.id !== id));
+      setBarangdistributor(
+        barangdistributor.filter((item: { id: number }) => item.id !== id),
+      );
       showToastMessage("Data berhasil dihapus!");
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
@@ -224,15 +232,16 @@ const Barangdistributor = () => {
   };
   // update data
   const handleEdit = (Item) => {
-    setUpdateData({
+    setUpdateData((prevState) => ({
+      ...prevState,
       id: Item.id,
       nama_barang: Item.nama_barang,
       satuan_barangId: Item.satuan_barangId,
       nama_satuan_barang: Item.satuan.nama_satuan,
       harga_satuan_barang: Item.harga_satuan_barang,
       satuan_stok_barang: Item.satuan_stok_barang,
-      gambar: Item.null,
-    });
+      gambar: Item.gambar,
+    }));
     setShowUpdateModal(true);
   };
 
@@ -457,10 +466,11 @@ const Barangdistributor = () => {
                         onClick={
                           () => setCurrentPage(firstPage + index) // Memperbarui halaman berdasarkan indeks dan halaman pertama yang ditampilkan
                         }
-                        className={`mx-1 rounded-md px-3 py-1 ${currentPage === firstPage + index
-                          ? "bg-blue-400 to-slate-600 text-white"
-                          : "bg-slate-200 hover:bg-slate-400"
-                          }`}
+                        className={`mx-1 rounded-md px-3 py-1 ${
+                          currentPage === firstPage + index
+                            ? "bg-blue-400 to-slate-600 text-white"
+                            : "bg-slate-200 hover:bg-slate-400"
+                        }`}
                       >
                         {firstPage + index}{" "}
                         {/* Menggunakan halaman pertama yang ditampilkan */}
@@ -522,7 +532,7 @@ const Barangdistributor = () => {
 
           {/* modal add */}
           {showModal && (
-            <div className="inset-0 z-50 flex items-center justify-center -mt-100 max-h-full overflow-y-auto">
+            <div className="inset-0 z-50 -mt-100 flex max-h-full items-center justify-center overflow-y-auto">
               <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
               <div
                 role="alert"
@@ -550,7 +560,6 @@ const Barangdistributor = () => {
                       required
                     />
 
-
                     <div>
                       <label
                         htmlFor="satuan_barangId"
@@ -567,14 +576,12 @@ const Barangdistributor = () => {
                       >
                         <option>-- pilih --</option>{" "}
                         {satuanbarang.map((ItemSatuan) => (
-                          <option key={ItemSatuan.id} value={ItemSatuan.id}>{ItemSatuan.attributes.nama_satuan}</option>
-
+                          <option key={ItemSatuan.id} value={ItemSatuan.id}>
+                            {ItemSatuan.attributes.nama_satuan}
+                          </option>
                         ))}
-
-
                       </select>
                     </div>
-
 
                     <div>
                       <label
@@ -680,7 +687,7 @@ const Barangdistributor = () => {
 
           {/* modal update */}
           {showUpdateModal && (
-            <div className="inset-0 z-50 flex items-center justify-center -mt-100 max-h-full overflow-y-auto">
+            <div className="inset-0 z-50 -mt-100 flex max-h-full items-center justify-center overflow-y-auto">
               <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
               <div
                 role="alert"
@@ -727,15 +734,17 @@ const Barangdistributor = () => {
                           setUpdateData({
                             ...updateData,
                             satuan_barangId: e.target.value,
-                            nama_satuan_barang: e.target.options[e.target.selectedIndex].text,
                           })
                         }
                         className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                       >
-                        <option value={updateData.satuan_barangId}>{updateData.nama_satuan_barang}</option>{" "}
                         {satuanbarang.map((Itemspesialis) => (
-                          <option key={Itemspesialis.id} value={Itemspesialis.id}>{Itemspesialis.attributes.nama_satuan}</option>
-
+                          <option
+                            key={Itemspesialis.id}
+                            value={Itemspesialis.id}
+                          >
+                            {Itemspesialis.attributes.nama_satuan}
+                          </option>
                         ))}
                       </select>
                     </div>
