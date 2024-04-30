@@ -31,7 +31,6 @@ const Obat = () => {
   const fileInputRef = useRef(null);
   const [satuan, setSatuan] = useState([]);
 
-
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -67,7 +66,7 @@ const Obat = () => {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const fetchDataByKeyword = async (keyword: string) => {
     try {
@@ -102,9 +101,7 @@ const Obat = () => {
   }, [currentPage, searchTerm]);
 
   if (error) {
-    return (
-      <div className="text-red-500 text-center">Error: {error.message}</div>
-    );
+    return <div className="text-red-500 text-center">Error: {error}</div>;
   }
 
   const firstPage = Math.max(1, currentPage - 4); // Menghitung halaman pertama yang akan ditampilkan
@@ -144,7 +141,11 @@ const Obat = () => {
             </button>
 
             {/* modal tambah */}
-            <TambahObat idModal={"modalTambahObat"} fetchData={fetchData} dataSatuan={satuan} />
+            <TambahObat
+              idModal={"modalTambahObat"}
+              fetchData={fetchData}
+              dataSatuan={satuan}
+            />
 
             <div className="mb-4 flex items-center justify-end">
               {/* search */}
@@ -187,17 +188,19 @@ const Obat = () => {
                         <tr key={key}>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                              {Item['nama_obat']}
+                              {Item["nama_obat"]}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                              {Item['qty_box']} {Item['satuan_box']['nama_satuan']}
+                              {Item["qty_box"]}{" "}
+                              {Item["satuan_box"]["nama_satuan"]}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                              {Item['qty_sat']} {Item['satuan_sat']['nama_satuan']}
+                              {Item["qty_sat"]}{" "}
+                              {Item["satuan_sat"]["nama_satuan"]}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -212,7 +215,9 @@ const Obat = () => {
                             <button
                               className="flex items-center gap-1 rounded-md bg-white px-4  py-2 text-end text-black shadow-xl hover:bg-slate-100 focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-offset-2 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-400"
                               onClick={() => {
-                                const modal = document.getElementById("modalGambarObat" + key);
+                                const modal = document.getElementById(
+                                  "modalGambarObat" + key,
+                                );
                                 if (modal instanceof HTMLDialogElement) {
                                   modal.showModal();
                                 }
@@ -220,18 +225,21 @@ const Obat = () => {
                             >
                               Gambar Obat
                             </button>
-                            <GambarObat idModal={"modalGambarObat" + key} dataObat={Item} />
-
+                            <GambarObat
+                              idModal={"modalGambarObat" + key}
+                              dataObat={Item}
+                            />
                           </td>
 
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <div className="flex items-center space-x-3.5">
-
                               {/* button modal edit */}
                               <button
                                 className="hover:text-primary"
                                 onClick={() => {
-                                  const modalEdit = document.getElementById("modalEditObat" + key);
+                                  const modalEdit = document.getElementById(
+                                    "modalEditObat" + key,
+                                  );
                                   if (modalEdit instanceof HTMLDialogElement) {
                                     modalEdit.showModal();
                                   }
@@ -252,12 +260,19 @@ const Obat = () => {
                                   />
                                 </svg>
                               </button>
-                              <EditObat idModal={"modalEditObat" + key} dataSatuan={satuan} dataObat={Item} fetchData={fetchData}/>
+                              <EditObat
+                                idModal={"modalEditObat" + key}
+                                dataSatuan={satuan}
+                                dataObat={Item}
+                                fetchData={fetchData}
+                              />
 
                               <button
                                 className="hover:text-primary"
                                 onClick={() => {
-                                  const modalHapus = document.getElementById('modalHapusObat' + key);
+                                  const modalHapus = document.getElementById(
+                                    "modalHapusObat" + key,
+                                  );
                                   if (modalHapus instanceof HTMLDialogElement) {
                                     modalHapus.showModal();
                                   }
@@ -289,8 +304,11 @@ const Obat = () => {
                                   />
                                 </svg>
                               </button>
-                              <HapusObat idModal={'modalHapusObat' + key} dataObat={Item} fetchData={fetchData} />
-
+                              <HapusObat
+                                idModal={"modalHapusObat" + key}
+                                dataObat={Item}
+                                fetchData={fetchData}
+                              />
                             </div>
                           </td>
                         </tr>
@@ -298,7 +316,9 @@ const Obat = () => {
                     </>
                   ) : (
                     <tr>
-                      <td colSpan={5} className="text-center">Tidak Ada Data Obat</td>
+                      <td colSpan={5} className="text-center">
+                        Tidak Ada Data Obat
+                      </td>
                     </tr>
                   )}
                 </tbody>
@@ -323,10 +343,11 @@ const Obat = () => {
                         onClick={
                           () => setCurrentPage(firstPage + index) // Memperbarui halaman berdasarkan indeks dan halaman pertama yang ditampilkan
                         }
-                        className={`mx-1 rounded-md px-3 py-1 ${currentPage === firstPage + index
+                        className={`mx-1 rounded-md px-3 py-1 ${
+                          currentPage === firstPage + index
                             ? "bg-blue-400 to-slate-600 text-white"
                             : "bg-slate-200 hover:bg-slate-400"
-                          }`}
+                        }`}
                       >
                         {firstPage + index}{" "}
                         {/* Menggunakan halaman pertama yang ditampilkan */}
@@ -348,7 +369,6 @@ const Obat = () => {
               </div>
             </div>
           </div>
-
         </div>
       </DefaultLayout>
     </>
