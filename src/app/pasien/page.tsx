@@ -33,10 +33,22 @@ const Pasien = () => {
     alergi: "",
     tgl_lahir: "",
     gol_darah: "",
+    gambar: null,
   });
 
   // update data
-  const [updateData, setUpdateData] = useState({
+
+  const [updateData, setUpdateData] = useState<{
+    nama: string;
+    alamat: string;
+    jk: string;
+    no_telp: string;
+    alergi: string;
+    tgl_lahir: string;
+    gol_darah: string;
+    gambar: any;
+    id: string; // tambahkan properti 'id' ke tipe
+  }>({
     nama: "",
     alamat: "",
     jk: "",
@@ -45,6 +57,7 @@ const Pasien = () => {
     tgl_lahir: "",
     gol_darah: "",
     gambar: null,
+    id: "",
   });
 
   const fetchData = async () => {
@@ -108,9 +121,7 @@ const Pasien = () => {
   };
 
   if (error) {
-    return (
-      <div className="text-red-500 text-center">Error: {error.message}</div>
-    );
+    return <div className="text-red-500 text-center">Error: {error}</div>;
   }
 
   const firstPage = Math.max(1, currentPage - 4); // Menghitung halaman pertama yang akan ditampilkan
@@ -523,7 +534,7 @@ const Pasien = () => {
 
           {/* modal add */}
           {showModal && (
-            <div className="inset-0 z-50 flex items-center justify-center -mt-100 max-h-full overflow-y-auto">
+            <div className="inset-0 z-50 -mt-100 flex max-h-full items-center justify-center overflow-y-auto">
               <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
               <div
                 role="alert"
@@ -655,8 +666,8 @@ const Pasien = () => {
                       <textarea
                         name="alamat"
                         id="alamat"
-                        cols="30"
-                        rows="10"
+                        cols={30}
+                        rows={10}
                         value={formData.alamat}
                         onChange={handleChange}
                         className="mb-3 mt-2 flex h-auto w-full items-center rounded border border-slate-300 p-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
@@ -730,7 +741,7 @@ const Pasien = () => {
 
           {/* modal update */}
           {showUpdateModal && (
-            <div className="inset-0 z-50 flex items-center justify-center -mt-100 max-h-full overflow-y-auto">
+            <div className="inset-0 z-50 -mt-100 flex max-h-full items-center justify-center overflow-y-auto">
               <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
               <div
                 role="alert"
@@ -887,8 +898,8 @@ const Pasien = () => {
                       <textarea
                         name="alamat"
                         id="alamat"
-                        cols="30"
-                        rows="10"
+                        cols={30}
+                        rows={10}
                         value={updateData.alamat}
                         onChange={(e) =>
                           setUpdateData({

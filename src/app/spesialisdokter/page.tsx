@@ -29,15 +29,29 @@ const Spesialisdokter = () => {
     nama_spesialis: "",
     harga: "",
     is_dokter_gigi: "",
-
+    gambar: null,
   });
 
   // update data
-  const [updateData, setUpdateData] = useState({
+  // const [updateData, setUpdateData] = useState({
+  //   nama_spesialis: "",
+  //   harga: "",
+  //   is_dokter_gigi: "",
+  //   gambar: null,
+  // });
+
+  const [updateData, setUpdateData] = useState<{
+    nama_spesialis: string;
+    harga: number;
+    is_dokter_gigi: string;
+    gambar: any;
+    id: string; // tambahkan properti 'id' ke tipe
+  }>({
     nama_spesialis: "",
-    harga: "",
+    harga: 0,
     is_dokter_gigi: "",
     gambar: null,
+    id: "",
   });
 
   const fetchData = async () => {
@@ -101,9 +115,7 @@ const Spesialisdokter = () => {
   };
 
   if (error) {
-    return (
-      <div className="text-red-500 text-center">Error: {error.message}</div>
-    );
+    return <div className="text-red-500 text-center">Error: {error}</div>;
   }
 
   const firstPage = Math.max(1, currentPage - 4); // Menghitung halaman pertama yang akan ditampilkan
@@ -158,7 +170,6 @@ const Spesialisdokter = () => {
       formDataToSend.append("harga", formData.harga);
       formDataToSend.append("is_dokter_gigi", formData.is_dokter_gigi);
 
-
       // Pastikan 'gambar' adalah File, bukan string 'null' atau path file.
       if (formData.gambar !== "null" && formData.gambar) {
         formDataToSend.append("gambar", formData.gambar);
@@ -210,10 +221,10 @@ const Spesialisdokter = () => {
     try {
       const formDataToUpdate = new FormData();
       formDataToUpdate.append("nama_spesialis", updateData.nama_spesialis);
-      formDataToUpdate.append("harga", updateData.harga);
+      formDataToUpdate.append("harga", updateData.harga.toString());
       formDataToUpdate.append("is_dokter_gigi", updateData.is_dokter_gigi);
 
-      // Cek jika ada file gambar yang baru atau tidak
+      // Periksa apakah ada file gambar baru atau tidak
       if (updateData.gambar && updateData.gambar instanceof File) {
         formDataToUpdate.append("gambar", updateData.gambar);
       } else {
@@ -321,9 +332,6 @@ const Spesialisdokter = () => {
                         </p>
                       </td>
 
-
-
-
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <div className="flex items-center space-x-3.5">
                           <button
@@ -405,10 +413,11 @@ const Spesialisdokter = () => {
                         onClick={
                           () => setCurrentPage(firstPage + index) // Memperbarui halaman berdasarkan indeks dan halaman pertama yang ditampilkan
                         }
-                        className={`mx-1 rounded-md px-3 py-1 ${currentPage === firstPage + index
-                          ? "bg-blue-400 to-slate-600 text-white"
-                          : "bg-slate-200 hover:bg-slate-400"
-                          }`}
+                        className={`mx-1 rounded-md px-3 py-1 ${
+                          currentPage === firstPage + index
+                            ? "bg-blue-400 to-slate-600 text-white"
+                            : "bg-slate-200 hover:bg-slate-400"
+                        }`}
                       >
                         {firstPage + index}{" "}
                         {/* Menggunakan halaman pertama yang ditampilkan */}
@@ -470,7 +479,7 @@ const Spesialisdokter = () => {
 
           {/* modal add */}
           {showModal && (
-            <div className="inset-0 z-50 flex items-center justify-center -mt-100 max-h-full overflow-y-auto">
+            <div className="inset-0 z-50 -mt-100 flex max-h-full items-center justify-center overflow-y-auto">
               <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
               <div
                 role="alert"
@@ -518,7 +527,6 @@ const Spesialisdokter = () => {
                       />
                     </div>
 
-
                     <div>
                       <label
                         htmlFor="is_dokter_gigi"
@@ -540,8 +548,6 @@ const Spesialisdokter = () => {
                         {/* Menghapus onChange dari option */}
                       </select>
                     </div>
-
-
 
                     {/* <div>
                       <label
@@ -610,7 +616,7 @@ const Spesialisdokter = () => {
 
           {/* modal update */}
           {showUpdateModal && (
-            <div className="inset-0 z-50 flex items-center justify-center -mt-100 max-h-full overflow-y-auto">
+            <div className="inset-0 z-50 -mt-100 flex max-h-full items-center justify-center overflow-y-auto">
               <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
               <div
                 role="alert"
@@ -658,7 +664,7 @@ const Spesialisdokter = () => {
                         onChange={(e) =>
                           setUpdateData({
                             ...updateData,
-                            harga: e.target.value,
+                            harga: parseInt(e.target.value),
                           })
                         }
                         className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
@@ -685,16 +691,15 @@ const Spesialisdokter = () => {
                         }
                         className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                       >
-                        <option value={updateData.is_dokter_gigi}>{updateData.is_dokter_gigi ? 'Ya' : 'Tidak'}</option>
+                        <option value={updateData.is_dokter_gigi}>
+                          {updateData.is_dokter_gigi ? "Ya" : "Tidak"}
+                        </option>
                         <option value="1">Ya</option>{" "}
                         {/* Menghapus onChange dari option */}
                         <option value="0">Tidak</option>{" "}
                         {/* Menghapus onChange dari option */}
                       </select>
                     </div>
-
-
-
 
                     {/* <div>
                       <label
