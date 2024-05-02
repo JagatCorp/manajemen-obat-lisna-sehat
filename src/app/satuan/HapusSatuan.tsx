@@ -15,7 +15,7 @@ const HapusSatuan = ({ idModal, data, fetchData }) => {
 
         try {
             const response = await axios.delete(
-                "http://localhost:5000/api/satuan/" + data.id,
+                "https://api.lisnasehat.online/api/satuan/" + data.id,
             );
 
             if (response.status === 200) {

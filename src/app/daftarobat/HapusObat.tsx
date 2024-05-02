@@ -13,7 +13,7 @@ const HapusObat = ({ idModal, fetchData, dataObat }) => {
 
         try {
             const response = await axios.delete(
-                "http://localhost:5000/api/obat/" + dataObat['id'],
+                "https://api.lisnasehat.online/api/obat/" + dataObat['id'],
             );
 
             if (response.status === 200) {

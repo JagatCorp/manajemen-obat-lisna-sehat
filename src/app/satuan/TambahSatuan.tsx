@@ -21,7 +21,7 @@ const TambahSatuan = ({ idModal, fetchData }) => {
             formDataToSend.append("nama_satuan", formData.nama_satuan);
 
             const response = await axios.post(
-                "http://localhost:5000/api/satuan",
+                "https://api.lisnasehat.online/api/satuan",
                 formDataToSend, // Kirim FormData
                 {
                     headers: {

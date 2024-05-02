@@ -63,7 +63,7 @@ const Pasien = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/pasien?page=${currentPage}`,
+        `https://api.lisnasehat.online/api/pasien?page=${currentPage}`,
       );
       setPasien(response.data.data.data);
       setTotalPages(response.data.totalPages);
@@ -85,7 +85,7 @@ const Pasien = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/pasien?keyword=${keyword}`,
+        `https://api.lisnasehat.online/api/pasien?keyword=${keyword}`,
       );
       setPasien(response.data.data.data);
       setTotalPages(response.data.totalPages);
@@ -131,7 +131,7 @@ const Pasien = () => {
     const id = itemIdToDelete;
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/pasien/${id}`,
+        `https://api.lisnasehat.online/api/pasien/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -186,7 +186,7 @@ const Pasien = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:5000/api/pasien",
+        "https://api.lisnasehat.online/api/pasien",
         formDataToSend, // Kirim FormData
         {
           headers: {
@@ -253,7 +253,7 @@ const Pasien = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:5000/api/pasien/${updateData.id}`,
+        `https://api.lisnasehat.online/api/pasien/${updateData.id}`,
         formDataToUpdate, // Kirim FormData
         {
           headers: {

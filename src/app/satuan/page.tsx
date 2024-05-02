@@ -30,7 +30,7 @@ const Satuan = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/satuan?page=${currentPage}`,
+        `https://api.lisnasehat.online/api/satuan?page=${currentPage}`,
       );
       //   console.log(response.data);
       setSatuan(response.data.data.data);
@@ -53,7 +53,7 @@ const Satuan = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/satuan?keyword=${keyword}`,
+        `https://api.lisnasehat.online/api/satuan?keyword=${keyword}`,
       );
       setSatuan(response.data.data.data);
       setTotalPages(response.data.totalPages);

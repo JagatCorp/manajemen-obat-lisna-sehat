@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import React, { useState } from "react";
 import { QrReader } from "react-qr-reader";
 declare module "react-qr-reader" {
@@ -6,6 +7,7 @@ declare module "react-qr-reader" {
     delay?: number;
     onError?: (error: any) => void;
     onScan?: (data: string | null) => void;
+    facingMode?: "environment";
   }
 }
 
@@ -32,20 +34,22 @@ const ScanQR: React.FC = () => {
         <div className="camera absolute top-4"></div>
         <div className="text-gray-50 absolute top-7 z-10 mb-2 flex w-full flex-row items-center justify-between px-2">
           <div className="flex flex-row items-center ">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="hover:bg-gray-500 text-gray-50 mr-3 h-8 w-8 cursor-pointer rounded-full p-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              ></path>
-            </svg>{" "}
+            <Link href="/scanqr">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="hover:bg-gray-500 text-gray-50 mr-3 h-8 w-8 cursor-pointer rounded-full p-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                ></path>
+              </svg>{" "}
+            </Link>
             <span className="text-sm">QR Code</span>
           </div>
           <div>
@@ -71,6 +75,8 @@ const ScanQR: React.FC = () => {
               onScan={handleScan}
               // untuk kamera depan di ponsel
               // facingMode="user"
+              // camera belakang
+              facingMode="environment"
             />
           </div>
           <p className="text-gray-300 mt-3 text-xs">Scan a QR Code</p>

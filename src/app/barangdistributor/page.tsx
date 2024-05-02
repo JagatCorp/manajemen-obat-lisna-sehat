@@ -28,7 +28,7 @@ const Barangdistributor = () => {
   const fetchDataSatuan = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/satuan?page=${currentPage}`,
+        `https://api.lisnasehat.online/api/satuan?page=${currentPage}`,
       );
       setSatuanbarang(response.data.data.data);
       // console.log('data', response.data.data);
@@ -76,7 +76,7 @@ const Barangdistributor = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/barangdistributor?page=${currentPage}`,
+        `https://api.lisnasehat.online/api/barangdistributor?page=${currentPage}`,
       );
       setBarangdistributor(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -98,7 +98,7 @@ const Barangdistributor = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/barangdistributor?keyword=${keyword}`,
+        `https://api.lisnasehat.online/api/barangdistributor?keyword=${keyword}`,
       );
       setBarangdistributor(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -145,7 +145,7 @@ const Barangdistributor = () => {
     const id = itemIdToDelete;
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/barangdistributor/${id}`,
+        `https://api.lisnasehat.online/api/barangdistributor/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -201,7 +201,7 @@ const Barangdistributor = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:5000/api/barangdistributor",
+        "https://api.lisnasehat.online/api/barangdistributor",
         formDataToSend, // Kirim FormData
         {
           headers: {
@@ -270,7 +270,7 @@ const Barangdistributor = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:5000/api/barangdistributor/${updateData.id}`,
+        `https://api.lisnasehat.online/api/barangdistributor/${updateData.id}`,
         formDataToUpdate, // Kirim FormData
         {
           headers: {
@@ -466,11 +466,10 @@ const Barangdistributor = () => {
                         onClick={
                           () => setCurrentPage(firstPage + index) // Memperbarui halaman berdasarkan indeks dan halaman pertama yang ditampilkan
                         }
-                        className={`mx-1 rounded-md px-3 py-1 ${
-                          currentPage === firstPage + index
+                        className={`mx-1 rounded-md px-3 py-1 ${currentPage === firstPage + index
                             ? "bg-blue-400 to-slate-600 text-white"
                             : "bg-slate-200 hover:bg-slate-400"
-                        }`}
+                          }`}
                       >
                         {firstPage + index}{" "}
                         {/* Menggunakan halaman pertama yang ditampilkan */}

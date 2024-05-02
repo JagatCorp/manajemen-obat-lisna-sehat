@@ -34,7 +34,7 @@ const Obat = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/obat?page=${currentPage}`,
+        `https://api.lisnasehat.online/api/obat?page=${currentPage}`,
       );
       //   console.log(response.data.data);
       setObat(response.data.data);
@@ -56,7 +56,7 @@ const Obat = () => {
 
   const fetchDataSatuan = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/satuan");
+      const response = await axios.get("https://api.lisnasehat.online/api/satuan");
 
       if (response.status == 200) {
         setSatuan(response.data.data.data);
@@ -71,7 +71,7 @@ const Obat = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/obat?keyword=${keyword}`,
+        `https://api.lisnasehat.online/api/obat?keyword=${keyword}`,
       );
       setObat(response.data.data.data);
       setTotalPages(response.data.totalPages);

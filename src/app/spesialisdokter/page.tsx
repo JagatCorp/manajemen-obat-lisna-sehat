@@ -57,7 +57,7 @@ const Spesialisdokter = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/spesialis_dokter?page=${currentPage}`,
+        `https://api.lisnasehat.online/api/spesialis_dokter?page=${currentPage}`,
       );
       setSpesialisdokter(response.data.data.data);
       setTotalPages(response.data.totalPages);
@@ -79,7 +79,7 @@ const Spesialisdokter = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/spesialis_dokter?keyword=${keyword}`,
+        `https://api.lisnasehat.online/api/spesialis_dokter?keyword=${keyword}`,
       );
       setSpesialisdokter(response.data.data.data);
       setTotalPages(response.data.totalPages);
@@ -125,7 +125,7 @@ const Spesialisdokter = () => {
     const id = itemIdToDelete;
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/spesialis_dokter/${id}`,
+        `https://api.lisnasehat.online/api/spesialis_dokter/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -176,7 +176,7 @@ const Spesialisdokter = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:5000/api/spesialis_dokter",
+        "https://api.lisnasehat.online/api/spesialis_dokter",
         formDataToSend, // Kirim FormData
         {
           headers: {
@@ -233,7 +233,7 @@ const Spesialisdokter = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:5000/api/spesialis_dokter/${updateData.id}`,
+        `https://api.lisnasehat.online/api/spesialis_dokter/${updateData.id}`,
         formDataToUpdate, // Kirim FormData
         {
           headers: {

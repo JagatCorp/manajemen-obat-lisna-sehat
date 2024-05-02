@@ -37,7 +37,7 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
             }
 
             const response = await axios.post(
-                "http://localhost:5000/api/obat",
+                "https://api.lisnasehat.online/api/obat",
                 formDataToSend, // Kirim FormData
                 {
                     headers: {

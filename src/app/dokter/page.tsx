@@ -28,7 +28,7 @@ const Dokter = () => {
   const fetchDataSpesialis = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/spesialis_dokter?page=${currentPage}`,
+        `https://api.lisnasehat.online/api/spesialis_dokter?page=${currentPage}`,
       );
       setSpesialisdokter(response.data.data.data);
       // console.log('data', response.data.data);
@@ -91,7 +91,7 @@ const Dokter = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/dokter?page=${currentPage}`,
+        `https://api.lisnasehat.online/api/dokter?page=${currentPage}`,
       );
       setDokter(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -113,7 +113,7 @@ const Dokter = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/dokter?keyword=${keyword}`,
+        `https://api.lisnasehat.online/api/dokter?keyword=${keyword}`,
       );
       setDokter(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -160,7 +160,7 @@ const Dokter = () => {
     const id = itemIdToDelete;
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/dokter/${id}`,
+        `https://api.lisnasehat.online/api/dokter/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -216,7 +216,7 @@ const Dokter = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:5000/api/dokter",
+        "https://api.lisnasehat.online/api/dokter",
         formDataToSend, // Kirim FormData
         {
           headers: {
@@ -285,7 +285,7 @@ const Dokter = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:5000/api/dokter/${updateData.id}`,
+        `https://api.lisnasehat.online/api/dokter/${updateData.id}`,
         formDataToUpdate, // Kirim FormData
         {
           headers: {

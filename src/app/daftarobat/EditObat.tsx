@@ -35,7 +35,7 @@ const EditObat = ({ idModal, fetchData, dataSatuan, dataObat }) => {
 
         try {
             const response = await axios.post(
-                `http://localhost:5000/api/obat/${dataObat.id}`,
+                `https://api.lisnasehat.online/api/obat/${dataObat.id}`,
                 formDataToSendEdit,
                 {
                     headers: {
