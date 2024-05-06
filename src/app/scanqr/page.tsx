@@ -1,19 +1,19 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
-import { QrReader } from "react-qr-reader";
-declare module "react-qr-reader" {
+import QrReader from "modern-react-qr-reader";
+declare module "modern-react-qr-reader" {
   export interface QrReaderProps {
     delay?: number;
     onError?: (error: any) => void;
     onScan?: (data: string | null) => void;
-    facingMode?: "environment";
+    facingMode?: "user" | "environment";
+    constraints?: any;
   }
 }
 
 const ScanQR: React.FC = () => {
-  const delay: number = 300;
-  const [scanResult, setScanResult] = useState<string>("");
+  const [scanResult, setScanResult] = useState<string | null>(null);
 
   const handleScan = (data: string | null) => {
     if (data) {
@@ -70,15 +70,13 @@ const ScanQR: React.FC = () => {
         <div className="z-10 mt-10 w-45 rounded-3xl text-center lg:w-90">
           <div style={{ width: "100%", height: "100%" }}>
             <QrReader
-              delay={delay as any}
+              delay={300}
               onError={handleError}
               onScan={handleScan}
-              // untuk kamera depan di ponsel
-              // facingMode="user"
-              // camera belakang
-              facingMode="environment"
+              facingMode="environment" // Menggunakan kamera belakang secara default
             />
           </div>
+          <p className="text-gray-300 mt-3 text-xs">{scanResult}</p>
           <p className="text-gray-300 mt-3 text-xs">Scan a QR Code</p>
           <div className="absolute bottom-0 left-0 my-3 mt-5 flex w-full items-center justify-between space-x-3 px-2">
             <div className="flex ">
