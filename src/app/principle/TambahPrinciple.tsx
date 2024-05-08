@@ -21,7 +21,7 @@ const TambahPrinciple = ({ idModal, fetchData }) => {
             formDataToSend.append("nama_instansi", formData.nama_instansi);
 
             const response = await axios.post(
-                "http://localhost:5000/api/principle",
+                "https://api.lisnasehat.online/api/principle",
                 formDataToSend, // Kirim FormData
                 {
                     headers: {

@@ -15,7 +15,7 @@ const HapusPrinciple = ({ idModal, data, fetchData }) => {
 
         try {
             const response = await axios.delete(
-                "http://localhost:5000/api/principle/" + data.id,
+                "https://api.lisnasehat.online/api/principle/" + data.id,
             );
 
 

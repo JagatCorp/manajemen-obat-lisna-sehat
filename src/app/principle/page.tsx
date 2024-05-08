@@ -46,7 +46,7 @@ const Principle = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/principle?page=${currentPage}`,
+        `https://api.lisnasehat.online/api/principle?page=${currentPage}`,
       );
       //   console.log(response.data);
       setPrinciple(response.data.data.data);
@@ -69,7 +69,7 @@ const Principle = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/principle?keyword=${keyword}`,
+        `https://api.lisnasehat.online/api/principle?keyword=${keyword}`,
       );
       setPrinciple(response.data.data.data);
       setTotalPages(response.data.totalPages);
@@ -115,7 +115,7 @@ const Principle = () => {
     const id = itemIdToDelete;
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/principle/${id}`,
+        `https://api.lisnasehat.online/api/principle/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -159,7 +159,7 @@ const Principle = () => {
       formDataToSend.append("nama_instansi", formData.nama_instansi);
 
       const response = await axios.post(
-        "http://localhost:5000/api/principle",
+        "https://api.lisnasehat.online/api/principle",
         formDataToSend, // Kirim FormData
         {
           headers: {
@@ -201,7 +201,7 @@ const Principle = () => {
       formDataToUpdate.append("nama_instansi", updateData.nama_instansi);
 
       const response = await axios.put(
-        `http://localhost:5000/api/principle/${updateData.id}`,
+        `https://api.lisnasehat.online/api/principle/${updateData.id}`,
         formDataToUpdate, // Kirim FormData
         {
           headers: {
