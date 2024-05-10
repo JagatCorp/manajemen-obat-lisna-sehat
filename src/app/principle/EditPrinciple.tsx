@@ -21,7 +21,7 @@ const EditPrinciple = ({ idModal, data, fetchData }) => {
             formDataToSend.append("nama_instansi", formData.nama_instansi);
 
             const response = await axios.put(
-                "http://localhost:5000/api/principle/" + data.id,
+                "https://api.lisnasehat.online/api/principle/" + data.id,
                 formDataToSend, // Kirim FormData
                 {
                     headers: {
