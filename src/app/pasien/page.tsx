@@ -468,11 +468,10 @@ const Pasien = () => {
                         onClick={
                           () => setCurrentPage(firstPage + index) // Memperbarui halaman berdasarkan indeks dan halaman pertama yang ditampilkan
                         }
-                        className={`mx-1 rounded-md px-3 py-1 ${
-                          currentPage === firstPage + index
+                        className={`mx-1 rounded-md px-3 py-1 ${currentPage === firstPage + index
                             ? "bg-blue-400 to-slate-600 text-white"
                             : "bg-slate-200 hover:bg-slate-400"
-                        }`}
+                          }`}
                       >
                         {firstPage + index}{" "}
                         {/* Menggunakan halaman pertama yang ditampilkan */}

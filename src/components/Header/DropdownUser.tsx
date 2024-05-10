@@ -1,12 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import API_URL from "@/app/config";
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
+  const [cookies, setCookie] = useCookies(["token"])
+
+  const urlGambar = sessionStorage.getItem("urlGambar");
+
+  const [user, setUser] = useState({});
 
   // close on click outside
   useEffect(() => {
@@ -34,6 +41,65 @@ const DropdownUser = () => {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
+
+  useEffect(() => {
+    fetchDataUser();
+  }, []);
+
+  // SECTION Fungsi untuk menghapus cookie berdasarkan namanya
+  function deleteCookie(name) {
+    // Menetapkan tanggal kedaluwarsa yang sudah lewat
+    document.cookie =
+      name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  }
+
+  const fetchDataUser = async () => {
+    const url = urlGambar ? "/dokter/" : "/pasien/";
+
+
+    try {
+      const response = await axios.get(API_URL + url + sessionStorage.getItem("id"));
+
+      if (response.status === 200) {
+        // console.log(response.data);
+        console.log(urlGambar ? response.data : response.data.data.attributes);
+        setUser(urlGambar ? response.data : response.data.data.attributes);
+      } else {
+        console.log(response);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      // Mendapatkan token JWT dari cookies
+      const token = cookies.token;
+
+      // Menyertakan token JWT dalam header Authorization
+      const config = {
+        headers: {
+          Authorization: `${token}`,
+        },
+      };
+
+      // Kirim permintaan logout dengan token JWT yang disertakan dalam header
+      await axios.post(API_URL + "/auth/logout", null, config);
+
+      // Hapus token JWT dari cookies setelah berhasil logout
+      setCookie("token", "", { path: "/" });
+      sessionStorage.clear();
+      deleteCookie("token");
+
+      // Redirect ke halaman login setelah logout
+      window.location.href = "/login";
+    } catch (error) {
+      // console.error("Logout error:", error);
+    }
+  };
+
+
   return (
     <div className="relative">
       <Link
@@ -50,15 +116,16 @@ const DropdownUser = () => {
         </span>
 
         <span className="h-12 w-12 rounded-full">
-          <Image
+          <img
             width={112}
             height={112}
-            src={"/images/user/user-01.png"}
+            src={urlGambar ? urlGambar : "/images/user/user-01.png"}
             style={{
               width: "auto",
               height: "auto",
             }}
             alt="User"
+            className="w-full h-full rounded-full"
           />
         </span>
 
@@ -84,9 +151,8 @@ const DropdownUser = () => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${
-          dropdownOpen === true ? "block" : "hidden"
-        }`}
+        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${dropdownOpen === true ? "block" : "hidden"
+          }`}
       >
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
           <li>
@@ -111,7 +177,7 @@ const DropdownUser = () => {
                   fill=""
                 />
               </svg>
-              My Profile
+              My Profile {urlGambar ? user.nama_dokter : user.nama}
             </Link>
           </li>
           <li>
@@ -161,7 +227,7 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button onClick={handleLogout} className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
           <svg
             className="fill-current"
             width="22"
