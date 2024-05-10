@@ -41,7 +41,7 @@ export default function QRCode() {
                 // API_URL + `/transaksi_medis`,
                 //    'https://lisnasehat.online/api' + `/transaksi_medis`,
             );
-            setQR(response.data);
+            setQR([response.data]);
             console.log('coba', response.data);
         } catch (error: any) {
             // Menggunakan `any` untuk sementara agar bisa mengakses `message`
@@ -61,7 +61,7 @@ export default function QRCode() {
                     </div>
                 ))} */}
 
-                <img src={qr.url_qrcode} alt="QR Code" className='mx-auto ' />
+                <img src={qr[0]?.url_qrcode} alt="QR Code" className='mx-auto ' />
 
             </DefaultLayout>
         </>
