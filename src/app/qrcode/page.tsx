@@ -42,7 +42,7 @@ export default function QRCode() {
                 //    'https://lisnasehat.online/api' + `/transaksi_medis`,
             );
             setQR(response.data);
-            console.log(response.data);
+            console.log('coba', response.data);
         } catch (error: any) {
             // Menggunakan `any` untuk sementara agar bisa mengakses `message`
             console.error("Error fetching data qr:", error);
@@ -55,11 +55,11 @@ export default function QRCode() {
         <>
             <DefaultLayout>
                 <Breadcrumb pageName="QRCode" />
-                {/* {qr.map((qr) => (
-                    <div key={qr.id}> */}
-                <img src={qr.url_qrcode} alt="QR Code" className='mx-auto ' />
-                {/* </div>
-                ))} */}
+                {qr && qr.length > 0 && qr.map((qr: any) => (
+                    <div key={qr.id}>
+                        <img src={qr.url_qrcode} alt="QR Code" className='mx-auto ' />
+                    </div>
+                ))}
 
             </DefaultLayout>
         </>
