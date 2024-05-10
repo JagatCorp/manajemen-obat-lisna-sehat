@@ -55,11 +55,13 @@ export default function QRCode() {
         <>
             <DefaultLayout>
                 <Breadcrumb pageName="QRCode" />
-                {qr && qr.length > 0 && qr.map((qr: any) => (
+                {/* {qr && qr.length > 0 && qr.map((qr: any) => (
                     <div key={qr.id}>
                         <img src={qr.url_qrcode} alt="QR Code" className='mx-auto ' />
                     </div>
-                ))}
+                ))} */}
+
+                <img src={qr.url_qrcode} alt="QR Code" className='mx-auto ' />
 
             </DefaultLayout>
         </>
