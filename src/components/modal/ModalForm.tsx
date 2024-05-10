@@ -6,7 +6,7 @@ export const ModalForm = ({ dataModal }) => {
         <>
             <dialog id={dataModal.idModal} className="modal rounded-xl">
                 <form method="dialog">
-                    <div className="modal-box w-96 md:w-[600px] h-auto p-3">
+                    <div className="modal-box w-72 md:w-[600px] h-auto p-3">
                         <div className="flex justify-between modal-footer border-b pb-2">
                             {dataModal.title}
                         </div>
