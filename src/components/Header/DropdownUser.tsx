@@ -177,7 +177,8 @@ const DropdownUser = () => {
                   fill=""
                 />
               </svg>
-              My Profile {urlGambar ? user.nama_dokter : user.nama}
+              {/* My Profile {urlGambar ? user.nama_dokter : user.nama} */}
+              My Profile
             </Link>
           </li>
           <li>

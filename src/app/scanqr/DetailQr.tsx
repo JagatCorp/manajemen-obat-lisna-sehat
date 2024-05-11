@@ -18,11 +18,11 @@ const DetailQr = ({ idModal, data }) => {
                     Tambah Data Satuan
                 </div>
             </div>,
-                <div>
-                    <button>
-                        X
-                    </button>
-                </div>
+            <div key={"title2"}>
+                <button>
+                    X
+                </button>
+            </div>
         ],
         body: [
             <div key={"input"} className="flex flex-col gap-3" style={{ maxHeight: '255px', overflow: 'auto' }}>
@@ -57,10 +57,10 @@ const DetailQr = ({ idModal, data }) => {
                             Biodata Dokter
                         </div>
                         <div>
-                            <img src={ data.dokter.urlGambar } alt="" className="rounded-md" />
+                            <img src={data.dokter.urlGambar} alt="" className="rounded-md" />
                         </div>
                         <div className="text-center font-bold">
-                            {data.dokter.nama_dokter} {'('+ data.dokter.jk +')'}
+                            {data.dokter.nama_dokter} {'(' + data.dokter.jk + ')'}
                         </div>
                         <hr />
                         <div className="text-center font-bold">
