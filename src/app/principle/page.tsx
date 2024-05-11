@@ -10,6 +10,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import TambahPrinciple from "./TambahPrinciple";
 import EditPrinciple from "./EditPrinciple";
 import HapusPrinciple from "./HapusPrinciple";
+import API_URL from "../config";
 
 const Principle = () => {
   const [principle, setPrinciple] = useState([]);
@@ -46,7 +47,7 @@ const Principle = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://api.lisnasehat.online/api/principle?page=${currentPage}`,
+        API_URL + `/principle?page=${currentPage}`,
       );
       //   console.log(response.data);
       setPrinciple(response.data.data.data);
@@ -69,7 +70,7 @@ const Principle = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        `https://api.lisnasehat.online/api/principle?keyword=${keyword}`,
+        API_URL + `/principle?keyword=${keyword}`,
       );
       setPrinciple(response.data.data.data);
       setTotalPages(response.data.totalPages);
@@ -115,7 +116,7 @@ const Principle = () => {
     const id = itemIdToDelete;
     try {
       const response = await axios.delete(
-        `https://api.lisnasehat.online/api/principle/${id}`,
+        API_URL + `/principle/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -159,7 +160,7 @@ const Principle = () => {
       formDataToSend.append("nama_instansi", formData.nama_instansi);
 
       const response = await axios.post(
-        "https://api.lisnasehat.online/api/principle",
+        API_URL + "/principle",
         formDataToSend, // Kirim FormData
         {
           headers: {
@@ -201,7 +202,7 @@ const Principle = () => {
       formDataToUpdate.append("nama_instansi", updateData.nama_instansi);
 
       const response = await axios.put(
-        `https://api.lisnasehat.online/api/principle/${updateData.id}`,
+        API_URL + `/principle/${updateData.id}`,
         formDataToUpdate, // Kirim FormData
         {
           headers: {

@@ -9,6 +9,7 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
+import API_URL from "../config";
 const Dokter = () => {
   const [dokter, setDokter] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,10 +29,10 @@ const Dokter = () => {
   const fetchDataSpesialis = async () => {
     try {
       const response = await axios.get(
-        `https://api.lisnasehat.online/api/spesialis_dokter?page=${currentPage}`,
+        API_URL + `/spesialis_dokter?page=${currentPage}`,
       );
       setSpesialisdokter(response.data.data.data);
-      // console.log('data', response.data.data);
+      console.log('data', response.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
       setTotalCount(response.data.totalCount);
@@ -53,6 +54,9 @@ const Dokter = () => {
     mulai_praktik: "",
     selesai_praktik: "",
     hari_praktik: "",
+    password: "",
+    username: "",
+    jk: "",
     spesialis_dokter_id: "",
     gambar_dokter: null,
   });
@@ -73,6 +77,9 @@ const Dokter = () => {
     mulai_praktik: string;
     selesai_praktik: string;
     hari_praktik: string;
+    username: string;
+    password: string;
+    jk: string;
     spesialis_dokter_id: string;
     nama_spesialis_dokter: string;
     gambar_dokter: any;
@@ -81,6 +88,9 @@ const Dokter = () => {
     nama_dokter: "",
     mulai_praktik: "",
     selesai_praktik: "",
+    username: "",
+    password: "",
+    jk: "",
     hari_praktik: "",
     spesialis_dokter_id: "",
     nama_spesialis_dokter: "",
@@ -91,7 +101,7 @@ const Dokter = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://api.lisnasehat.online/api/dokter?page=${currentPage}`,
+        API_URL + `/dokter?page=${currentPage}`,
       );
       setDokter(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -113,7 +123,7 @@ const Dokter = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        `https://api.lisnasehat.online/api/dokter?keyword=${keyword}`,
+        API_URL + `/dokter?keyword=${keyword}`,
       );
       setDokter(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -160,7 +170,7 @@ const Dokter = () => {
     const id = itemIdToDelete;
     try {
       const response = await axios.delete(
-        `https://api.lisnasehat.online/api/dokter/${id}`,
+        API_URL + `/dokter/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -205,6 +215,11 @@ const Dokter = () => {
       formDataToSend.append("mulai_praktik", formData.mulai_praktik);
       formDataToSend.append("selesai_praktik", formData.selesai_praktik);
       formDataToSend.append("hari_praktik", formData.hari_praktik);
+
+      formDataToSend.append("username", formData.username);
+      formDataToSend.append("password", formData.password);
+      formDataToSend.append("jk", formData.jk);
+
       formDataToSend.append(
         "spesialis_dokter_id",
         formData.spesialis_dokter_id,
@@ -216,7 +231,7 @@ const Dokter = () => {
       }
 
       const response = await axios.post(
-        "https://api.lisnasehat.online/api/dokter",
+        API_URL + "/dokter",
         formDataToSend, // Kirim FormData
         {
           headers: {
@@ -232,6 +247,9 @@ const Dokter = () => {
           nama_dokter: "",
           mulai_praktik: "",
           selesai_praktik: "",
+          username: "",
+          password: "",
+          jk: "",
           hari_praktik: "",
           spesialis_dokter_id: "",
           gambar_dokter: null,
@@ -252,6 +270,9 @@ const Dokter = () => {
       mulai_praktik: Item.mulai_praktik,
       selesai_praktik: Item.selesai_praktik,
       hari_praktik: Item.hari_praktik,
+      username: Item.username,
+      password: Item.password,
+      jk: Item.jk,
       spesialis_dokter_id: Item.spesialis_dokter_id,
       nama_spesialis_dokter: Item.spesialisdokter.nama_spesialis,
       gambar_dokter: Item.null,
@@ -268,6 +289,11 @@ const Dokter = () => {
       formDataToUpdate.append("mulai_praktik", updateData.mulai_praktik);
       formDataToUpdate.append("selesai_praktik", updateData.selesai_praktik);
       formDataToUpdate.append("hari_praktik", updateData.hari_praktik);
+
+      formDataToUpdate.append("username", updateData.username);
+      formDataToUpdate.append("password", updateData.password);
+      formDataToUpdate.append("jk", updateData.jk);
+
       formDataToUpdate.append(
         "spesialis_dokter_id",
         updateData.spesialis_dokter_id,
@@ -285,7 +311,7 @@ const Dokter = () => {
       }
 
       const response = await axios.put(
-        `https://api.lisnasehat.online/api/dokter/${updateData.id}`,
+        API_URL + `/dokter/${updateData.id}`,
         formDataToUpdate, // Kirim FormData
         {
           headers: {
@@ -504,11 +530,10 @@ const Dokter = () => {
                         onClick={
                           () => setCurrentPage(firstPage + index) // Memperbarui halaman berdasarkan indeks dan halaman pertama yang ditampilkan
                         }
-                        className={`mx-1 rounded-md px-3 py-1 ${
-                          currentPage === firstPage + index
-                            ? "bg-blue-400 to-slate-600 text-white"
-                            : "bg-slate-200 hover:bg-slate-400"
-                        }`}
+                        className={`mx-1 rounded-md px-3 py-1 ${currentPage === firstPage + index
+                          ? "bg-blue-400 to-slate-600 text-white"
+                          : "bg-slate-200 hover:bg-slate-400"
+                          }`}
                       >
                         {firstPage + index}{" "}
                         {/* Menggunakan halaman pertama yang ditampilkan */}
@@ -699,6 +724,64 @@ const Dokter = () => {
                       </select>
                     </div>
 
+                    <div>
+                      <label
+                        htmlFor="Jk"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Jenis Kelamin
+                      </label>
+                      <select
+                        name="jk"
+                        id="Jk" // Menambahkan id untuk label 'for'
+                        value={formData.jk}
+                        onChange={handleChange}
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                      >
+                        <option value=''>-- pilih jk --</option>
+                        <option value='L'>Laki-Laki</option>
+                        <option value='P'>Perempuan</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="Username"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Username
+                      </label>
+                      <input
+                        type="text"
+                        id="Username"
+                        name="username"
+                        value={formData.username}
+                        onChange={handleChange}
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="username"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="Password"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Password
+                      </label>
+                      <input
+                        type=""
+                        id="Password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="password"
+                        required
+                      />
+                    </div>
+
                     <div className="flex w-full items-center justify-start">
                       <button
                         type="button"
@@ -746,7 +829,7 @@ const Dokter = () => {
 
           {/* modal update */}
           {showUpdateModal && (
-            <div className="inset-0 z-50 -mt-100 flex max-h-full items-center justify-center overflow-y-auto">
+            <div className="inset-0 z-50 -mt-[700px] flex max-h-full items-center justify-center overflow-y-auto">
               <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
               <div
                 role="alert"
@@ -890,9 +973,6 @@ const Dokter = () => {
                         }
                         className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                       >
-                        <option value={updateData.spesialis_dokter_id}>
-                          {updateData.nama_spesialis_dokter}
-                        </option>{" "}
                         {spesialisdokter.map((Itemspesialis) => (
                           <option
                             key={Itemspesialis.id}
@@ -902,6 +982,82 @@ const Dokter = () => {
                           </option>
                         ))}
                       </select>
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="Jk"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Jenis Kelamin
+                      </label>
+                      <select
+                        name="jk"
+                        id="Jk" // Menambahkan id untuk label 'for'
+                        value={updateData.jk}
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            jk: e.target.value,
+                          })
+                        }
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        required
+                      >
+                        <option value='L' >Laki-Laki</option>
+                        <option value='P' >Perempuan</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="Username"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Username
+                      </label>
+                      <input
+                        type="text"
+                        id="Username"
+                        name="username"
+                        value={updateData.username}
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            username: e.target.value,
+                          })
+                        }
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="username"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="Password"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Password
+                      </label>
+                      <input
+                        type=""
+                        id="Password"
+                        name="password"
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            password: e.target.value,
+                          })
+                        }
+                        className="mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="password"
+                        />
+                      <div className="mb-3">
+                        <small>
+                          Kosongkan bila tidak ingin mengubah password
+                        </small>
+                      </div>
+
                     </div>
 
                     <div className="flex w-full items-center justify-start">

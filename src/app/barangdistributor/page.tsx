@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import API_URL from "../config";
 
 const Barangdistributor = () => {
   const [barangdistributor, setBarangdistributor] = useState([]);
@@ -28,7 +29,7 @@ const Barangdistributor = () => {
   const fetchDataSatuan = async () => {
     try {
       const response = await axios.get(
-        `https://api.lisnasehat.online/api/satuan?page=${currentPage}`,
+        API_URL + `/satuan?page=${currentPage}`,
       );
       setSatuanbarang(response.data.data.data);
       // console.log('data', response.data.data);
@@ -76,7 +77,7 @@ const Barangdistributor = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://api.lisnasehat.online/api/barangdistributor?page=${currentPage}`,
+        API_URL + `/barangdistributor?page=${currentPage}`,
       );
       setBarangdistributor(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -98,7 +99,7 @@ const Barangdistributor = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        `https://api.lisnasehat.online/api/barangdistributor?keyword=${keyword}`,
+        API_URL + `/barangdistributor?keyword=${keyword}`,
       );
       setBarangdistributor(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -145,7 +146,7 @@ const Barangdistributor = () => {
     const id = itemIdToDelete;
     try {
       const response = await axios.delete(
-        `https://api.lisnasehat.online/api/barangdistributor/${id}`,
+        API_URL + `/barangdistributor/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -201,7 +202,7 @@ const Barangdistributor = () => {
       }
 
       const response = await axios.post(
-        "https://api.lisnasehat.online/api/barangdistributor",
+        API_URL + "/barangdistributor",
         formDataToSend, // Kirim FormData
         {
           headers: {
@@ -270,7 +271,7 @@ const Barangdistributor = () => {
       }
 
       const response = await axios.put(
-        `https://api.lisnasehat.online/api/barangdistributor/${updateData.id}`,
+        API_URL + `/barangdistributor/${updateData.id}`,
         formDataToUpdate, // Kirim FormData
         {
           headers: {

@@ -39,7 +39,6 @@ const DaftarBerobat = () => {
             }
 
             const response = await axios.post(
-                // "https://api.lisnasehat.online/api/transaksi_medis",
                 API_URL + `/transaksi_medis`,
                 formDataToSend, // Kirim FormData
                 {

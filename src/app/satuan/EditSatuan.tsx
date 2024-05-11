@@ -2,6 +2,7 @@ import { ModalForm } from "@/components/modal/ModalForm";
 import axios from "axios";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import API_URL from "../config";
 
 const EditSatuan = ({ idModal, data, fetchData }) => {
     // console.log(errorMessages);
@@ -20,7 +21,7 @@ const EditSatuan = ({ idModal, data, fetchData }) => {
             formDataToSend.append("nama_satuan", formData.nama_satuan);
 
             const response = await axios.put(
-                "https://api.lisnasehat.online/api/satuan/" + data.id,
+                API_URL + "/satuan/" + data.id,
                 formDataToSend, // Kirim FormData
                 {
                     headers: {

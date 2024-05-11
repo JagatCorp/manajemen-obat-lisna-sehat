@@ -9,6 +9,7 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
+import API_URL from "../config";
 const Pasien = () => {
   const [pasien, setPasien] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,6 +42,8 @@ const Pasien = () => {
   const [updateData, setUpdateData] = useState<{
     nama: string;
     alamat: string;
+    password: string;
+    username: string;
     jk: string;
     no_telp: string;
     alergi: string;
@@ -51,6 +54,8 @@ const Pasien = () => {
   }>({
     nama: "",
     alamat: "",
+    password: "",
+    username: "",
     jk: "",
     no_telp: "",
     alergi: "",
@@ -63,7 +68,7 @@ const Pasien = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://api.lisnasehat.online/api/pasien?page=${currentPage}`,
+        API_URL + `/pasien?page=${currentPage}`,
       );
       setPasien(response.data.data.data);
       setTotalPages(response.data.totalPages);
@@ -85,7 +90,7 @@ const Pasien = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        `https://api.lisnasehat.online/api/pasien?keyword=${keyword}`,
+        API_URL + `/pasien?keyword=${keyword}`,
       );
       setPasien(response.data.data.data);
       setTotalPages(response.data.totalPages);
@@ -131,7 +136,7 @@ const Pasien = () => {
     const id = itemIdToDelete;
     try {
       const response = await axios.delete(
-        `https://api.lisnasehat.online/api/pasien/${id}`,
+        API_URL + `/pasien/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -186,7 +191,7 @@ const Pasien = () => {
       }
 
       const response = await axios.post(
-        "https://api.lisnasehat.online/api/pasien",
+        API_URL + "/pasien",
         formDataToSend, // Kirim FormData
         {
           headers: {
@@ -228,6 +233,8 @@ const Pasien = () => {
       tgl_lahir: Item.attributes.tgl_lahir,
       gol_darah: Item.attributes.gol_darah,
       gambar: Item.attributes.null,
+      password: Item.attributes.password,
+      username: Item.attributes.username,
     });
     setShowUpdateModal(true);
   };
@@ -253,7 +260,7 @@ const Pasien = () => {
       }
 
       const response = await axios.put(
-        `https://api.lisnasehat.online/api/pasien/${updateData.id}`,
+        API_URL + `/pasien/${updateData.id}`,
         formDataToUpdate, // Kirim FormData
         {
           headers: {
@@ -908,6 +915,51 @@ const Pasien = () => {
                         }
                         className="mb-3 mt-2 flex h-auto w-full items-center rounded border border-slate-300 p-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                       ></textarea>
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="Username"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Username
+                      </label>
+                      <input
+                        type="text"
+                        id="Username"
+                        name="username"
+                        value={updateData.username}
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            username: e.target.value,
+                          })
+                        }
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="Username"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="Password"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Username
+                      </label>
+                      <input
+                        type="text"
+                        id="Password"
+                        name="password"
+                        value={updateData.password}
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            password: e.target.value,
+                          })
+                        }
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="Password"
+                      />
                     </div>
                     {/* <div>
                       <label

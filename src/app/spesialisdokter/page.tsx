@@ -9,6 +9,7 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
+import API_URL from "../config";
 const Spesialisdokter = () => {
   const [spesialisdokter, setSpesialisdokter] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -57,7 +58,7 @@ const Spesialisdokter = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://api.lisnasehat.online/api/spesialis_dokter?page=${currentPage}`,
+        API_URL + `/spesialis_dokter?page=${currentPage}`,
       );
       setSpesialisdokter(response.data.data.data);
       setTotalPages(response.data.totalPages);
@@ -79,7 +80,7 @@ const Spesialisdokter = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        `https://api.lisnasehat.online/api/spesialis_dokter?keyword=${keyword}`,
+        API_URL + `/spesialis_dokter?keyword=${keyword}`,
       );
       setSpesialisdokter(response.data.data.data);
       setTotalPages(response.data.totalPages);
@@ -125,7 +126,7 @@ const Spesialisdokter = () => {
     const id = itemIdToDelete;
     try {
       const response = await axios.delete(
-        `https://api.lisnasehat.online/api/spesialis_dokter/${id}`,
+        API_URL + `/spesialis_dokter/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -176,7 +177,7 @@ const Spesialisdokter = () => {
       }
 
       const response = await axios.post(
-        "https://api.lisnasehat.online/api/spesialis_dokter",
+        API_URL + "/spesialis_dokter",
         formDataToSend, // Kirim FormData
         {
           headers: {
@@ -233,7 +234,7 @@ const Spesialisdokter = () => {
       }
 
       const response = await axios.put(
-        `https://api.lisnasehat.online/api/spesialis_dokter/${updateData.id}`,
+        API_URL + `/spesialis_dokter/${updateData.id}`,
         formDataToUpdate, // Kirim FormData
         {
           headers: {

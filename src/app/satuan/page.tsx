@@ -10,6 +10,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import TambahSatuan from "./TambahSatuan";
 import EditSatuan from "./EditSatuan";
 import HapusSatuan from "./HapusSatuan";
+import API_URL from "../config";
 
 const Satuan = () => {
   const [satuan, setSatuan] = useState([]);
@@ -30,7 +31,7 @@ const Satuan = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://api.lisnasehat.online/api/satuan?page=${currentPage}`,
+        API_URL + `/satuan?page=${currentPage}`,
       );
       //   console.log(response.data);
       setSatuan(response.data.data.data);
@@ -53,7 +54,7 @@ const Satuan = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        `https://api.lisnasehat.online/api/satuan?keyword=${keyword}`,
+        API_URL + `/satuan?keyword=${keyword}`,
       );
       setSatuan(response.data.data.data);
       setTotalPages(response.data.totalPages);

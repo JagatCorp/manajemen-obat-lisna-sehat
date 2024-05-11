@@ -11,6 +11,7 @@ import TambahObat from "./TambahObat";
 import GambarObat from "./GambarObat";
 import HapusObat from "./HapusObat";
 import EditObat from "./EditObat";
+import API_URL from "../config";
 // import EditObat from "./EditObat";
 // import HapusObat from "./HapusObat";
 
@@ -34,7 +35,7 @@ const Obat = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://api.lisnasehat.online/api/obat?page=${currentPage}`,
+        API_URL + `/obat?page=${currentPage}`,
       );
       //   console.log(response.data.data);
       setObat(response.data.data);
@@ -56,7 +57,7 @@ const Obat = () => {
 
   const fetchDataSatuan = async () => {
     try {
-      const response = await axios.get("https://api.lisnasehat.online/api/satuan");
+      const response = await axios.get(API_URL + "/satuan");
 
       if (response.status == 200) {
         setSatuan(response.data.data.data);
@@ -71,7 +72,7 @@ const Obat = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        `https://api.lisnasehat.online/api/obat?keyword=${keyword}`,
+        API_URL + `/obat?keyword=${keyword}`,
       );
       setObat(response.data.data.data);
       setTotalPages(response.data.totalPages);

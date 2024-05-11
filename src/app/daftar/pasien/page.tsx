@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Image from "next/image";
+import API_URL from "@/app/config";
 const DaftarPasien = () => {
     // add data
     const [formData, setFormData] = useState({
@@ -46,7 +47,7 @@ const DaftarPasien = () => {
             }
 
             const response = await axios.post(
-                "https://api.lisnasehat.online/api/pasien",
+                API_URL + "/pasien",
                 formDataToSend, // Kirim FormData
                 {
                     headers: {

@@ -3,6 +3,7 @@ import { ModalForm } from "@/components/modal/ModalForm";
 import axios from "axios";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import API_URL from "../config";
 
 
 const HapusPrinciple = ({ idModal, data, fetchData }) => {
@@ -15,7 +16,7 @@ const HapusPrinciple = ({ idModal, data, fetchData }) => {
 
         try {
             const response = await axios.delete(
-                "https://api.lisnasehat.online/api/principle/" + data.id,
+                API_URL + "/principle/" + data.id,
             );
 
 

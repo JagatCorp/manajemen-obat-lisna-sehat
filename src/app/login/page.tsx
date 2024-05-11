@@ -23,7 +23,6 @@ export default function Login() {
 
         try {
             const response = await axios.post(
-                // "https://api.lisnasehat.online/api/auth/login",
                 API_URL + "/auth/login",
                 {
                     username,

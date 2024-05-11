@@ -2,6 +2,7 @@ import { ModalForm } from "@/components/modal/ModalForm";
 import axios from "axios";
 import { use, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import API_URL from "../config";
 
 
 const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
@@ -37,7 +38,7 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
             }
 
             const response = await axios.post(
-                "https://api.lisnasehat.online/api/obat",
+                API_URL + "/obat",
                 formDataToSend, // Kirim FormData
                 {
                     headers: {
