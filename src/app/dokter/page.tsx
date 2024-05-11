@@ -152,6 +152,9 @@ const Dokter = () => {
     }
   }, [currentPage, searchTerm]);
 
+
+
+
   //   toast
   const showToastMessage = (message: string) => {
     toast.success(message, {
@@ -173,16 +176,18 @@ const Dokter = () => {
         API_URL + `/dokter/${id}`,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         },
       );
+
+      console.log(response);
 
       if (response.status === 201) {
         throw new Error("Gagal menghapus data");
       }
 
-      setDokter(dokter.filter((item) => item.id !== id));
+      fetchData();
       showToastMessage("Data berhasil dihapus!");
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
@@ -315,16 +320,19 @@ const Dokter = () => {
         formDataToUpdate, // Kirim FormData
         {
           headers: {
-            "Content-Type": "application/json",
+            // "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         },
       );
 
       if (response.status === 200) {
+        console.log(response);
         showToastMessage("Data berhasil diupdate!");
         setShowUpdateModal(false);
         fetchData();
       } else {
+        console.error(response);
         console.error("Gagal mengupdate data.");
       }
     } catch (error) {
@@ -829,7 +837,7 @@ const Dokter = () => {
 
           {/* modal update */}
           {showUpdateModal && (
-            <div className="inset-0 z-50 -mt-[700px] flex max-h-full items-center justify-center overflow-y-auto">
+            <div className="inset-0 z-50 -mt-[530px] flex max-h-full items-center justify-center overflow-y-auto">
               <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
               <div
                 role="alert"
