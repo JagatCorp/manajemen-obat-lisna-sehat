@@ -34,6 +34,9 @@ const Pasien = () => {
     alergi: "",
     tgl_lahir: "",
     gol_darah: "",
+    username: "",
+    password: "",
+    id_relasi: "",
     gambar: null,
   });
 
@@ -49,6 +52,7 @@ const Pasien = () => {
     alergi: string;
     tgl_lahir: string;
     gol_darah: string;
+    id_relasi: string,
     gambar: any;
     id: string; // tambahkan properti 'id' ke tipe
   }>({
@@ -56,6 +60,7 @@ const Pasien = () => {
     alamat: "",
     password: "",
     username: "",
+    id_relasi: "",
     jk: "",
     no_telp: "",
     alergi: "",
@@ -180,6 +185,11 @@ const Pasien = () => {
       formDataToSend.append("nama", formData.nama);
       formDataToSend.append("alamat", formData.alamat);
       formDataToSend.append("jk", formData.jk);
+
+      formDataToSend.append("username", formData.username);
+      formDataToSend.append("password", formData.password);
+      formDataToSend.append("id_relasi", formData.id_relasi);
+
       formDataToSend.append("no_telp", formData.no_telp);
       formDataToSend.append("alergi", formData.alergi);
       formDataToSend.append("tgl_lahir", formData.tgl_lahir);
@@ -201,6 +211,7 @@ const Pasien = () => {
       );
 
       if (response.status === 200) {
+        console.log(response);
         showToastMessage("Data berhasil ditambahkan!");
         setShowModal(false);
         setFormData({
@@ -211,10 +222,14 @@ const Pasien = () => {
           alergi: "",
           tgl_lahir: "",
           gol_darah: "",
+          username: "",
+          password: "",
+          id_relasi: "",
           gambar: null,
         });
         fetchData();
       } else {
+        console.error(response);
         console.error("Gagal mengirim data.");
       }
     } catch (error) {
@@ -223,6 +238,7 @@ const Pasien = () => {
   };
   // update data
   const handleEdit = (Item) => {
+    console.log('Item', Item);
     setUpdateData({
       id: Item.id,
       nama: Item.attributes.nama,
@@ -234,6 +250,7 @@ const Pasien = () => {
       gol_darah: Item.attributes.gol_darah,
       gambar: Item.attributes.null,
       password: Item.attributes.password,
+      id_relasi: Item.attributes.id_relasi,
       username: Item.attributes.username,
     });
     setShowUpdateModal(true);
@@ -249,6 +266,11 @@ const Pasien = () => {
       formDataToUpdate.append("jk", updateData.jk);
       formDataToUpdate.append("no_telp", updateData.no_telp);
       formDataToUpdate.append("alergi", updateData.alergi);
+
+      formDataToUpdate.append("username", updateData.username);
+      formDataToUpdate.append("password", updateData.password);
+      formDataToUpdate.append("id_relasi", updateData.id_relasi);
+
       formDataToUpdate.append("tgl_lahir", updateData.tgl_lahir);
       formDataToUpdate.append("gol_darah", updateData.gol_darah);
       // Cek jika ada file gambar yang baru atau tidak
@@ -269,6 +291,7 @@ const Pasien = () => {
         },
       );
 
+      console.log(response);
       if (response.status === 200) {
         showToastMessage("Data berhasil diupdate!");
         setShowUpdateModal(false);
@@ -361,7 +384,7 @@ const Pasien = () => {
                       </td>
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <p className="text-black dark:text-white">
-                          {Item.attributes.jk}
+                          {Item.attributes.jk == "L" ? "Laki-laki" : "Perempuan"}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -582,11 +605,9 @@ const Pasien = () => {
                         onChange={handleChange}
                         className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                       >
-                        <option>-- pilih --</option>{" "}
-                        <option value="L">L</option>{" "}
-                        {/* Menghapus onChange dari option */}
-                        <option value="P">P</option>{" "}
-                        {/* Menghapus onChange dari option */}
+                        <option>-- pilih --</option>
+                        <option value="L">Laki-Laki</option>
+                        <option value="P">Perempuan</option>
                       </select>
                     </div>
 
@@ -680,6 +701,59 @@ const Pasien = () => {
                       ></textarea>
                     </div>
 
+                    <hr />
+                    <div className="text-center mt-3">
+                      Bila dikosongkan akan terisi nilai default
+                    </div>
+                    <div className="mb-3 ">
+                      <label
+                        htmlFor="username"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Username
+                      </label>
+                      <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        value={formData.username}
+                        onChange={handleChange}
+                        className="mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="Username"
+                      />
+                    <small>Default: Diambil dari nomor telepon pasien</small>
+                    </div>
+
+                    <div className="mb-3">
+                      <label
+                        htmlFor="password"
+                        className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                      >
+                        Password
+                      </label>
+                      <input
+                        type="text"
+                        id="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        className="mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        placeholder="Password"
+                      />
+                    <small>Default: Diambil dari tanggal lahir pasien {'(MMDDYYY)'}</small>
+                    </div>
+
+                    <div>
+                      <input
+                        type="hidden"
+                        id="id_relasi"
+                        name="id_relasi"
+                        value={formData.id_relasi}
+                        onChange={handleChange}
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                      />
+                    </div>
+
                     {/* <div>
                       <label
                         htmlFor="gambar"
@@ -747,7 +821,7 @@ const Pasien = () => {
 
           {/* modal update */}
           {showUpdateModal && (
-            <div className="inset-0 z-50 -mt-100 flex max-h-full items-center justify-center overflow-y-auto">
+            <div className="inset-0 z-50 -mt-[760px] flex max-h-full items-center justify-center overflow-y-auto">
               <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
               <div
                 role="alert"
@@ -798,10 +872,8 @@ const Pasien = () => {
                         }
                         className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                       >
-                        <option value="L">L</option>{" "}
-                        {/* Menghapus onChange dari option */}
-                        <option value="P">P</option>{" "}
-                        {/* Menghapus onChange dari option */}
+                        <option value="L">Laki-Laki</option>
+                        <option value="P">Perempuan</option>
                       </select>
                     </div>
 
@@ -939,28 +1011,45 @@ const Pasien = () => {
                       />
                     </div>
 
-                    <div>
+                    <div className="mb-3">
                       <label
                         htmlFor="Password"
                         className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
                       >
-                        Username
+                        Password
                       </label>
                       <input
                         type="text"
                         id="Password"
                         name="password"
-                        value={updateData.password}
                         onChange={(e) =>
                           setUpdateData({
                             ...updateData,
                             password: e.target.value,
                           })
                         }
-                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                        className="mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                         placeholder="Password"
                       />
+                      <small>Kosongkan bila tidak ingin mengubah password</small>
                     </div>
+
+                    <div>
+                      <input
+                        type="hidden"
+                        id="id_relasi"
+                        name="id_relasi"
+                        value={updateData.username}
+                        onChange={(e) =>
+                          setUpdateData({
+                            ...updateData,
+                            id_relasi: e.target.value,
+                          })
+                        }
+                        className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                      />
+                    </div>
+
                     {/* <div>
                       <label
                         htmlFor="Gambar"
