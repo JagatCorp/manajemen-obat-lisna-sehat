@@ -6,7 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import { useRouter } from 'next/router';
-import { useNavigate } from "react-router-dom";
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
@@ -425,7 +424,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   pathname === "/daftarobat" ||
                   pathname.includes("daftarobat") ||
                   pathname === "/principle" ||
-                  pathname.includes("principle")
+                  pathname.includes("principle") ||
+                  pathname === "/transaksiobatkeluar" ||
+                  pathname.includes("transaksiobatkeluar")
                 }
               >
                 {(handleClick, open) => {
@@ -487,6 +488,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 }`}
                             >
                               Principle
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/transaksiobatmasuk"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/transaksi/obat/masuk" && "text-white"
+                                }`}
+                            >
+                              Transaksi Masuk
                             </Link>
                           </li>
 

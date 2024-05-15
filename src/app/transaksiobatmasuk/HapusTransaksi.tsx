@@ -6,8 +6,8 @@ import { ToastContainer, toast } from "react-toastify";
 import API_URL from "../config";
 
 
-const HapusPrinciple = ({ idModal, data, fetchData }) => {
-    // console.log(errorMessages);
+const HapusTransaksi = ({ idModal, data, fetchData }) => {
+    // console.log('transaksi',data);
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -16,11 +16,9 @@ const HapusPrinciple = ({ idModal, data, fetchData }) => {
 
         try {
             const response = await axios.delete(
-                API_URL + "/principle/" + data.id,
+                API_URL + "/transaksi_obat_masuk/" + data.id,
             );
 
-
-            
             if (response.status === 200) {
 
                 const modalHapus = document.getElementById(idModal);
@@ -28,7 +26,7 @@ const HapusPrinciple = ({ idModal, data, fetchData }) => {
                     modalHapus.close();
                 }
 
-                showToastMessage("Data Principle berhasil ditambahkan!");
+                showToastMessage("Data Transaksi Obat Masuk berhasil ditambahkan!");
                 setLoading(false);
                 fetchData();
             } else {
@@ -53,7 +51,7 @@ const HapusPrinciple = ({ idModal, data, fetchData }) => {
                 className="flex gap-1 items-center font-semibold"
             >
                 {/* <IconUserPlus color="#4777F3" /> */}
-                Hapus Data Principle
+                Hapus Data Transaksi
             </label>,
         ],
         body: [
@@ -91,4 +89,4 @@ const HapusPrinciple = ({ idModal, data, fetchData }) => {
     );
 };
 
-export default HapusPrinciple;
+export default HapusTransaksi;

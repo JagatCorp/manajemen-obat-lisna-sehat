@@ -7,45 +7,39 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import TambahObat from "./TambahObat";
-import GambarObat from "./GambarObat";
-import HapusObat from "./HapusObat";
-import EditObat from "./EditObat";
 import API_URL from "../config";
-import formatNumberWithCurrency from "@/components/formatNumberWithCurrency";
-// import EditObat from "./EditObat";
-// import HapusObat from "./HapusObat";
+import TambahTransaksi from "./TambahTransaksi";
+import HapusTransaksi from "./HapusTransaksi";
 
-const Obat = () => {
-  const [obat, setObat] = useState([]);
+const TransaksiObatMasuk = () => {
+  const [transaksiObatMasuk, setTransaksiObatMasuk] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
-  const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [itemIdToDelete, setItemIdToDelete] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef(null);
-  const [satuan, setSatuan] = useState([]);
+  const [obat, setObat] = useState([]);
+  const [principle, setPrinciple] = useState([]);
 
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        API_URL + `/obat?page=${currentPage}`,
+        API_URL + `/transaksi_obat_masuk?page=${currentPage}`,
       );
-      //   console.log(response.data.data);
-      setObat(response.data.data);
+      console.log(response);
+      setTransaksiObatMasuk(response.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
       setTotalCount(response.data.totalCount);
     } catch (error: any) {
       // Menggunakan `any` untuk sementara agar bisa mengakses `message`
-      console.error("Error fetching data Obat:", error);
+      console.error("Error fetching data transaksi obat masuk:", error);
       setError(
         error instanceof Error
           ? error.message
@@ -56,12 +50,28 @@ const Obat = () => {
     }
   };
 
-  const fetchDataSatuan = async () => {
+  const fetchDataObat = async () => {
     try {
-      const response = await axios.get(API_URL + "/satuan");
+      const response = await axios.get(API_URL + "/obat");
 
       if (response.status == 200) {
-        setSatuan(response.data.data.data);
+        // console.log('obat',response.data.data);
+        setObat(response.data.data);
+      } else {
+        console.error(response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchDataPrinciple = async () => {
+    try {
+      const response = await axios.get(API_URL + "/principle");
+
+      if (response.status == 200) {
+        console.log('obat',response.data.data.data);
+        setPrinciple(response.data.data.data);
       } else {
         console.error(response);
       }
@@ -73,15 +83,15 @@ const Obat = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        API_URL + `/obat?keyword=${keyword}`,
+        API_URL + `/transaksi_obat_masuk?keyword=${keyword}`,
       );
-      setObat(response.data.data.data);
+      setTransaksiObatMasuk(response.data.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
       setTotalCount(response.data.totalCount);
     } catch (error: any) {
       // Menggunakan `any` untuk sementara agar bisa mengakses `message`
-      console.error("Error fetching data Obat:", error);
+      console.error("Error fetching data transaksi obat masuk:", error);
       setError(
         error instanceof Error
           ? error.message
@@ -94,7 +104,8 @@ const Obat = () => {
 
   // kondisi search
   useEffect(() => {
-    fetchDataSatuan();
+    fetchDataObat();
+    fetchDataPrinciple();
     if (searchTerm !== "") {
       fetchDataByKeyword(searchTerm);
     } else {
@@ -108,10 +119,15 @@ const Obat = () => {
 
   const firstPage = Math.max(1, currentPage - 4); // Menghitung halaman pertama yang akan ditampilkan
 
+  const formatNumberWithCurrency = (number) => {
+    // Memformat angka dengan dua angka desimal dan tambahkan simbol mata uang
+    return `Rp ${number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
+  };
+
   return (
     <>
       <DefaultLayout>
-        <Breadcrumb pageName="Obat" />
+        <Breadcrumb pageName="Transaksi Obat Masuk" />
         <div className="flex flex-col gap-10">
           <ToastContainer />
 
@@ -119,7 +135,7 @@ const Obat = () => {
             <button
               className="flex items-center gap-1 rounded-md bg-white px-4  py-2 text-end text-black shadow-xl hover:bg-slate-100 focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-offset-2 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-400"
               onClick={() => {
-                const modal = document.getElementById("modalTambahObat");
+                const modal = document.getElementById("modalTambahTransaksiObatMasuk");
                 if (modal instanceof HTMLDialogElement) {
                   modal.showModal();
                 }
@@ -139,21 +155,22 @@ const Obat = () => {
                   d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                 />
               </svg>
-              Tambah Obat
+              Tambah Transaksi Obat Masuk
             </button>
 
             {/* modal tambah */}
-            <TambahObat
-              idModal={"modalTambahObat"}
+            <TambahTransaksi
+              idModal={"modalTambahTransaksiObatMasuk"}
               fetchData={fetchData}
-              dataSatuan={satuan}
+              dataObat={obat}
+              dataPrinciple={principle}
             />
 
             <div className="mb-4 flex items-center justify-end">
               {/* search */}
               <input
                 type="text"
-                placeholder="Cari Obat..."
+                placeholder="Cari Transaksi Obat..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-48 rounded-l-md border border-[#e0e0e0] bg-white px-6 py-3 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-slate-500 dark:text-white md:w-56"
@@ -164,22 +181,22 @@ const Obat = () => {
                 <thead>
                   <tr className="bg-slate-2 text-left dark:bg-meta-4">
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                      Obat
+                      Nama Obat
                     </th>
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                      Qty Box
+                      Jumlah Obat
                     </th>
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                      Qty Sat
+                      Harga Satuan Obat
                     </th>
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                      Stok
+                      Jumlah Harga
                     </th>
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                      Harga
+                      Principle
                     </th>
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                      Gambar
+                      Tanggal
                     </th>
                     <th className="px-4 py-4 font-medium text-black dark:text-white">
                       Actions
@@ -187,101 +204,53 @@ const Obat = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {obat && obat.length > 0 ? (
+                  {transaksiObatMasuk && transaksiObatMasuk.length > 0 ? (
                     <>
-                      {obat.map((Item, key) => (
+                      {transaksiObatMasuk.map((Item, key) => (
                         <tr key={key}>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                              {Item["nama_obat"]}
+                              {Item['obat']["nama_obat"]}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                              {Item["qty_box"]}{" "}
-                              {Item["satuan_box"]["nama_satuan"]}
+                              {Item['jml_obat']}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                              {Item["qty_sat"]}{" "}
-                              {Item["satuan_sat"]["nama_satuan"]}
+                              {formatNumberWithCurrency(Item['harga'])}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                              {Item.stok}
+                              {formatNumberWithCurrency(Item['jml_obat'] * Item['harga'])}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <p className="text-black dark:text-white">
-                              {formatNumberWithCurrency(Item.harga)}
-                            </p>
+                              {Item['principle']['nama_instansi']}                          
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            {/* <p className="text-black dark:text-white">
-                                    Lihat Gambar
-                                </p> */}
-                            <button
-                              className="flex items-center gap-1 rounded-md bg-white px-4  py-2 text-end text-black shadow-xl hover:bg-slate-100 focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-offset-2 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-400"
-                              onClick={() => {
-                                const modal = document.getElementById(
-                                  "modalGambarObat" + key,
-                                );
-                                if (modal instanceof HTMLDialogElement) {
-                                  modal.showModal();
-                                }
-                              }}
-                            >
-                              Gambar Obat
-                            </button>
-                            <GambarObat
-                              idModal={"modalGambarObat" + key}
-                              dataObat={Item}
-                            />
+                              {(() => {
+                                const date = new Date(Item['createdAt']);
+                                const year = date.getFullYear();
+                                const month = String(date.getMonth() + 1).padStart(2, '0'); // Tambah 1 karena indeks bulan dimulai dari 0
+                                const day = String(date.getDate()).padStart(2, '0');
+          
+                                const formattedDate = `${year}-${month}-${day}`;
+          
+                                return formattedDate;
+                              })()}
                           </td>
 
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <div className="flex items-center space-x-3.5">
-                              {/* button modal edit */}
-                              <button
-                                className="hover:text-primary"
-                                onClick={() => {
-                                  const modalEdit = document.getElementById(
-                                    "modalEditObat" + key,
-                                  );
-                                  if (modalEdit instanceof HTMLDialogElement) {
-                                    modalEdit.showModal();
-                                  }
-                                }}
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke-width="1.5"
-                                  stroke="currentColor"
-                                  className="h-5 w-5"
-                                >
-                                  <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                                  />
-                                </svg>
-                              </button>
-                              <EditObat
-                                idModal={"modalEditObat" + key}
-                                dataSatuan={satuan}
-                                dataObat={Item}
-                                fetchData={fetchData}
-                              />
-
                               <button
                                 className="hover:text-primary"
                                 onClick={() => {
                                   const modalHapus = document.getElementById(
-                                    "modalHapusObat" + key,
+                                    "modalHapusTransaksi" + key,
                                   );
                                   if (modalHapus instanceof HTMLDialogElement) {
                                     modalHapus.showModal();
@@ -314,9 +283,9 @@ const Obat = () => {
                                   />
                                 </svg>
                               </button>
-                              <HapusObat
-                                idModal={"modalHapusObat" + key}
-                                dataObat={Item}
+                              <HapusTransaksi
+                                idModal={"modalHapusTransaksi" + key}
+                                data={Item}
                                 fetchData={fetchData}
                               />
                             </div>
@@ -385,4 +354,4 @@ const Obat = () => {
   );
 };
 
-export default Obat;
+export default TransaksiObatMasuk;
