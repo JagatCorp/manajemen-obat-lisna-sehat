@@ -10,7 +10,6 @@ const EditObat = ({ idModal, fetchData, dataSatuan, dataObat }) => {
 
     const [formData, setFormData] = useState({
         nama_obat: dataObat['nama_obat'],
-        qty_box: dataObat['qty_box'],
         qty_sat: dataObat['qty_sat'],
         stok: dataObat['stok'],
         harga: dataObat['harga'],
@@ -26,7 +25,6 @@ const EditObat = ({ idModal, fetchData, dataSatuan, dataObat }) => {
 
         var formDataToSendEdit = new FormData;
         formDataToSendEdit.append("nama_obat", formData.nama_obat);
-        formDataToSendEdit.append("qty_box", formData.qty_box);
         formDataToSendEdit.append("qty_sat", formData.qty_sat);
         formDataToSendEdit.append("stok", formData.stok);
         formDataToSendEdit.append("harga", formData.harga);
@@ -144,15 +142,6 @@ const EditObat = ({ idModal, fetchData, dataSatuan, dataObat }) => {
                     </div>
                     <div className="flex gap-3">
                         <div className="grid grid-cols-3 gap-2">
-                            <input
-                                type="number"
-                                name="qty_box"
-                                id="qty_box"
-                                min="0"
-                                value={formData.qty_box}
-                                onChange={handleChange}
-                                className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 col-span-2"
-                            />
                             <select 
                             onChange={handleChange} 
                             name="satuan_box_id" 
