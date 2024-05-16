@@ -13,7 +13,6 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
 
     const [formData, setFormData] = useState({
         nama_obat: "",
-        qty_box: "",
         qty_sat: "",
         stok: "",
         harga: "",
@@ -29,7 +28,6 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
         try {
             var formDataToSend = new FormData();
             formDataToSend.append("nama_obat", formData.nama_obat);
-            formDataToSend.append("qty_box", formData.qty_box);
             formDataToSend.append("qty_sat", formData.qty_sat);
             formDataToSend.append("stok", formData.stok);
             formDataToSend.append("harga", formData.harga);
@@ -61,7 +59,6 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
                 setFormData(prevData => ({
                     ...prevData,
                     nama_obat: "",
-                    qty_box: "",
                     qty_sat: "",
                     stok: "",
                     harga: "",
@@ -138,15 +135,6 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
                     </div>
                     <div className="flex gap-3">
                         <div className="grid grid-cols-3 gap-2">
-                            <input
-                                type="number"
-                                name="qty_box"
-                                id="qty_box"
-                                min="0"
-                                value={formData.qty_box}
-                                onChange={handleChange}
-                                className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 col-span-2"
-                            />
                             <select
                                 onChange={handleChange}
                                 name="satuan_box_id"

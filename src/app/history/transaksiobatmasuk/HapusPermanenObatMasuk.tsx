@@ -1,12 +1,12 @@
 
+import API_URL from "@/app/config";
 import { ModalForm } from "@/components/modal/ModalForm";
 import axios from "axios";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import API_URL from "../config";
 
 
-const HapusTransaksi = ({ idModal, data, fetchData }) => {
+const HapusPermanenObatMasuk = ({ idModal, data, fetchData }) => {
     // console.log('transaksi',data);
     const [loading, setLoading] = useState(false);
 
@@ -14,20 +14,23 @@ const HapusTransaksi = ({ idModal, data, fetchData }) => {
         // e.preventDefault();
         setLoading(true);
 
+        const formData = new FormData;
+        formData.append('deletedAt', null);
+
         try {
             const response = await axios.delete(
-                API_URL + "/transaksi_obat_masuk/" + data.id,
+                API_URL + "/transaksi_obat_masuk/hard/" + data.id
             );
 
             if (response.status === 200) {
                 console.log('hapus', response);
 
-                const modalHapus = document.getElementById(idModal);
-                if(modalHapus instanceof HTMLDialogElement){
-                    modalHapus.close();
+                const modalRestore = document.getElementById(idModal);
+                if (modalRestore instanceof HTMLDialogElement) {
+                    modalRestore.close();
                 }
 
-                showToastMessage("Data Transaksi Obat Masuk berhasil ditambahkan!");
+                showToastMessage("Data Transaksi Obat Masuk berhasil dihapus permanen!");
                 setLoading(false);
                 fetchData();
             } else {
@@ -61,19 +64,18 @@ const HapusTransaksi = ({ idModal, data, fetchData }) => {
                 key={"title"}
                 className="flex gap-1 items-center font-semibold"
             >
-                {/* <IconUserPlus color="#4777F3" /> */}
-                Hapus Data Transaksi
+                Hapus Permanen Data Transaksi Obat Masuk
             </label>,
         ],
         body: [
             <div key={"input"} className="flex flex-col gap-3">
-                Apakah Anda yakin ingin menghapus data ini?
+                Apakah Anda yakin ingin menghapus permanen data ini?
             </div>,
         ],
         footer: [
             <>
                 <button className="mt-3 inline-flex w-full justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-base font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm">
-                    Cancel    
+                    Cancel
                 </button>
                 <button
                     key="buttonSubmit"
@@ -85,7 +87,7 @@ const HapusTransaksi = ({ idModal, data, fetchData }) => {
                     {loading ? (
                         <span className="animate-spin">&#9696;</span>
                     ) : (
-                        ''                        
+                        ''
                     )}
                     {loading ? "Loading..." : "Submit"}
                 </button>
@@ -100,4 +102,4 @@ const HapusTransaksi = ({ idModal, data, fetchData }) => {
     );
 };
 
-export default HapusTransaksi;
+export default HapusPermanenObatMasuk;

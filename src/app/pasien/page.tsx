@@ -10,6 +10,14 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import API_URL from "../config";
+
+const dataArray = [
+  { id: 1, name: 'John Doe', age: 30 },
+  { id: 2, name: 'Jane Doe', age: 25 },
+  { id: 3, name: 'Bob Smith', age: 40 },
+  { id: 4, name: 'Alice Johnson', age: 35 },
+];
+
 const Pasien = () => {
   const [pasien, setPasien] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +33,32 @@ const Pasien = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef(null);
+
+
+  const [inputValue, setInputValue] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedData, setSelectedData] = useState(null);
+
+  const handleInputChange = (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    const results = dataArray.filter((data) => {
+      return (
+        data.name.toLowerCase().includes(searchTerm) ||
+        data.age.toString().includes(searchTerm)
+      );
+    });
+    setSearchResults(results);
+    setInputValue(searchTerm);
+  };
+
+  const handleSelect = (data) => {
+    setSelectedData(data);
+    setInputValue(data.name);
+    setSearchResults([]); // Optional: Clear search results after selection
+  };
+
+
+
   // add data
   const [formData, setFormData] = useState({
     nama: "",
@@ -92,6 +126,24 @@ const Pasien = () => {
     }
   };
 
+  const fetchDataAnggota = async () => {
+    // console.log('masuk');
+    try {
+      const response = await axios.get(
+        `https://kop-dayalisna.online/api/anggotaApi`,
+      );
+
+      if(response.status == 200){
+        console.log('anggota', response);
+      } else{
+        console.error('anggota', response);
+      }
+      
+      } catch (error: any) {
+        console.log(error);
+      }
+  }
+
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
@@ -113,6 +165,10 @@ const Pasien = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchDataAnggota();
+  }, []);
 
   // kondisi search
   useEffect(() => {
@@ -499,8 +555,8 @@ const Pasien = () => {
                           () => setCurrentPage(firstPage + index) // Memperbarui halaman berdasarkan indeks dan halaman pertama yang ditampilkan
                         }
                         className={`mx-1 rounded-md px-3 py-1 ${currentPage === firstPage + index
-                            ? "bg-blue-400 to-slate-600 text-white"
-                            : "bg-slate-200 hover:bg-slate-400"
+                          ? "bg-blue-400 to-slate-600 text-white"
+                          : "bg-slate-200 hover:bg-slate-400"
                           }`}
                       >
                         {firstPage + index}{" "}
@@ -574,6 +630,34 @@ const Pasien = () => {
                     Add Pasien
                   </h1>
                   <form onSubmit={handleSubmit}>
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Search..."
+                        value={inputValue}
+                        onChange={handleInputChange}
+                        className="border rounded-md p-2 w-full"
+                      />
+                      <ul>
+                        {searchResults.map((data) => (
+                          <li
+                            key={data.id}
+                            onClick={() => handleSelect(data)}
+                            className="cursor-pointer"
+                          >
+                            {data.name} - {data.age}
+                          </li>
+                        ))}
+                      </ul>
+                      {selectedData && (
+                        <div>
+                          <h2>Selected Data</h2>
+                          <p>Name: {selectedData.name}</p>
+                          <p>Age: {selectedData.age}</p>
+                        </div>
+                      )}
+                    </div>
+
                     <label
                       htmlFor="nama"
                       className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
@@ -721,7 +805,7 @@ const Pasien = () => {
                         className="mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                         placeholder="Username"
                       />
-                    <small>Default: Diambil dari nomor telepon pasien</small>
+                      <small>Default: Diambil dari nomor telepon pasien</small>
                     </div>
 
                     <div className="mb-3">
@@ -740,7 +824,7 @@ const Pasien = () => {
                         className="mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                         placeholder="Password"
                       />
-                    <small>Default: Diambil dari tanggal lahir pasien {'(MMDDYYY)'}</small>
+                      <small>Default: Diambil dari tanggal lahir pasien {'(MMDDYYY)'}</small>
                     </div>
 
                     <div>
@@ -1116,8 +1200,8 @@ const Pasien = () => {
               </div>
             </div>
           )}
-        </div>
-      </DefaultLayout>
+        </div >
+      </DefaultLayout >
     </>
   );
 };
