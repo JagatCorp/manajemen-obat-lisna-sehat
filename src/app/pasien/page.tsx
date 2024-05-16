@@ -41,7 +41,6 @@ const Pasien = () => {
   });
 
   // update data
-
   const [updateData, setUpdateData] = useState<{
     nama: string;
     alamat: string;

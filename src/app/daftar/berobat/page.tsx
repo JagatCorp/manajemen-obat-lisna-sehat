@@ -58,7 +58,7 @@ const DaftarBerobat = () => {
                     gambar: null,
                 });
                 // fetchData();
-                window.location.href = "/qrcode";
+                window.location.href = "/daftar/pasienberobat/pasien";
             } else {
                 console.error("Gagal mengirim data.");
             }

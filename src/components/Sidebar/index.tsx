@@ -596,7 +596,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </li>
               {/* <!-- Menu Item Pasien --> */}
               {/* <!-- Menu Item Calendar --> */}
-              {isPasien && pathname !== "/daftar/berobat" && (
+              {/* {isPasien && pathname !== "/daftar/berobat" && ( */}
               <li>
                 <Link
                   href="/daftar/berobat"
@@ -620,7 +620,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Daftar Berobat
                 </Link>
               </li>
-              )}
+              {/* )} */}
               {/* <!-- Menu Item Calendar --> */}
 
               <li>
