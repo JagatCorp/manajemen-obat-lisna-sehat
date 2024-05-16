@@ -36,7 +36,11 @@ export default function Login() {
             if (response.data.urlGambar) {
                 sessionStorage.setItem("urlGambar", response.data.urlGambar);
             }
+            if (response.data.role) {
+                sessionStorage.setItem("role", response.data.role);
+            }
             sessionStorage.setItem("id", response.data.id);
+            
 
             // Simpan token JWT di dalam cookie dengan nama 'token'
             setCookie("token", response.data.token, { path: "/" });
