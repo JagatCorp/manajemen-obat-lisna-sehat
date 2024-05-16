@@ -168,7 +168,7 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple }) => {
                         required>
                         <option value=''>-- Pilih Principle --</option>
                         {dataPrinciple.map((principle, index) => (
-                            <option value={principle['id']}>{principle['attributes']['nama_instansi']}</option>
+                            <option key={index} value={principle['id']}>{principle['attributes']['nama_instansi']}</option>
                         ))}
                     </select>
                 </div>
@@ -209,8 +209,8 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple }) => {
                     />
                 </div>
             </div>,
-            <hr className="mt-3 mb-3" />,
-            <div id="hasil">
+            <hr key={'divider'} className="mt-3 mb-3" />,
+            <div key={'hasil'} id="hasil">
                 <div className="text-center">Detail Pengeluaran</div>
                 {hargaHasil ? formatNumberWithCurrency(parseInt(hargaHasil)) : 0} x {jumlahHasil ?? 0} = {hasil ? formatNumberWithCurrency(parseInt(hasil)) : 0}
             </div>,
