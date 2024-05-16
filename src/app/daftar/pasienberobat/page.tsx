@@ -9,6 +9,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import API_URL from "@/app/config";
+import FormattedDate from "@/components/FormattedDate";
 const Pasienberobat = () => {
   const [pasienberobat, setPasienberobat] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,13 +44,14 @@ const Pasienberobat = () => {
       const response = await axios.get(
         API_URL + `/transaksi_medis?page=${currentPage}`,
       );
+      console.log('coba',response.data.data);
       setPasienberobat(response.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
       setTotalCount(response.data.totalCount);
     } catch (error: any) {
       // Menggunakan `any` untuk sementara agar bisa mengakses `message`
-      console.error("Error fetching data pasienberobat:", error);
+      console.error("Error fetching data pasien berobat:", error);
       setError(
         error instanceof Error
           ? error.message
@@ -71,7 +73,7 @@ const Pasienberobat = () => {
       setTotalCount(response.data.totalCount);
     } catch (error: any) {
       // Menggunakan `any` untuk sementara agar bisa mengakses `message`
-      console.error("Error fetching data pasienberobat:", error);
+      console.error("Error fetching data pasien berobat:", error);
       setError(
         error instanceof Error
           ? error.message
@@ -158,7 +160,7 @@ const Pasienberobat = () => {
   return (
     <>
       <DefaultLayout>
-        <Breadcrumb pageName="Pasienberobat" />
+        <Breadcrumb pageName="Pasien Berobat" />
         <div className="flex flex-col gap-10">
           <ToastContainer />
 
@@ -188,7 +190,7 @@ const Pasienberobat = () => {
               {/* search */}
               <input
                 type="text"
-                placeholder="Cari Pasienberobat..."
+                placeholder="Cari Pasien Berobat..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-48 rounded-l-md border border-[#e0e0e0] bg-white px-6 py-3 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-slate-500 dark:text-white md:w-56"
@@ -199,11 +201,22 @@ const Pasienberobat = () => {
                 <thead>
                   <tr className="bg-slate-2 text-left dark:bg-meta-4">
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
+                      Nomor Urut
+                    </th>
+                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
                       Keluhan
                     </th>
-
+                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
+                      Nama Dokter
+                    </th>
+                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
+                      Spesialis Dokter
+                    </th>
                     <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
                       Harga
+                    </th>
+                    <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
+                      Tanggal Daftar
                     </th>
                     <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
                       Status
@@ -221,13 +234,32 @@ const Pasienberobat = () => {
                         <tr key={key}>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
+                              {Item.no_urut}
+                            </p>
+                          </td>
+                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                            <p className="text-black dark:text-white">
                               {Item.keluhan}
                             </p>
                           </td>
-
+                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                            <p className="text-black dark:text-white">
+                              {Item.dokter.nama_dokter}
+                            </p>
+                          </td>
+                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                            <p className="text-black dark:text-white">
+                              {Item.dokter.spesialisdokter.nama_spesialis}
+                            </p>
+                          </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
                               {Item.harga}
+                            </p>
+                          </td>
+                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                            <p className="text-black dark:text-white">
+                              <FormattedDate date={Item.createdAt} />
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

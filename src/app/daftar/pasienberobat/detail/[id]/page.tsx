@@ -18,12 +18,16 @@ const Detail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const goBack = () => {
+        window.history.back();
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`${API_URL}/transaksi_medis/${id}`);
                 setData(response.data);
-                // console.log(response.data.data);
+                // console.log(response.data);
             } catch (error) {
                 setError('Terjadi kesalahan saat mengambil data');
             } finally {
@@ -40,6 +44,12 @@ const Detail = () => {
     return (
         <DefaultLayout>
             <div className="py-14 px-4 md:px-6 2xl:px-20 2xl:container 2xl:mx-auto">
+                <button
+                    onClick={goBack}
+                    className="mt-3 inline-flex justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-base font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
+                >
+                    Kembali
+                </button>
                 <div className="flex justify-start item-start space-y-2 flex-col">
                     {/* <h1 className="text-3xl dark:text-white lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800">Order #13432</h1> */}
                     <p className="text-base dark:text-gray-300 font-medium leading-6 text-gray-600">Berobat Pada Tanggal: {format(
@@ -58,7 +68,7 @@ const Detail = () => {
                                     <img className="w-full md:hidden" src={data?.url_qrcode} alt="qrcode" />
                                 </div>
                                 <div className="border-b border-gray-200 md:flex-row flex-col flex justify-between items-start w-full pb-8 space-y-4 md:space-y-0">
-                                    <div className="w-full flex flex-col justify-start items-start space-y-8">
+                                    <div className="w-full flex flex-col justify-start items-start space-y-8 me-5">
                                         {/* <h3 className="text-xl dark:text-white xl:text-2xl font-semibold leading-6 text-gray-800">Pasien:</h3> */}
                                         {/* <div className="flex justify-start items-start flex-col space-y-2">
                                             <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300">Keluhan: </span> {data?.keluhan}</p>
@@ -73,25 +83,32 @@ const Detail = () => {
                                         </div>
                                         <div className="flex justify-between w-full">
                                             <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300">Keluhan: </span> {data?.keluhan}</p>
-                                            <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300">Mulai Praktik: </span> {data?.dokter.mulai_praktik}</p>
+                                            <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300">Spesialis: </span> {data?.dokter.spesialisdokter.nama_spesialis}</p>
                                         </div>
 
                                         <div className="flex justify-between w-full">
                                             <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300">Jenis Kelamin: </span>{data?.pasien.jk == "L" ? "Laki-laki" : "Perempuan"}</p>
                                             <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300">Jenis Kelamin: </span>{data?.dokter.jk == "L" ? "Laki-laki" : "Perempuan"}</p>
                                         </div>
+                                        {/* <div className="flex justify-between w-full">
+                                            <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300">Spesialis: </span> {data?.dokter.spesialisdokter.nama_spesialis}</p>
+                                        </div> */}
                                         <div className="flex justify-between w-full">
                                             <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300">No Telpon: </span>{data?.pasien.no_telp}</p>
                                             <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300">Selesai Praktik: </span>{data?.dokter.selesai_praktik}</p>
                                         </div>
                                         <div className="flex justify-between w-full">
                                             <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300">Alergi: </span>{data?.pasien.alergi}</p>
-                                            <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300">Hari Praktik: </span>{data?.dokter.hari_praktik}</p>
+                                            <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300">Mulai Praktik: </span> {data?.dokter.mulai_praktik}</p>
                                         </div>
                                         <div className="flex justify-between w-full">
                                             <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300">Gol Darah: </span>{data?.pasien.gol_darah}</p>
-                                            <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300"><img src={data?.dokter.urlGambar} alt="foto dokter" className='w-10 h-10' /></span></p>
+                                            <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300">Hari Praktik: </span>{data?.dokter.hari_praktik}</p>
+                                            {/* <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300"><img src={data?.dokter.urlGambar} alt="foto dokter" className='w-10 h-10' /></span></p> */}
                                         </div>
+                                    </div>
+                                    <div>
+                                        <img src={data?.dokter.urlGambar} alt="foto dokter" />
                                     </div>
                                     {/* <div className="flex justify-between space-x-8 items-start w-full">
                                         <p className="text-base dark:text-white xl:text-lg font-semibold leading-6 text-gray-800">Harga: {data?.harga}</p>

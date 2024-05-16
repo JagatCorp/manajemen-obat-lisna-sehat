@@ -7,6 +7,7 @@ import axios from "axios";
 import API_URL from "@/app/config";
 const DaftarBerobat = () => {
     const [dokter, setDokter] = useState([]);
+    const [pasien, setPasien] = useState([]);
     const urlGambar = sessionStorage.getItem("urlGambar");
     const [user, setUser] = useState({});
     // insert
@@ -32,6 +33,9 @@ const DaftarBerobat = () => {
             formDataToSend.append("pasien_id", formData.pasien_id);
             formDataToSend.append("dokter_id", formData.dokter_id);
             formDataToSend.append("keluhan", formData.keluhan);
+            
+            // kasih validasi
+            formDataToSend.append("status", "1");
 
             // Pastikan 'gambar' adalah File, bukan string 'null' atau path file.
             if (formData.gambar !== "null" && formData.gambar) {
@@ -81,14 +85,29 @@ const DaftarBerobat = () => {
             // setLoading(false);
         }
     };
+
+    const fetchDataPasien = async () => {
+        try {
+            const response = await axios.get(
+                API_URL + `/pasien`,
+            );
+            console.log('pasien',response.data.data.data);
+            setPasien(response.data.data.data);
+        } catch (error: any) {
+            // Menggunakan `any` untuk sementara agar bisa mengakses `message`
+            console.error("Error fetching data spesialisdokter:", error);
+        } finally {
+            // setLoading(false);
+        }
+    };
     useEffect(() => {
+        fetchDataPasien();
         fetchDataDokter();
         fetchDataUser();
     }, []);
 
     const fetchDataUser = async () => {
         const url = urlGambar ? "/dokter/" : "/pasien/";
-
 
         try {
             const response = await axios.get(API_URL + url + sessionStorage.getItem("id"));
@@ -120,8 +139,9 @@ const DaftarBerobat = () => {
                                     </h3>
                                 </div>
                                 <div className="flex flex-col gap-5.5 p-6.5">
-                                    <input type="hidden"
-                                        onChange={handleChange} name="pasien_id" id="pasien_id" value={formData.pasien_id = sessionStorage.getItem("id")} />
+                                    {/* cek adminnya disini */}
+                                    {/* <input type="hidden"
+                                        onChange={handleChange} name="pasien_id" id="pasien_id" value={formData.pasien_id = sessionStorage.getItem("id")} /> */}
                                     <div>
                                         <label className="mb-3 block text-sm font-medium text-black dark:text-white">
                                             Pilih Dokter
@@ -137,6 +157,28 @@ const DaftarBerobat = () => {
                                                             value={ItemsDokter.id}
                                                         >
                                                             {ItemsDokter.nama_dokter} | spesialis: {ItemsDokter.spesialisdokter.nama_spesialis}
+                                                        </option>
+
+                                                    ))}
+                                                </>
+                                            )}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                                            Pilih Pasien
+                                        </label>
+                                        <select value={formData.pasien_id}
+                                            onChange={handleChange} name="pasien_id" id="pasien_id" className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary">
+                                            <option>-- pilih --</option>
+                                            {pasien && pasien.length > 0 && (
+                                                <>
+                                                    {pasien.map((ItemsPasien) => (
+                                                        <option
+                                                            key={ItemsPasien.attributes.id}
+                                                            value={ItemsPasien.id}
+                                                        >
+                                                            {ItemsPasien.attributes.nama}
                                                         </option>
 
                                                     ))}

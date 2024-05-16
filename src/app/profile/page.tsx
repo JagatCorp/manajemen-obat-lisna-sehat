@@ -9,6 +9,7 @@ import axios from "axios";
 import API_URL from "@/app/config";
 import EditSatuanDokter from "./EditDokter";
 import EditSatuanPasien from "./EditPasien";
+import FormattedDate from "@/components/FormattedDate";
 
 const Profile = () => {
   const urlGambar = sessionStorage.getItem("urlGambar");
@@ -159,16 +160,7 @@ const Profile = () => {
                 </div>
                 <div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-strokedark xsm:flex-row">
                   <span className="font-semibold text-black dark:text-white">
-                    {urlGambar ? (user as any).selesai_praktik : (() => {
-                      const date = new Date((user as any).tgl_lahir);
-                      const year = date.getFullYear();
-                      const month = String(date.getMonth() + 1).padStart(2, '0'); // Tambah 1 karena indeks bulan dimulai dari 0
-                      const day = String(date.getDate()).padStart(2, '0');
-
-                      const formattedDate = `${year}-${month}-${day}`;
-
-                      return formattedDate;
-                    })()}
+                    <FormattedDate date={(user as any).tgl_lahir} />
                     {/* {urlGambar ? user.selesai_praktik : user.tgl_lahir} */}
                   </span>
                 </div>

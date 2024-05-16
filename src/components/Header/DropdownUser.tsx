@@ -56,7 +56,6 @@ const DropdownUser = () => {
   const fetchDataUser = async () => {
     const url = urlGambar ? "/dokter/" : "/pasien/";
 
-
     try {
       const response = await axios.get(API_URL + url + sessionStorage.getItem("id"));
 
@@ -110,9 +109,11 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {urlGambar ? (user as any).nama_dokter : (user as any).nama}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs">
+            {urlGambar ? (user as any).spesialisdokter.nama_spesialis : "Pasien"}
+          </span>
         </span>
 
         <span className="h-12 w-12 rounded-full">

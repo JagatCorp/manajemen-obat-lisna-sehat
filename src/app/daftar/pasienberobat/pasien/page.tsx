@@ -9,6 +9,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import API_URL from "@/app/config";
+import FormattedDate from "@/components/FormattedDate";
 const Pasienberobat = () => {
   const [pasienberobat, setPasienberobat] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,6 +44,7 @@ const Pasienberobat = () => {
       const response = await axios.get(
         API_URL + `/transaksi_medis/pasien/${sessionStorage.getItem('id')}?page=${currentPage}`,
       );
+      console.log('pasienberobat', response.data.data);
       setPasienberobat(response.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
@@ -199,11 +201,16 @@ const Pasienberobat = () => {
                 <thead>
                   <tr className="bg-slate-2 text-left dark:bg-meta-4">
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
+                      Nomor Urut
+                    </th>
+                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
                       Keluhan
                     </th>
-
                     <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
                       Harga
+                    </th>
+                    <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
+                      Tanggal Daftar
                     </th>
                     <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
                       Status
@@ -221,6 +228,11 @@ const Pasienberobat = () => {
                         <tr key={key}>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
+                              {Item.no_urut}
+                            </p>
+                          </td>
+                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                            <p className="text-black dark:text-white">
                               {Item.keluhan}
                             </p>
                           </td>
@@ -228,6 +240,11 @@ const Pasienberobat = () => {
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
                               {Item.harga}
+                            </p>
+                          </td>
+                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                            <p className="text-black dark:text-white">
+                              <FormattedDate date={Item.createdAt} />
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
