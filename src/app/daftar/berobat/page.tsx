@@ -5,17 +5,54 @@ import React, { useState, useEffect, useRef } from "react";
 // const [error, setError] = useState<string | null>(null);
 import axios from "axios";
 import API_URL from "@/app/config";
+import { usePathname } from "next/navigation";
 const DaftarBerobat = () => {
     const [dokter, setDokter] = useState([]);
     const [pasien, setPasien] = useState([]);
     const urlGambar = sessionStorage.getItem("urlGambar");
     const [user, setUser] = useState({});
+
+    // validasi admin
+    const pathname = usePathname();
+    const role = sessionStorage.getItem("role"); // Mendapatkan peran dari sessionStorage
+
+    const cekDokter = !!urlGambar && role === 'lisDo'; // Cek apakah pengguna adalah dokter
+    const cekPasien = role === 'lisPa'; // Cek apakah pengguna adalah pasien
+    const cekAdmin = role === 'lisAd'; // Cek apakah pengguna adalah administrator
+
+    // Buat array yang berisi rute-rute yang tidak diizinkan untuk dokter, pasien, dan admin
+    const forbiddenPathsDoctor = ['/satuan', '/daftar/berobat', '/history/transaksiobatmasuk'];
+    const forbiddenPathsPatient = ['/scanqr', '/riwayat', '/history/transaksiobatmasuk'];
+    const forbiddenPathsAdmin = ['/admin-punyabebas'];
+
+    // Pembatasan akses berdasarkan peran pengguna
+    useEffect(() => {
+        if (cekDokter && forbiddenPathsDoctor.includes(pathname)) {
+            window.location.href = '/'; // Alihkan ke halaman lain jika dokter mengakses rute terlarang
+        } else if (cekPasien && forbiddenPathsPatient.includes(pathname)) {
+            window.location.href = '/'; // Alihkan ke halaman lain jika pasien mengakses rute terlarang
+        } else if (!cekAdmin && forbiddenPathsAdmin.includes(pathname)) {
+            window.location.href = '/'; // Alihkan ke halaman lain jika bukan admin mengakses rute admin
+        }
+    }, [pathname, cekDokter, cekPasien, cekAdmin]);
+
+    // Inisialisasi state untuk mengetahui peran pengguna
+    const [isDoctor, setIsDoctor] = useState(false);
+    const [isPasien, setIsPasien] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    useEffect(() => {
+        setIsDoctor(cekDokter);
+        setIsPasien(cekPasien);
+        setIsAdmin(cekAdmin);
+    }, [cekDokter, cekPasien, cekAdmin]);
     // insert
     const [formData, setFormData] = useState({
         pasien_id: "",
         dokter_id: "",
         keluhan: "",
         gambar: null,
+        status: null,
     });
     const handleChange = (e) => {
         const { name, type } = e.target;
@@ -33,10 +70,11 @@ const DaftarBerobat = () => {
             formDataToSend.append("pasien_id", formData.pasien_id);
             formDataToSend.append("dokter_id", formData.dokter_id);
             formDataToSend.append("keluhan", formData.keluhan);
-            
-            // kasih validasi
-            formDataToSend.append("status", "1");
 
+            // kasih validasi
+            if (isAdmin ==true) {
+            formDataToSend.append("status", "1");
+            }
             // Pastikan 'gambar' adalah File, bukan string 'null' atau path file.
             if (formData.gambar !== "null" && formData.gambar) {
                 formDataToSend.append("gambar", formData.gambar);
@@ -60,6 +98,7 @@ const DaftarBerobat = () => {
                     dokter_id: "",
                     keluhan: "",
                     gambar: null,
+                    status: null,
                 });
                 // fetchData();
                 window.location.href = "/daftar/pasienberobat/pasien";
@@ -91,7 +130,7 @@ const DaftarBerobat = () => {
             const response = await axios.get(
                 API_URL + `/pasien`,
             );
-            console.log('pasien',response.data.data.data);
+            console.log('pasien', response.data.data.data);
             setPasien(response.data.data.data);
         } catch (error: any) {
             // Menggunakan `any` untuk sementara agar bisa mengakses `message`
@@ -140,8 +179,10 @@ const DaftarBerobat = () => {
                                 </div>
                                 <div className="flex flex-col gap-5.5 p-6.5">
                                     {/* cek adminnya disini */}
-                                    {/* <input type="hidden"
-                                        onChange={handleChange} name="pasien_id" id="pasien_id" value={formData.pasien_id = sessionStorage.getItem("id")} /> */}
+                                    {!isAdmin && isPasien && (
+                                           <input type="hidden"
+                                           onChange={handleChange} name="pasien_id" id="pasien_id" value={formData.pasien_id = sessionStorage.getItem("id")} />
+                                    )}
                                     <div>
                                         <label className="mb-3 block text-sm font-medium text-black dark:text-white">
                                             Pilih Dokter
@@ -164,29 +205,30 @@ const DaftarBerobat = () => {
                                             )}
                                         </select>
                                     </div>
-                                    <div>
-                                        <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                                            Pilih Pasien
-                                        </label>
-                                        <select value={formData.pasien_id}
-                                            onChange={handleChange} name="pasien_id" id="pasien_id" className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary">
-                                            <option>-- pilih --</option>
-                                            {pasien && pasien.length > 0 && (
-                                                <>
-                                                    {pasien.map((ItemsPasien) => (
-                                                        <option
-                                                            key={ItemsPasien.attributes.id}
-                                                            value={ItemsPasien.id}
-                                                        >
-                                                            {ItemsPasien.attributes.nama}
-                                                        </option>
+                                    {isAdmin &&
+                                        <div>
+                                            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                                                Pilih Pasien
+                                            </label>
+                                            <select value={formData.pasien_id}
+                                                onChange={handleChange} name="pasien_id" id="pasien_id" className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary">
+                                                <option>-- pilih --</option>
+                                                {pasien && pasien.length > 0 && (
+                                                    <>
+                                                        {pasien.map((ItemsPasien) => (
+                                                            <option
+                                                                key={ItemsPasien.attributes.id}
+                                                                value={ItemsPasien.id}
+                                                            >
+                                                                {ItemsPasien.attributes.nama}
+                                                            </option>
 
-                                                    ))}
-                                                </>
-                                            )}
-                                        </select>
-                                    </div>
-
+                                                        ))}
+                                                    </>
+                                                )}
+                                            </select>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>

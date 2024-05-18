@@ -60,7 +60,7 @@ const DropdownUser = () => {
       const response = await axios.get(API_URL + url + sessionStorage.getItem("id"));
 
       if (response.status === 200) {
-        // console.log(response.data);
+        console.log(response.data);
         console.log(urlGambar ? response.data : response.data.data.attributes);
         setUser(urlGambar ? response.data : response.data.data.attributes);
       } else {
@@ -112,7 +112,7 @@ const DropdownUser = () => {
             {urlGambar ? (user as any).nama_dokter : (user as any).nama}
           </span>
           <span className="block text-xs">
-            {urlGambar ? (user as any).spesialisdokter.nama_spesialis : "Pasien"}
+            {/* {urlGambar ? user.spesialisdokter.nama_spesialis : "Pasien"} */}
           </span>
         </span>
 

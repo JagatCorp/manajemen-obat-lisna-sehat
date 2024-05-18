@@ -27,7 +27,7 @@ const Detail = () => {
             try {
                 const response = await axios.get(`${API_URL}/transaksi_medis/${id}`);
                 setData(response.data);
-                // console.log(response.data);
+                console.log(response.data);
             } catch (error) {
                 setError('Terjadi kesalahan saat mengambil data');
             } finally {
