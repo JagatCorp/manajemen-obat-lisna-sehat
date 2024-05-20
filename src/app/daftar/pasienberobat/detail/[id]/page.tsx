@@ -48,7 +48,6 @@ const Detail = () => {
             try {
                 const response = await axios.get(`${API_URL}/transaksi_medis/${id}`);
                 setData(response.data);
-<<<<<<< HEAD
 
                 setFormData((prevData) => ({
                     ...prevData,
@@ -56,9 +55,6 @@ const Detail = () => {
                 }));
 
                 console.log('tran', response.data);
-=======
-                console.log(response.data);
->>>>>>> 33ab687ae55126633ad9e2f9e3040df066d377ca
             } catch (error) {
                 setError('Terjadi kesalahan saat mengambil data');
             } finally {
