@@ -267,7 +267,11 @@ const Pasienberobat = () => {
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                              <FormattedDate date={Item.createdAt} />
+                            {format(
+                            new Date(Item.createdAt),
+                            "dd MMMM yyyy",
+                            { locale: id },
+                          )}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

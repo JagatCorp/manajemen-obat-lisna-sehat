@@ -61,8 +61,8 @@ const DropdownUser = () => {
       const response = await axios.get(API_URL + url + sessionStorage.getItem("id"));
 
       if (response.status === 200) {
-        // console.log(response.data);
-        // console.log('dropdown', urlGambar ? response.data : response.data.data.attributes);
+        console.log(response.data);
+        console.log(urlGambar ? response.data : response.data.data.attributes);
         setUser(urlGambar ? response.data : response.data.data.attributes);
 
         if(urlGambar){
