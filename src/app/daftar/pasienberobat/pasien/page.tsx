@@ -160,7 +160,7 @@ const Pasienberobat = () => {
   return (
     <>
       <DefaultLayout>
-        <Breadcrumb pageName="Pasienberobat" />
+        <Breadcrumb pageName={"Pasien Berobat"} />
         <div className="flex flex-col gap-10">
           <ToastContainer />
 
@@ -249,7 +249,7 @@ const Pasienberobat = () => {
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                              {Item.status == "1" ? "Sudah Datang" : (Item.status == "0" ? "Belum Datang" : "Sudah Selesai")}
+                            {Item.status == 2 ? "Sudah Selesai" : (Item.status == 1 ? "Belum Berobat" : "Belum Datang")}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

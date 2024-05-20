@@ -1,6 +1,8 @@
 const formatNumberWithCurrency = (number) => {
-    // Memformat angka dengan dua angka desimal dan tambahkan simbol mata uang
-    return `Rp ${number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
+    if (number === null || number === undefined) {
+        return 'Rp 0'; // atau Anda dapat mengembalikan nilai default yang sesuai
+    }
+    return `Rp ${number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
 };
 
 export default formatNumberWithCurrency;

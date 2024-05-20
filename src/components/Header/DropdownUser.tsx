@@ -14,6 +14,7 @@ const DropdownUser = () => {
   const urlGambar = sessionStorage.getItem("urlGambar");
 
   const [user, setUser] = useState({});
+  const [spesialisDokter, setSpesialisDokter] = useState({});
 
   // close on click outside
   useEffect(() => {
@@ -61,8 +62,12 @@ const DropdownUser = () => {
 
       if (response.status === 200) {
         // console.log(response.data);
-        console.log(urlGambar ? response.data : response.data.data.attributes);
+        // console.log('dropdown', urlGambar ? response.data : response.data.data.attributes);
         setUser(urlGambar ? response.data : response.data.data.attributes);
+
+        if(urlGambar){
+          setSpesialisDokter(response.data.spesialisdokter);
+        }
       } else {
         console.log(response);
       }
@@ -112,7 +117,8 @@ const DropdownUser = () => {
             {urlGambar ? (user as any).nama_dokter : (user as any).nama}
           </span>
           <span className="block text-xs">
-            {urlGambar ? (user as any).spesialisdokter.nama_spesialis : "Pasien"}
+            {/* {urlGambar ? (user as any).spesialisdokter.nama_spesialis : "Pasien"} */}
+            {urlGambar ? (spesialisDokter as any).nama_spesialis : "Pasien"}
           </span>
         </span>
 

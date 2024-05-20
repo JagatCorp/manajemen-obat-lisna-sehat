@@ -10,8 +10,8 @@ import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import API_URL from "@/app/config";
 import FormattedDate from "@/components/FormattedDate";
-const Pasienberobat = () => {
-  const [pasienberobat, setPasienberobat] = useState([]);
+const Dokterberobat = () => {
+  const [dokterberobat, setDokterberobat] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,16 +42,16 @@ const Pasienberobat = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        API_URL + `/transaksi_medis?page=${currentPage}`,
+        API_URL + `/transaksi_medis/dokter/${sessionStorage.getItem('id')}?page=${currentPage}`,
       );
-      console.log('coba',response.data.data);
-      setPasienberobat(response.data.data);
+      console.log('dokterberobat', response.data.data);
+      setDokterberobat(response.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
       setTotalCount(response.data.totalCount);
     } catch (error: any) {
       // Menggunakan `any` untuk sementara agar bisa mengakses `message`
-      console.error("Error fetching data pasien berobat:", error);
+      console.error("Error fetching data dokter berobat:", error);
       setError(
         error instanceof Error
           ? error.message
@@ -65,15 +65,15 @@ const Pasienberobat = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        API_URL + `/transaksi_medis?keyword=${keyword}`,
+        API_URL + `/transaksi_medis/dokter?keyword=${keyword}`,
       );
-      setPasienberobat(response.data.data.data);
+      setDokterberobat(response.data.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
       setTotalCount(response.data.totalCount);
     } catch (error: any) {
       // Menggunakan `any` untuk sementara agar bisa mengakses `message`
-      console.error("Error fetching data pasien berobat:", error);
+      console.error("Error fetching data dokter berobat:", error);
       setError(
         error instanceof Error
           ? error.message
@@ -119,48 +119,48 @@ const Pasienberobat = () => {
     setShowUpdateModal(true);
   };
 
-  const handleUpdate = async (e) => {
-    e.preventDefault();
+  // const handleUpdate = async (e) => {
+  //   e.preventDefault();
 
-    try {
-      const formDataToUpdate = new FormData();
-      formDataToUpdate.append("keluhan", updateData.keluhan);
-      formDataToUpdate.append("harga", updateData.harga);
-      formDataToUpdate.append("status", updateData.status);
-      // Cek jika ada file gambar yang baru atau tidak
-      if (updateData.gambar && updateData.gambar instanceof File) {
-        formDataToUpdate.append("gambar", updateData.gambar);
-      } else {
-        // Jika tidak ada gambar baru, tidak perlu menambahkan field 'gambar' ke FormData
-        // Atau bisa menambahkan logika lain sesuai kebutuhan backend Anda
-      }
-      const response = await axios.put(
-        API_URL + `/pasien/${updateData.id}`,
-        formDataToUpdate, // Kirim FormData
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
+  //   try {
+  //     const formDataToUpdate = new FormData();
+  //     formDataToUpdate.append("keluhan", updateData.keluhan);
+  //     formDataToUpdate.append("harga", updateData.harga);
+  //     formDataToUpdate.append("status", updateData.status);
+  //     // Cek jika ada file gambar yang baru atau tidak
+  //     if (updateData.gambar && updateData.gambar instanceof File) {
+  //       formDataToUpdate.append("gambar", updateData.gambar);
+  //     } else {
+  //       // Jika tidak ada gambar baru, tidak perlu menambahkan field 'gambar' ke FormData
+  //       // Atau bisa menambahkan logika lain sesuai kebutuhan backend Anda
+  //     }
+  //     const response = await axios.put(
+  //       API_URL + `/pasien/${updateData.id}`,
+  //       formDataToUpdate, // Kirim FormData
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       },
+  //     );
 
-      console.log(response);
-      if (response.status === 200) {
-        showToastMessage("Data berhasil diupdate!");
-        setShowUpdateModal(false);
-        fetchData();
-      } else {
-        console.error("Gagal mengupdate data.");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+  //     console.log(response);
+  //     if (response.status === 200) {
+  //       showToastMessage("Data berhasil diupdate!");
+  //       setShowUpdateModal(false);
+  //       fetchData();
+  //     } else {
+  //       console.error("Gagal mengupdate data.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
 
   return (
     <>
       <DefaultLayout>
-        <Breadcrumb pageName="Pasien Berobat" />
+        <Breadcrumb pageName={"Dokter Berobat"} />
         <div className="flex flex-col gap-10">
           <ToastContainer />
 
@@ -183,14 +183,14 @@ const Pasienberobat = () => {
                   d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                 />
               </svg>
-              Pasienberobat
+              Dokter Berobat
             </button> */}
 
             <div className="mb-4 flex items-center justify-end">
               {/* search */}
               <input
                 type="text"
-                placeholder="Cari Pasien Berobat..."
+                placeholder="Cari Dokter Berobat..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-48 rounded-l-md border border-[#e0e0e0] bg-white px-6 py-3 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-slate-500 dark:text-white md:w-56"
@@ -204,16 +204,7 @@ const Pasienberobat = () => {
                       Nomor Urut
                     </th>
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
-                      Nama Pasien
-                    </th>
-                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
                       Keluhan
-                    </th>
-                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
-                      Nama Dokter
-                    </th>
-                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
-                      Spesialis Dokter
                     </th>
                     <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
                       Harga
@@ -231,9 +222,9 @@ const Pasienberobat = () => {
                 </thead>
 
                 <tbody>
-                  {pasienberobat && pasienberobat.length > 0 ? (
+                  {dokterberobat && dokterberobat.length > 0 ? (
                     <>
-                      {pasienberobat.map((Item, key) => (
+                      {dokterberobat.map((Item, key) => (
                         <tr key={key}>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
@@ -242,24 +233,10 @@ const Pasienberobat = () => {
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                              {Item.pasien.nama}
-                            </p>
-                          </td>
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <p className="text-black dark:text-white">
                               {Item.keluhan}
                             </p>
                           </td>
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <p className="text-black dark:text-white">
-                              {Item.dokter.nama_dokter}
-                            </p>
-                          </td>
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <p className="text-black dark:text-white">
-                              {Item.dokter.spesialisdokter.nama_spesialis}
-                            </p>
-                          </td>
+
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
                               {Item.harga}
@@ -272,7 +249,7 @@ const Pasienberobat = () => {
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                            {Item.status == 2 ? "Sudah Selesai" : (Item.status == 1 ? "Belum Berobat" : "Belum Datang")}
+                              {Item.status == 2 ? "Sudah Selesai" : (Item.status == 1 ? "Belum Berobat" : "Belum Datang")}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -478,4 +455,4 @@ const Pasienberobat = () => {
   );
 };
 
-export default Pasienberobat;
+export default Dokterberobat;

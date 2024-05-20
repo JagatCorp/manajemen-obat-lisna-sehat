@@ -10,24 +10,51 @@ import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import API_URL from '@/app/config';
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
+import formatNumberWithCurrency from '@/components/formatNumberWithCurrency';
+import TambahObat from './TambahObat';
 const Detail = () => {
     const params = useParams();
     const { id } = params;
-    console.log(id);
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const [dataObatKeluar, setDataObatKeluar] = useState([]);
+
+    const [formData, setFormData] = useState({
+        diagnosa_dokter: "",
+    });
+
     const goBack = () => {
         window.history.back();
     };
+
+    const fetchDataObatKeluar = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/transaksi_obat_keluar/all/${id}`);
+            if (response.status == 200) {
+                console.log('obatKeluar', response.data.data);
+                setDataObatKeluar(response.data.data);
+            } else {
+                console.error(response);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`${API_URL}/transaksi_medis/${id}`);
                 setData(response.data);
-                // console.log(response.data);
+
+                setFormData((prevData) => ({
+                    ...prevData,
+                    diagnosa_dokter: response.data.diagnosa_dokter,
+                }));
+
+                console.log('tran', response.data);
             } catch (error) {
                 setError('Terjadi kesalahan saat mengambil data');
             } finally {
@@ -38,15 +65,80 @@ const Detail = () => {
         fetchData();
     }, [id]);
 
+    const cekDiagnosa = async () => {
+        const idLogin = sessionStorage.getItem('id');
+        // const idDokterTran = dataObatKeluar;
+        // console.log('masuk', data);
+    }
+
+    useEffect(() => {
+        fetchDataObatKeluar();
+        cekDiagnosa();
+    }, []);
+
+    const handleSelesai = async () => {
+        try {
+            const formDataToSend = new FormData();
+            formDataToSend.append('diagnosa_dokter', formData.diagnosa_dokter);
+
+            const response = await axios.post(`${API_URL}/transaksi_medis/selesai/${id}`, formDataToSend, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.status === 200) {
+                console.log(response);
+            } else {
+                console.error(response);
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    
+    const handleDeleteObat = async (dataId) => {
+        try{
+
+            const confirm = window.confirm("Apakah anda yakin ingin menghapus data obat ini?");
+            
+            if(confirm){
+                const response = await axios.delete(API_URL + '/transaksi_obat_keluar/hard/dokter/' + dataId);
+    
+                if(response.status == 200){
+                    console.log(response);
+                    fetchDataObatKeluar();
+                } else {
+                    console.log(response);
+                }
+            }
+
+        } catch(error){
+
+        }
+    }
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
+
+    let totalHarga = data.harga_dokter ?? 0;
 
     return (
         <DefaultLayout>
             <div className="py-14 px-4 md:px-6 2xl:px-20 2xl:container 2xl:mx-auto">
                 <button
                     onClick={goBack}
-                    className="mt-3 inline-flex justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-base font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
+                    className='bg-slate-500 px-3 py-1 rounded text-black hover:bg-slate-600 hover:text-white'
                 >
                     Kembali
                 </button>
@@ -58,7 +150,18 @@ const Detail = () => {
                         // { locale: id },
                     )}</p>
                 </div>
-                <div className="mt-10 flex flex-col xl:flex-row jusitfy-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0">
+                <div className='text-6xl text-center mt-10'>
+                    {data.status == 2 && (
+                        <div>Sudah Selesai berobat</div>
+                    )}
+                    {data.status == 1 && (
+                        <div>Belom Berobat</div>
+                    )}
+                    {data.status == 0 && (
+                        <div>Belum Datang</div>
+                    )}
+                </div>
+                <div className="flex flex-col xl:flex-row jusitfy-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0">
                     <div className="flex flex-col justify-start items-start w-full space-y-4 md:space-y-6 xl:space-y-8">
                         <div className="flex flex-col justify-start items-start dark:bg-gray-800 bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
                             <p className="text-lg md:text-xl dark:text-white font-semibold leading-6 xl:leading-5 text-gray-800">Detail Berobat</p>
@@ -104,11 +207,16 @@ const Detail = () => {
                                         <div className="flex justify-between w-full">
                                             <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300">Gol Darah: </span>{data?.pasien.gol_darah}</p>
                                             <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300">Hari Praktik: </span>{data?.dokter.hari_praktik}</p>
-                                            {/* <p className="text-sm dark:text-white leading-none text-gray-800"><span className="dark:text-gray-400 text-gray-300"><img src={data?.dokter.urlGambar} alt="foto dokter" className='w-10 h-10' /></span></p> */}
                                         </div>
                                     </div>
-                                    <div>
+                                    <div className='h-full'>
                                         <img src={data?.dokter.urlGambar} alt="foto dokter" />
+                                        <div>
+                                            <p className="dark:text-white leading-none text-gray-800 text-4xl flex justify-center">No</p>
+                                        </div>
+                                        <div>
+                                            <p className="dark:text-white leading-none text-gray-800 text-4xl flex justify-center">{data.no_urut}</p>
+                                        </div>
                                     </div>
                                     {/* <div className="flex justify-between space-x-8 items-start w-full">
                                         <p className="text-base dark:text-white xl:text-lg font-semibold leading-6 text-gray-800">Harga: {data?.harga}</p>
@@ -117,48 +225,94 @@ const Detail = () => {
                             </div>
 
                         </div>
-                        {/* <div className="flex justify-center md:flex-row flex-col items-stretch w-full space-y-4 md:space-y-0 md:space-x-6 xl:space-x-8">
+
+                        <div className="flex flex-col justify-center px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-50 dark:bg-gray-800 space-y-6">
+                            <div>
+                                <h3 className="text-xl dark:text-white font-semibold leading-5 text-gray-800">Diagnosa Dokter</h3>
+                            </div>
+                            <div className="flex justify-between items-start w-full">
+                                <div className="flex justify-center items-center space-x-4">
+                                    <div className="flex flex-col justify-start items-center">
+                                        <textarea name="diagnosa_dokter" id="diagnosa_dokter" onChange={handleChange} cols={60} rows={5} value={formData.diagnosa_dokter}
+                                            className="border text-black w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+                                        ></textarea>
+                                        {/* <p className="leading-6 dark:text-white text-sm text-gray-800">{data.diagnosa_dokter ?? "Diagnosa Belom Diberikan"}</p> */}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex justify-center md:flex-row flex-col items-stretch w-full space-y-4 md:space-y-0 md:space-x-6 xl:space-x-8">
+
                             <div className="flex flex-col px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-50 dark:bg-gray-800 space-y-6">
-                                <h3 className="text-xl dark:text-white font-semibold leading-5 text-gray-800">Summary</h3>
+                                <h3 className="text-xl dark:text-white font-semibold leading-5 text-gray-800 flex gap-2">
+                                    Obat Yang Diambil
+                                    <button className='bg-slate-500 text-lg px-1 rounded text-white hover:bg-slate-600 hover:text-white-500 text-center text-sm flex'
+                                        onClick={() => {
+                                            const modal = document.getElementById("modalTambahObatKeluar");
+                                            if (modal instanceof HTMLDialogElement) {
+                                                modal.showModal();
+                                            }
+                                        }}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="h-6 w-6 text-black dark:text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path></svg>
+                                        Tambah Obat
+                                    </button>
+                                    <TambahObat idModal={'modalTambahObatKeluar'} dataId={data.id} fetchDataObatKeluar={fetchDataObatKeluar} />
+                                </h3>
+
                                 <div className="flex justify-center items-center w-full space-y-4 flex-col border-gray-200 border-b pb-4">
-                                    <div className="flex justify-between w-full">
-                                        <p className="text-base dark:text-white leading-4 text-gray-800">Subtotal</p>
-                                        <p className="text-base dark:text-gray-300 leading-4 text-gray-600">$56.00</p>
-                                    </div>
+                                    {dataObatKeluar && dataObatKeluar.length !== 0 ? (
+                                        dataObatKeluar.map((data, index) => {
+                                            let jml_harga = data.harga * data.jml_obat;
+                                            totalHarga = totalHarga + jml_harga;
+                                            return (
+                                                <div className="flex justify-between items-center w-full">
+                                                    <p className="text-base dark:text-white leading-4 text-gray-800">{data.obat.nama_obat}</p>
+                                                    <p className="text-base dark:text-gray-300 leading-4 text-gray-600">{formatNumberWithCurrency(data.harga)} x {data.jml_obat} = {formatNumberWithCurrency(jml_harga)}</p>
+                                                </div>
+                                            )
+                                        })
+                                    ) : (
+                                        "Belom Mengambil Obat Apapun"
+                                    )}
                                     <div className="flex justify-between items-center w-full">
-                                        <p className="text-base dark:text-white leading-4 text-gray-800">Discount <span className="bg-gray-200 p-1 text-xs font-medium dark:bg-white dark:text-gray-800 leading-3 text-gray-800">STUDENT</span></p>
-                                        <p className="text-base dark:text-gray-300 leading-4 text-gray-600">-$28.00 (50%)</p>
-                                    </div>
-                                    <div className="flex justify-between items-center w-full">
-                                        <p className="text-base dark:text-white leading-4 text-gray-800">Shipping</p>
-                                        <p className="text-base dark:text-gray-300 leading-4 text-gray-600">$8.00</p>
+                                        <p className="text-base dark:text-white leading-4 text-gray-800">Biaya {data?.dokter.spesialisdokter.nama_spesialis}</p>
+                                        <p className="text-base dark:text-gray-300 leading-4 text-gray-600">{formatNumberWithCurrency(data.harga_dokter)}</p>
                                     </div>
                                 </div>
                                 <div className="flex justify-between items-center w-full">
                                     <p className="text-base dark:text-white font-semibold leading-4 text-gray-800">Total</p>
-                                    <p className="text-base dark:text-gray-300 font-semibold leading-4 text-gray-600">$36.00</p>
+                                    <p className="text-base dark:text-gray-300 font-semibold leading-4 text-gray-600">{formatNumberWithCurrency(totalHarga)}</p>
                                 </div>
                             </div>
-                            <div className="flex flex-col justify-center px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-50 dark:bg-gray-800 space-y-6">
-                                <h3 className="text-xl dark:text-white font-semibold leading-5 text-gray-800">Shipping</h3>
-                                <div className="flex justify-between items-start w-full">
-                                    <div className="flex justify-center items-center space-x-4">
-                                        <div className="w-8 h-8">
-                                            <img className="w-full h-full" alt="logo" src="https://i.ibb.co/L8KSdNQ/image-3.png" />
-                                        </div>
-                                        <div className="flex flex-col justify-start items-center">
-                                            <p className="text-lg leading-6 dark:text-white font-semibold text-gray-800">DPD Delivery<br /><span className="font-normal">Delivery with 24 Hours</span></p>
-                                        </div>
-                                    </div>
-                                    <p className="text-lg font-semibold leading-6 dark:text-white text-gray-800">$8.00</p>
-                                </div>
-                                <div className="w-full flex justify-center items-center">
-                                    <button className="hover:bg-black dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-gray-800 text-base font-medium leading-4 text-white">View Carrier Details</button>
-                                </div>
-                            </div>
-                        </div> */}
-                    </div>
 
+                            <div className="flex flex-col justify-center px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-50 dark:bg-gray-800 space-y-6">
+                                <h3 className="text-xl dark:text-white font-semibold leading-5 text-gray-800">Dosis Obat</h3>
+                                {dataObatKeluar && dataObatKeluar.length !== 0 ? (
+                                    dataObatKeluar.map((data, index) => {
+                                        return (
+                                            <div className="flex justify-between items-center w-full">
+                                                <p className="text-base dark:text-white leading-4 text-gray-800">{data.obat.nama_obat}</p>
+                                                <div className='flex gap-3'>
+                                                    <p className="text-base dark:text-gray-300 leading-4 text-gray-600">{data.dosis}</p>
+                                                    <button onClick={() => handleDeleteObat(data.id)} className='text-red'>X</button>
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                ) : (
+                                    "Belom Mengambil Obat Apapun"
+                                )}
+                                <div>
+                                    <button className='bg-slate-500 w-full px-3 py-2 text-lg rounded text-black hover:bg-slate-600 hover:text-white text-center'
+                                        onClick={handleSelesai}>
+                                        Sudah Selesai Berobat
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </DefaultLayout>
