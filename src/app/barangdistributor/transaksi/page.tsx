@@ -146,6 +146,11 @@ const Transaksibarangdistributor = () => {
             position: "top-right",
         });
     };
+    const showErrorMessage = (message: string) => {
+        toast.error(message, {
+            position: "top-right",
+        });
+    };
 
     if (error) {
         return <div className="text-red-500 text-center">Error: {error}</div>;
@@ -168,14 +173,15 @@ const Transaksibarangdistributor = () => {
             console.log(response);
 
             if (response.status !== 200) {
-                throw new Error("Gagal menghapus data");
+                console.error("Terjadi kesalahan:", response.data.message);
+                throw new Error("Gagal menghapus data" + response.data.message);
             }
 
             fetchData();
             showToastMessage("Data berhasil dihapus!");
         } catch (error) {
-            console.error("Terjadi kesalahan:", error);
-            showToastMessage("Gagal menghapus data!");
+            console.error("Terjadi kesalahan:", error.response.data.message);
+            showErrorMessage("Gagal menghapus data! " + error.response.data.message);
         } finally {
             setShowDeleteModal(false);
         }
@@ -199,6 +205,20 @@ const Transaksibarangdistributor = () => {
             [name]: value,
         }));
     };
+
+    const handleSelectChange = (event) => {
+        const selectedId = event.target.value;
+        if (selectedId != '') {
+            const distributor = spesialistransaksibarangdistributor.find(o => o.id === parseInt(selectedId));
+            console.log('obat', distributor);
+            setFormData(prevData => ({
+                ...prevData,
+                ['harga']: distributor.harga_satuan_barang,
+                ['barang_distributorId']: distributor.id,
+            }));
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -241,6 +261,7 @@ const Transaksibarangdistributor = () => {
                     gambar_transaksibarangdistributor: null,
                 });
                 fetchData();
+                fetchDataDistributor();
             } else {
                 console.error("Gagal mengirim data.");
             }
@@ -603,7 +624,7 @@ const Transaksibarangdistributor = () => {
                                                 name="barang_distributorId"
                                                 id="barang_distributorId" // Menambahkan id untuk label 'for'
                                                 value={formData.barang_distributorId}
-                                                onChange={handleChange}
+                                                onChange={handleSelectChange}
                                                 className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                                             >
                                                 <option>-- pilih --</option>{" "}
