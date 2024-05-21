@@ -1,10 +1,20 @@
-.inputDark input {
-    border: 2px solid blue;
-    background-color: lightyellow;
-    padding: 10px;
-    font-size: 16px;
+/* Dark Theme for inputs */
+.inputDark input, 
+.inputDark textarea, 
+.inputDark select {
+  border-color: #f1f5f9; /* dark:border-slate-100 */
+  background-color: #475569; /* dark:bg-slate-600 */
+  color: #fff; /* dark:text-white */
 }
 
-.inputDark label {
+/* Default Light Theme */
+input, textarea, select {
+    border: 1px solid #000; /* Default border color */
+    background-color: #fff; /* Default background color */
+    color: #000; /* Default text color */
+  }
+
+.inputDark label, 
+.inputDark select {
     color: white;
 }
