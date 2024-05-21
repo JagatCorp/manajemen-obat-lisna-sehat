@@ -1,0 +1,10 @@
+.inputDark input {
+    border: 2px solid blue;
+    background-color: lightyellow;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.inputDark label {
+    color: white;
+}

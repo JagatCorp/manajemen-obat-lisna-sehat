@@ -22,8 +22,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const cekAdmin = role === 'lisAd'; // Cek apakah pengguna adalah administrator
 
   // Buat array yang berisi rute-rute yang tidak diizinkan untuk dokter, pasien, dan admin
-  const forbiddenPathsDoctor = ['/satuan', '/daftar/berobat', '/history/transaksiobatmasuk','/daftar/pasienberobat/pasien','/daftar/pasienberobat'];
-  const forbiddenPathsPatient = ['/scanqr', '/riwayat', '/history/transaksiobatmasuk','/daftar/pasienberobat/dokter','/daftar/pasienberobat'];
+  const forbiddenPathsDoctor = ['/satuan', '/pasien', '/dokter','/spesialisdokter','/daftar/berobat', '/history/transaksiobatmasuk','/daftar/pasienberobat/pasien','/daftar/pasienberobat','/barangdistributor','/barangdistributor/transaksi','/daftarobat','/principle','/transaksiobatkeluar'];
+  const forbiddenPathsPatient = ['/satuan', '/pasien','/dokter','/spesialisdokter', '/scanqr', '/riwayat', '/history/transaksiobatmasuk','/daftar/pasienberobat/dokter','/daftar/pasienberobat','/barangdistributor','/barangdistributor/transaksi','/daftarobat','/principle','/transaksiobatkeluar'];
   const forbiddenPathsAdmin = ['/admin-punyabebas'];
 
   // Pembatasan akses berdasarkan peran pengguna
@@ -237,6 +237,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* <!-- Menu Item Dashboard --> */}
 
               {/* <!-- Menu Item dokter --> */}
+              {isAdmin &&
               <SidebarLinkGroup
                 activeCondition={
                   pathname === "/dokter" ||
@@ -322,9 +323,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   );
                 }}
               </SidebarLinkGroup>
+              }
               {/* <!-- Menu Item dokter --> */}
 
               {/* <!-- Menu Item distributor --> */}
+              {isAdmin &&
               <SidebarLinkGroup
                 activeCondition={
                   pathname === "/barangdistributor" ||
@@ -424,10 +427,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   );
                 }}
               </SidebarLinkGroup>
+              }
               {/* <!-- Menu Item distributor --> */}
 
 
               {/* <!-- Menu Item obat --> */}
+              {isAdmin &&
               <SidebarLinkGroup
                 activeCondition={
                   pathname === "/daftarobat" ||
@@ -516,10 +521,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   );
                 }}
               </SidebarLinkGroup>
-
+              }
 
 
               {/* <!-- Menu Item Satuan --> */}
+              {isAdmin &&
               <li>
                 <Link
                   href="/satuan"
@@ -543,7 +549,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Satuan
                 </Link>
               </li>
-
+              }
               {/* <!-- Menu Item Satuan --> */}
 
               {/* <!-- Menu Item scanqr --> */}
@@ -580,6 +586,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* <!-- Menu Item scanqr --> */}
 
               {/* <!-- Menu Item Pasien --> */}
+              {isAdmin &&
               <li>
                 <Link
                   href="/pasien"
@@ -603,6 +610,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Pasien
                 </Link>
               </li>
+              }
               {/* <!-- Menu Item Pasien --> */}
               {/* <!-- Menu Item Berobat --> */}
               {(isPasien || isAdmin) && (
@@ -737,7 +745,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </li>
               }
 
-              <li>
+              {/* <li>
                 <Link
                   href="/qrcode/history"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("/qrcode/history") &&
@@ -765,7 +773,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   </svg>
                   History QR Code
                 </Link>
-              </li>
+              </li> */}
 
               {/* <!-- Menu Item history --> */}
               {isAdmin &&
@@ -892,6 +900,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
 
               {/* <!-- Menu Item Settings --> */}
+              {isAdmin &&
               <li>
                 <Link
                   href="/settings"
@@ -931,6 +940,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Settings
                 </Link>
               </li>
+               }
               {/* <!-- Menu Item Settings --> */}
             </ul>
           </div>
