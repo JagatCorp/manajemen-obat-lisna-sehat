@@ -239,7 +239,7 @@ const Pasienberobat = () => {
 
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                              {Item.harga}
+                              {Item.harga_total}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -253,7 +253,7 @@ const Pasienberobat = () => {
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                            {Item.status == 2 ? "Sudah Selesai" : (Item.status == 1 ? "Belum Berobat" : "Belum Datang")}
+                            {Item.status == 3 ? "Sudah Selesai" : (Item.status == 2 ? "Sedang Berobat" : (Item.status == 1 ? "Sudah Datang" : "Belum Datang"))}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
