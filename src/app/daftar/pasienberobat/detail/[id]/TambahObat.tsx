@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 
-const TambahObat = ({ idModal, dataId, fetchDataObatKeluar }) => {
+const TambahObat = ({ idModal, dataId, fetchDataObatKeluar, fetchDataObat, dataObat }) => {
     // console.log(errorMessages);
     const [loading, setLoading] = useState(false);
 
@@ -16,8 +16,6 @@ const TambahObat = ({ idModal, dataId, fetchDataObatKeluar }) => {
     });
 
     const [maxJumlah, setMaxJumlah] = useState(null);
-
-    const [dataObat, setDataObat] = useState([]);
 
     const handleSubmit = async (e) => {
         // e.preventDefault();
@@ -72,26 +70,6 @@ const TambahObat = ({ idModal, dataId, fetchDataObatKeluar }) => {
             }, 5000);
         }
     };
-
-    const fetchDataObat = async () => {
-        try {
-            const response = await axios.get(API_URL + '/obat/');
-
-            if (response.status == 200) {
-                setDataObat(response.data.data);
-                console.log('obat tambah', response);
-            } else {
-                console.error(response);
-            }
-        } catch (error) {
-            console.error("Error:", error.response.data.message);
-            showErrorMessage(error.response.data.message);
-        }
-    }
-
-    useEffect(() => {
-        fetchDataObat();
-    }, [])
 
     const showToastMessage = (message: string) => {
         toast.success(message, {

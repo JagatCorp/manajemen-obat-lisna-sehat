@@ -206,18 +206,12 @@ const Pasienberobat = () => {
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
                       Nama Pasien
                     </th>
-                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
-                      Keluhan
-                    </th>
+                  
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
                       Nama Dokter
                     </th>
-                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
-                      Spesialis Dokter
-                    </th>
-                    <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                      Harga
-                    </th>
+                 
+                  
                     <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
                       Tanggal Daftar
                     </th>
@@ -245,26 +239,14 @@ const Pasienberobat = () => {
                               {Item.pasien.nama}
                             </p>
                           </td>
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <p className="text-black dark:text-white">
-                              {Item.keluhan}
-                            </p>
-                          </td>
+                         
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
                               {Item.dokter.nama_dokter}
                             </p>
                           </td>
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <p className="text-black dark:text-white">
-                              {Item.dokter.spesialisdokter.nama_spesialis}
-                            </p>
-                          </td>
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <p className="text-black dark:text-white">
-                              {Item.harga}
-                            </p>
-                          </td>
+                        
+                          
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
                             {format(
@@ -276,7 +258,7 @@ const Pasienberobat = () => {
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                            {Item.status == 2 ? "Sudah Selesai" : (Item.status == 1 ? "Belum Berobat" : "Belum Datang")}
+                              {Item.status == 3 ? "Sudah Selesai" : (Item.status == 2 ? "Sedang Berobat" : (Item.status == 1 ? "Sudah Datang" : "Belum Datang"))}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
