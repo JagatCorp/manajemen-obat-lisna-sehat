@@ -30,16 +30,16 @@ export default function Login() {
                 }
             );
 
-            // Simpan username di dalam sessionStorage
-            // sessionStorage.setItem("username", username);
+            // Simpan username di dalam localStorage
+            // localStorage.setItem("username", username);
             console.log(response.data);
             if (response.data.urlGambar) {
-                sessionStorage.setItem("urlGambar", response.data.urlGambar);
+                localStorage.setItem("urlGambar", response.data.urlGambar);
             }
             if (response.data.role) {
-                sessionStorage.setItem("role", response.data.role);
+                localStorage.setItem("role", response.data.role);
             }
-            sessionStorage.setItem("id", response.data.id);
+            localStorage.setItem("id", response.data.id);
             
 
             // Simpan token JWT di dalam cookie dengan nama 'token'

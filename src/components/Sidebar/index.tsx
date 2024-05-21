@@ -14,8 +14,8 @@ interface SidebarProps {
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const pathname = usePathname();
-  const urlGambar = sessionStorage.getItem("urlGambar");
-  const role = sessionStorage.getItem("role"); // Mendapatkan peran dari sessionStorage
+  const urlGambar = localStorage.getItem("urlGambar");
+  const role = localStorage.getItem("role"); // Mendapatkan peran dari localStorage
 
   const cekDokter = !!urlGambar && role === 'lisDo'; // Cek apakah pengguna adalah dokter
   const cekPasien = role === 'lisPa'; // Cek apakah pengguna adalah pasien
