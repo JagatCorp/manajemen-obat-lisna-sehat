@@ -27,7 +27,7 @@ const Transaksibarangdistributor = () => {
     const fileInputRef = useRef(null);
     const [spesialistransaksibarangdistributor, setSpesialistransaksibarangdistributor] = useState([]);
     const [statusFilter, setStatusFilter] = useState('');
-    const fetchDataSpesialis = async () => {
+    const fetchDataDistributor = async () => {
         try {
             const response = await axios.get(
                 API_URL + `/barangdistributor?page=${currentPage}`,
@@ -131,6 +131,7 @@ const Transaksibarangdistributor = () => {
     };
 
     useEffect(() => {
+        fetchDataDistributor();
         if (searchTerm !== "") {
             fetchDataByKeyword(searchTerm);
         } else {
@@ -164,10 +165,9 @@ const Transaksibarangdistributor = () => {
                     },
                 },
             );
-
             console.log(response);
 
-            if (response.status === 201) {
+            if (response.status !== 200) {
                 throw new Error("Gagal menghapus data");
             }
 
@@ -175,13 +175,17 @@ const Transaksibarangdistributor = () => {
             showToastMessage("Data berhasil dihapus!");
         } catch (error) {
             console.error("Terjadi kesalahan:", error);
+            showToastMessage("Gagal menghapus data!");
         } finally {
             setShowDeleteModal(false);
         }
     };
+
     const toggleModalDelete = () => {
         setShowDeleteModal(!showDeleteModal);
     };
+
+
 
     //   add data
     const toggleModal = () => {
@@ -337,11 +341,12 @@ const Transaksibarangdistributor = () => {
                             </svg>
                             Transaksi barangdistributor
                         </button>
-                        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-                <option value="">Semua Status</option>
-                <option value="Masuk">Masuk</option>
-                <option value="Keluar">Keluar</option>
-            </select>
+                        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="mt-5">
+                            <option value="">Semua Status</option>
+                            <option value="Masuk">Masuk</option>
+                            <option value="Keluar">Keluar</option>
+                        </select>
+                        <Link href="/barangdistributor/transaksi/deletelist" className="ml-5"><span className="bg-rose-600 text-white text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-rose-900 dark:text-white">Lihat Data Transaksi Yang di Hapus</span></Link>
                         <div className="mb-4 flex items-center justify-end">
                             {/* search */}
                             <input
@@ -421,7 +426,7 @@ const Transaksibarangdistributor = () => {
 
                                                     <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                                                         <div className="flex items-center space-x-3.5">
-                                                            <button
+                                                            {/* <button
                                                                 className="hover:text-primary"
                                                                 onClick={() => handleEdit(Item)}
                                                             >
@@ -439,7 +444,7 @@ const Transaksibarangdistributor = () => {
                                                                         d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
                                                                     />
                                                                 </svg>
-                                                            </button>
+                                                            </button> */}
                                                             <button
                                                                 className="hover:text-primary"
                                                                 onClick={() => {
