@@ -8,7 +8,7 @@ import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 export default function History() {
-    const urlGambar = sessionStorage.getItem("urlGambar");
+    const urlGambar = localStorage.getItem("urlGambar");
 
     const [user, setUser] = useState({});
     const [qr, setQR] = useState([]);
@@ -17,7 +17,7 @@ export default function History() {
 
 
         try {
-            const response = await axios.get(API_URL + url + sessionStorage.getItem("id"));
+            const response = await axios.get(API_URL + url + localStorage.getItem("id"));
 
             if (response.status === 200) {
                 // console.log(response.data);
@@ -39,7 +39,7 @@ export default function History() {
     const fetchDataQR = async () => {
         try {
             const response = await axios.get(
-                API_URL + `/transaksi_medis/all/` + sessionStorage.getItem("id"),
+                API_URL + `/transaksi_medis/all/` + localStorage.getItem("id"),
                 // API_URL + `/transaksi_medis`,
                 //    'https://lisnasehat.online/api' + `/transaksi_medis`,
             );

@@ -58,7 +58,7 @@ const EditSatuanDokter = ({ idModal, data, fetchData }) => {
             }
             
             const response = await axios.put(
-                API_URL + "/dokter/" + sessionStorage.getItem('id'),
+                API_URL + "/dokter/" + localStorage.getItem('id'),
                 formDataToSend, // Kirim FormData
                 {
                     headers: {
@@ -80,7 +80,7 @@ const EditSatuanDokter = ({ idModal, data, fetchData }) => {
                 fetchData();
                 // console.log('coba', data.urlGambar);
                 if(formData.gambar_dokter){
-                    sessionStorage.setItem('urlGambar', response.data.urlGambar);
+                    localStorage.setItem('urlGambar', response.data.urlGambar);
                 }
             } else {
                 showToastMessage("Data Dokter gagal diubah!", false);

@@ -63,7 +63,7 @@ const EditSatuanPasien = ({ idModal, data, fetchData }) => {
             formDataToSend.append("password", formData.password);
 
             const response = await axios.put(
-                API_URL + "/pasien/" + sessionStorage.getItem('id'),
+                API_URL + "/pasien/" + localStorage.getItem('id'),
                 formDataToSend, // Kirim FormData
                 {
                     headers: {

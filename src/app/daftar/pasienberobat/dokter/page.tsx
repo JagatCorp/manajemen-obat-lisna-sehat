@@ -28,7 +28,7 @@ const Dokterberobat = () => {
   const fileInputRef = useRef(null);
 
   const [pasienBerobat, setPasienBerobat] = useState(null);
-  
+
   // update data
   const [updateData, setUpdateData] = useState<{
     keluhan: string;
@@ -46,7 +46,7 @@ const Dokterberobat = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        API_URL + `/transaksi_medis/dokter/${sessionStorage.getItem('id')}?page=${currentPage}`,
+        API_URL + `/transaksi_medis/dokter/${localStorage.getItem('id')}?page=${currentPage}`,
       );
       console.log('dokterberobat', response.data.data);
       setDokterberobat(response.data.data);
@@ -67,17 +67,17 @@ const Dokterberobat = () => {
   };
 
   const fetchDataBerobat = async () => {
-    try{
-      const response = await axios.get(API_URL + `/transaksi_medis/dokter/berobat/${sessionStorage.getItem('id')}?page=${currentPage}`);
+    try {
+      const response = await axios.get(API_URL + `/transaksi_medis/dokter/berobat/${localStorage.getItem('id')}?page=${currentPage}`);
 
-      if(response.status == 200){
+      if (response.status == 200) {
         setPasienBerobat(response.data);
-        console.log('berobat',response.data);
+        console.log('berobat', response.data);
       } else {
         console.log(response);
       }
-      
-    } catch(error) {
+
+    } catch (error) {
       console.error(error);
     }
   }
@@ -105,14 +105,28 @@ const Dokterberobat = () => {
   };
 
   // kondisi search
+  // useEffect(() => {
+  //   // fetchDataBerobat();
+
+  //   if (searchTerm !== "") {
+  //     fetchDataByKeyword(searchTerm);
+  //   } else {
+  //     fetchData();
+  //   }
+
+  // }, [currentPage, searchTerm]);
+
   useEffect(() => {
     fetchDataBerobat();
-    if (searchTerm !== "") {
-      fetchDataByKeyword(searchTerm);
-    } else {
-      fetchData();
-    }
-  }, [currentPage, searchTerm]);
+    fetchData(); // Fetch data immediately on mount
+
+    const intervalId = setInterval(() => {
+      fetchDataBerobat();
+      fetchData(); // Fetch data every 1 second
+    }, 1000);
+
+    return () => clearInterval(intervalId); // Cleanup interval on unmount
+  }, []);
 
   //   toast
   const showToastMessage = (message: string) => {
@@ -166,51 +180,51 @@ const Dokterberobat = () => {
                 </thead>
 
                 <tbody>
-                  {pasienBerobat ?(
-                        <tr>
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <p className="text-black dark:text-white">
-                              {pasienBerobat.no_urut}
-                            </p>
-                          </td>
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <p className="text-black dark:text-white">
-                              {pasienBerobat.pasien.nama}
-                            </p>
-                          </td>
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <p className="text-black dark:text-white">
-                              {pasienBerobat.keluhan}
-                            </p>
-                          </td>
+                  {pasienBerobat ? (
+                    <tr>
+                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {pasienBerobat.no_urut}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {pasienBerobat.pasien.nama}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {pasienBerobat.keluhan}
+                        </p>
+                      </td>
 
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <p className="text-black dark:text-white">
-                              {formatNumberWithCurrency(pasienBerobat.harga_total)}
-                            </p>
-                          </td>
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <p className="text-black dark:text-white">
-                              <FormattedDate date={pasienBerobat.createdAt} />
-                            </p>
-                          </td>
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <p className="text-black dark:text-white">
-                              {pasienBerobat.status == 3 ? "Sudah Selesai" : (pasienBerobat.status == 2 ? "Sedang Berobat" : (pasienBerobat.status == 1 ? "Sudah Datang" : "Belum Datang"))}
-                            </p>
-                          </td>
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <div className="flex items-center space-x-3.5">
+                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {formatNumberWithCurrency(pasienBerobat.harga_total)}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          <FormattedDate date={pasienBerobat.createdAt} />
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {pasienBerobat.status == '3' ? "Sudah Selesai" : (pasienBerobat.status == '2' ? "Sedang Berobat" : (pasienBerobat.status == '1' ? "Sudah Datang" : "Belum Datang"))}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                        <div className="flex items-center space-x-3.5">
 
-                              <a href={`/daftar/pasienberobat/detail/${pasienBerobat.id}`} className="hover:text-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                </svg>
-                              </a>
-                            </div>
-                          </td>
-                        </tr>
+                          <a href={`/daftar/pasienberobat/detail/${pasienBerobat.id}`} className="hover:text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            </svg>
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
                   ) : (
                     <tr>
                       <td>tidak ada</td>
@@ -291,7 +305,7 @@ const Dokterberobat = () => {
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                              {Item.status == 3 ? "Sudah Selesai" : (Item.status == 2 ? "Sedang Berobat" : (Item.status == 1 ? "Sudah Datang" : "Belum Datang"))}
+                              {Item.status == '3' ? "Sudah Selesai" : (Item.status == '2' ? "Sedang Berobat" : (Item.status == '1' ? "Sudah Datang" : "Belum Datang"))}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
