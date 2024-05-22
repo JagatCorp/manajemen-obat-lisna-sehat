@@ -97,7 +97,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-white  duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
@@ -111,7 +111,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             priority
           />
         </Link> */}
-        <h1 className="text-2xl font-semibold text-white">Klinik Lisna Sehat</h1>
+        <h1 className="text-2xl font-semibold text-black dark:text-white">Klinik Lisna Sehat</h1>
 
         <button
           ref={trigger}
@@ -142,7 +142,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
           <div>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
+            <h3 className="mb-4 ml-4 text-sm font-semibold text-black">
               MENU
             </h3>
 
@@ -158,9 +158,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <React.Fragment>
                       <Link
                         href="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === "/" ||
+                        className={`group relative flex items-center gap-2.5 rounded-xl px-4 py-2 font-medium text-black dark:text-white hover:text-white duration-300 ease-in-out  hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === "/" ||
                           pathname.includes("dashboard")) &&
-                          "bg-graydark dark:bg-meta-4"
+                          "bg-graydark dark:bg-meta-4 text-white"
                           }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -221,7 +221,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           <li>
                             <Link
                               href="/"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/" && "text-white"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black  dark:text-slate-300 duration-300 ease-in-out hover:text-slate-500 ${pathname === "/" && "text-black dark:text-white"
                                 }`}
                             >
                               eCommerce
@@ -251,7 +251,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="#"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${open && "bg-graydark dark:bg-meta-4"
+                          className={`group relative flex items-center gap-2.5   dark:text-white hover:text-white rounded-xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${open && "bg-graydark dark:bg-meta-4 text-white"
                             }`}
                           onClick={(e) => {
                             e.preventDefault();
@@ -301,7 +301,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <li>
                               <Link
                                 href="/dokter"
-                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/dokter" && "text-white"
+                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out dark:text-slate-300 hover:text-slate-500 ${pathname === "/dokter" && "text-black dark:text-white"
                                   }`}
                               >
                                 Data Dokter
@@ -310,7 +310,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <li>
                               <Link
                                 href="/spesialisdokter"
-                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/spesialisdokter" && "text-white"
+                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out dark:text-slate-300 hover:text-slate-500 ${pathname === "/spesialisdokter" && "text-black dark:text-white"
                                   }`}
                               >
                                 Spesialis Dokter
@@ -340,7 +340,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="#"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${open && "bg-graydark dark:bg-meta-4"
+                          className={`group relative flex items-center gap-2.5 rounded-xl px-4 py-2 font-medium  text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${open && "bg-graydark dark:bg-meta-4 text-white"
                             }`}
                           onClick={(e) => {
                             e.preventDefault();
@@ -401,8 +401,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <li>
                               <Link
                                 href="/barangdistributor"
-                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/barangdistributor" &&
-                                  "text-white"
+                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out dark:text-slate-300 hover:text-slate-500 ${pathname === "/barangdistributor" &&
+                                  "text-black dark:text-white"
                                   }`}
                               >
                                 Barang Distributor
@@ -411,8 +411,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <li>
                               <Link
                                 href="/barangdistributor/transaksi"
-                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/barangdistributor/transaksi" &&
-                                  "text-white"
+                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out dark:text-slate-300 hover:text-slate-500 ${pathname === "/barangdistributor/transaksi" &&
+                                  "text-black dark:text-white"
                                   }`}
                               >
                                 Transaksi Distributor
@@ -448,7 +448,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="#"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${open && "bg-graydark dark:bg-meta-4"
+                          className={`group relative flex items-center gap-2.5 rounded-xl px-4 py-2 font-medium  text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${open && "bg-graydark dark:bg-meta-4 text-white"
                             }`}
                           onClick={(e) => {
                             e.preventDefault();
@@ -488,8 +488,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <li>
                               <Link
                                 href="/daftarobat"
-                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/daftarobat" &&
-                                  "text-white"
+                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out dark:text-slate-300 hover:text-slate-500 ${pathname === "/daftarobat" &&
+                                  "text-black dark:text-white"
                                   }`}
                               >
                                 Daftar Obat
@@ -498,7 +498,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <li>
                               <Link
                                 href="/principle"
-                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/principle" && "text-white"
+                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out dark:text-slate-300 hover:text-slate-500 ${pathname === "/principle" && "text-black dark:text-white"
                                   }`}
                               >
                                 Principle
@@ -507,7 +507,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <li>
                               <Link
                                 href="/transaksiobatmasuk"
-                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/transaksi/obat/masuk" && "text-white"
+                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out dark:text-slate-300 hover:text-slate-500 ${pathname === "/transaksi/obat/masuk" && "text-black dark:text-white"
                                   }`}
                               >
                                 Transaksi Masuk
@@ -529,7 +529,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <li>
                   <Link
                     href="/satuan"
-                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("satuan") && "bg-graydark dark:bg-meta-4"
+                    className={`group relative flex items-center gap-2.5 rounded-xl px-4 py-2 font-medium text-black dark:text-white duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("satuan") && "bg-graydark text-white dark:bg-meta-4"
                       }`}
                   >
                     <svg
@@ -557,7 +557,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <li>
                   <Link
                     href="/scanqr"
-                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("scanqr") && "bg-graydark dark:bg-meta-4"
+                    className={`group relative flex items-center gap-2.5 rounded-xl px-4 py-2 font-medium text-black dark:text-white duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4  ${pathname.includes("scanqr") && "bg-graydark text-white dark:bg-meta-4"
                       }`}
                   >
                     <svg
@@ -590,7 +590,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <li>
                   <Link
                     href="/pasien"
-                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("pasien") && "bg-graydark dark:bg-meta-4"
+                    className={`group relative flex items-center gap-2.5 rounded-xl px-4 py-2 font-medium text-black dark:text-white duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("pasien") && "bg-graydark text-white dark:bg-meta-4"
                       }`}
                   >
                     <svg
@@ -617,8 +617,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <li>
                   <Link
                     href="/daftar/berobat"
-                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("daftar/berobat") &&
-                      "bg-graydark dark:bg-meta-4"
+                    className={`group relative flex items-center gap-2.5 rounded-xl px-4 py-2 font-medium text-black dark:text-white duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("daftar/berobat") &&
+                      "bg-graydark text-white dark:bg-meta-4"
                       }`}
                   >
                     <svg
@@ -644,8 +644,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <li>
                   <Link
                     href="/daftar/pasienberobat"
-                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("daftar/pasienberobat") &&
-                      "bg-graydark dark:bg-meta-4"
+                    className={`group relative flex items-center gap-2.5 rounded-xl px-4 py-2 font-medium text-black dark:text-white duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("daftar/pasienberobat") &&
+                      "bg-graydark text-white dark:bg-meta-4"
                       }`}
                   >
                     <svg
@@ -670,8 +670,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <li>
                   <Link
                     href="/daftar/pasienberobat/pasien"
-                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("daftar/pasienberobat/pasien") &&
-                      "bg-graydark dark:bg-meta-4"
+                    className={`group relative flex items-center gap-2.5 rounded-xl px-4 py-2 font-medium text-black dark:text-white duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("daftar/pasienberobat/pasien") &&
+                      "bg-graydark text-white dark:bg-meta-4"
                       }`}
                   >
                     <svg
@@ -697,8 +697,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <li>
                   <Link
                     href="/daftar/pasienberobat/dokter"
-                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("daftar/pasienberobat/dokter") &&
-                      "bg-graydark dark:bg-meta-4"
+                    className={`group relative flex items-center gap-2.5 rounded-xl px-4 py-2 font-medium text-black dark:text-white duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4  ${pathname.includes("daftar/pasienberobat/dokter") &&
+                      "bg-graydark text-white dark:bg-meta-4"
                       }`}
                   >
                     <svg
@@ -723,14 +723,23 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <li>
                   <Link
                     href="/daftar/urutBerobat"
-                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("daftar/urutBerobat") &&
-                      "bg-graydark dark:bg-meta-4"
+                    className={`group relative flex items-center gap-2.5 rounded-xl px-4 py-2 font-medium text-black dark:text-white duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("daftar/urutBerobat") &&
+                      "bg-graydark text-white dark:bg-meta-4"
                       }`}
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+                    <svg
+                      className="fill-current"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 18 18"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M15.7499 2.9812H14.2874V2.36245C14.2874 2.02495 14.0062 1.71558 13.6405 1.71558C13.2749 1.71558 12.9937 1.99683 12.9937 2.36245V2.9812H4.97803V2.36245C4.97803 2.02495 4.69678 1.71558 4.33115 1.71558C3.96553 1.71558 3.68428 1.99683 3.68428 2.36245V2.9812H2.2499C1.29365 2.9812 0.478027 3.7687 0.478027 4.75308V14.5406C0.478027 15.4968 1.26553 16.3125 2.2499 16.3125H15.7499C16.7062 16.3125 17.5218 15.525 17.5218 14.5406V4.72495C17.5218 3.7687 16.7062 2.9812 15.7499 2.9812ZM1.77178 8.21245H4.1624V10.9968H1.77178V8.21245ZM5.42803 8.21245H8.38115V10.9968H5.42803V8.21245ZM8.38115 12.2625V15.0187H5.42803V12.2625H8.38115ZM9.64678 12.2625H12.5999V15.0187H9.64678V12.2625ZM9.64678 10.9968V8.21245H12.5999V10.9968H9.64678ZM13.8374 8.21245H16.228V10.9968H13.8374V8.21245ZM2.2499 4.24683H3.7124V4.83745C3.7124 5.17495 3.99365 5.48433 4.35928 5.48433C4.7249 5.48433 5.00615 5.20308 5.00615 4.83745V4.24683H13.0499V4.83745C13.0499 5.17495 13.3312 5.48433 13.6968 5.48433C14.0624 5.48433 14.3437 5.20308 14.3437 4.83745V4.24683H15.7499C16.0312 4.24683 16.2562 4.47183 16.2562 4.75308V6.94683H1.77178V4.75308C1.77178 4.47183 1.96865 4.24683 2.2499 4.24683ZM1.77178 14.5125V12.2343H4.1624V14.9906H2.2499C1.96865 15.0187 1.77178 14.7937 1.77178 14.5125ZM15.7499 15.0187H13.8374V12.2625H16.228V14.5406C16.2562 14.7937 16.0312 15.0187 15.7499 15.0187Z"
+                        fill=""
+                      />
                     </svg>
-
                     Daftar Urut Berobat
                   </Link>
                 </li>
@@ -739,7 +748,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* <li>
                 <Link
                   href="/qrcode/history"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("/qrcode/history") &&
+                  className={`group relative flex items-center gap-2.5 rounded-xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("/qrcode/history") &&
                     "bg-graydark dark:bg-meta-4"
                     }`}
                 >
@@ -780,7 +789,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="#"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${open && "bg-graydark dark:bg-meta-4"
+                          className={`group relative flex items-center gap-2.5 rounded-xl px-4 py-2 font-medium  text-black dark:text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${open && "bg-graydark dark:bg-meta-4 text-white"
                             }`}
                           onClick={(e) => {
                             e.preventDefault();
@@ -820,8 +829,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <li>
                               <Link
                                 href="/history/transaksiobatmasuk"
-                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/barangdistributor" &&
-                                  "text-white"
+                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out dark:text-slate-300 hover:text-slate-500  ${pathname === "/barangdistributor" &&
+                                  "text-black dark:text-white"
                                   }`}
                               >
                                 Transaksi Obat Masuk
@@ -843,7 +852,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href="/profile"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("profile") && "bg-graydark dark:bg-meta-4"
+                  className={`group relative flex items-center gap-2.5 rounded-xl px-4 py-2 font-medium text-black dark:text-white duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("profile") && "bg-graydark text-white dark:bg-meta-4"
                     }`}
                 >
                   <svg
@@ -874,8 +883,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <li>
                   <Link
                     href="/settings"
-                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("settings") &&
-                      "bg-graydark dark:bg-meta-4"
+                    className={`group relative flex items-center gap-2.5 rounded-xl px-4 py-2 font-medium text-black dark:text-white duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("settings") &&
+                      "bg-graydark text-white dark:bg-meta-4"
                       }`}
                   >
                     <svg
