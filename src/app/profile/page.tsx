@@ -12,14 +12,14 @@ import EditSatuanPasien from "./EditPasien";
 import FormattedDate from "@/components/FormattedDate";
 
 const Profile = () => {
-  const urlGambar = sessionStorage.getItem("urlGambar");
+  const urlGambar = localStorage.getItem("urlGambar");
   const [user, setUser] = useState({});
   console.log(user);
   const fetchDataUser = async () => {
     const url = urlGambar ? "/dokter/" : "/pasien/";
 
     try {
-      const response = await axios.get(API_URL + url + sessionStorage.getItem("id"));
+      const response = await axios.get(API_URL + url + localStorage.getItem("id"));
 
       if (response.status === 200) {
         // console.log(response.data);

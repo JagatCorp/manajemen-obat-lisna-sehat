@@ -6,7 +6,7 @@ import API_URL from '../config';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
 export default function QRCode() {
-    const urlGambar = sessionStorage.getItem("urlGambar");
+    const urlGambar = localStorage.getItem("urlGambar");
 
     const [user, setUser] = useState({});
     const [qr, setQR] = useState([]);
@@ -15,7 +15,7 @@ export default function QRCode() {
 
 
         try {
-            const response = await axios.get(API_URL + url + sessionStorage.getItem("id"));
+            const response = await axios.get(API_URL + url + localStorage.getItem("id"));
 
             if (response.status === 200) {
                 // console.log(response.data);
@@ -37,7 +37,7 @@ export default function QRCode() {
     const fetchDataQR = async () => {
         try {
             const response = await axios.get(
-                API_URL + `/transaksi_medis/` + sessionStorage.getItem("id"),
+                API_URL + `/transaksi_medis/` + localStorage.getItem("id"),
                 // API_URL + `/transaksi_medis`,
                 //    'https://lisnasehat.online/api' + `/transaksi_medis`,
             );

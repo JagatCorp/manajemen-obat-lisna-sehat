@@ -96,7 +96,7 @@ const Detail = () => {
     }, [id]);
 
     const cekDiagnosa = async () => {
-        const idLogin = sessionStorage.getItem('id');
+        const idLogin = localStorage.getItem('id');
         // const idDokterTran = dataObatKeluar;
         // console.log('masuk', data);
     }
@@ -204,7 +204,7 @@ const Detail = () => {
                     )}</p>
                 </div>
                 <div className='text-6xl text-center mt-10'>
-                    {data.status == 3 ? "Sudah Selesai" : (data.status == 2 ? "Sedang Berobat" : (data.status == 1 ? "Sudah Datang" : "Belum Datang"))}
+                    {data.status == '3' ? "Sudah Selesai" : (data.status == '2' ? "Sedang Berobat" : (data.status == '1' ? "Sudah Datang" : "Belum Datang"))}
                 </div>
                 <div className="flex flex-col xl:flex-row jusitfy-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0">
                     <div className="flex flex-col justify-start items-start w-full space-y-4 md:space-y-6 xl:space-y-8">

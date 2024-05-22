@@ -42,7 +42,7 @@ const Pasienberobat = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        API_URL + `/transaksi_medis/pasien/${sessionStorage.getItem('id')}?page=${currentPage}`,
+        API_URL + `/transaksi_medis/pasien/${localStorage.getItem('id')}?page=${currentPage}`,
       );
       console.log('pasienberobat', response.data.data);
       setPasienberobat(response.data.data);
@@ -253,7 +253,7 @@ const Pasienberobat = () => {
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                            {Item.status == 3 ? "Sudah Selesai" : (Item.status == 2 ? "Sedang Berobat" : (Item.status == 1 ? "Sudah Datang" : "Belum Datang"))}
+                            {Item.status == '3' ? "Sudah Selesai" : (Item.status == '2' ? "Sedang Berobat" : (Item.status == '1' ? "Sudah Datang" : "Belum Datang"))}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

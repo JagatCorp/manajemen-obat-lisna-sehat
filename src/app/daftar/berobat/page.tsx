@@ -9,12 +9,12 @@ import { usePathname } from "next/navigation";
 const DaftarBerobat = () => {
     const [dokter, setDokter] = useState([]);
     const [pasien, setPasien] = useState([]);
-    const urlGambar = sessionStorage.getItem("urlGambar");
+    const urlGambar = localStorage.getItem("urlGambar");
     const [user, setUser] = useState({});
 
     // validasi admin
     const pathname = usePathname();
-    const role = sessionStorage.getItem("role"); // Mendapatkan peran dari sessionStorage
+    const role = localStorage.getItem("role"); // Mendapatkan peran dari localStorage
 
     const cekDokter = !!urlGambar && role === 'lisDo'; // Cek apakah pengguna adalah dokter
     const cekPasien = role === 'lisPa'; // Cek apakah pengguna adalah pasien
@@ -149,8 +149,8 @@ const DaftarBerobat = () => {
         const url = urlGambar ? "/dokter/" : "/pasien/";
 
         try {
-            const response = await axios.get(API_URL + url + sessionStorage.getItem("id"));
-            // const response = await axios.get('https://lisnasehat.online/api' + url + sessionStorage.getItem("id"));
+            const response = await axios.get(API_URL + url + localStorage.getItem("id"));
+            // const response = await axios.get('https://lisnasehat.online/api' + url + localStorage.getItem("id"));
 
             if (response.status === 200) {
                 // console.log(response.data);
@@ -181,7 +181,7 @@ const DaftarBerobat = () => {
                                     {/* cek adminnya disini */}
                                     {!isAdmin && isPasien && (
                                            <input type="hidden"
-                                           onChange={handleChange} name="pasien_id" id="pasien_id" value={formData.pasien_id = sessionStorage.getItem("id")} />
+                                           onChange={handleChange} name="pasien_id" id="pasien_id" value={formData.pasien_id = localStorage.getItem("id")} />
                                     )}
                                     <div>
                                         <label className="mb-3 block text-sm font-medium text-black dark:text-white">

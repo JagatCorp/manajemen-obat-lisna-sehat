@@ -11,7 +11,7 @@ const DropdownUser = () => {
   const dropdown = useRef<any>(null);
   const [cookies, setCookie] = useCookies(["token"])
 
-  const urlGambar = sessionStorage.getItem("urlGambar");
+  const urlGambar = localStorage.getItem("urlGambar");
 
   const [user, setUser] = useState({});
   const [spesialisDokter, setSpesialisDokter] = useState({});
@@ -58,7 +58,7 @@ const DropdownUser = () => {
     const url = urlGambar ? "/dokter/" : "/pasien/";
 
     try {
-      const response = await axios.get(API_URL + url + sessionStorage.getItem("id"));
+      const response = await axios.get(API_URL + url + localStorage.getItem("id"));
 
       if (response.status === 200) {
         console.log(response.data);
@@ -93,7 +93,7 @@ const DropdownUser = () => {
 
       // Hapus token JWT dari cookies setelah berhasil logout
       setCookie("token", "", { path: "/" });
-      sessionStorage.clear();
+      localStorage.clear();
       deleteCookie("token");
 
       // Redirect ke halaman login setelah logout
