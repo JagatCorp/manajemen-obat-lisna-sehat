@@ -28,8 +28,9 @@ const Pasienberobat = () => {
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef(null);
   const [data, setData] = useState([]);
-
   const [jumlahHargaTotal, setJumlahHargaTotal] = useState(0);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   // update data
   const [updateData, setUpdateData] = useState<{
     keluhan: string;
@@ -66,39 +67,46 @@ const Pasienberobat = () => {
       setLoading(false);
     }
   };
-  const fetchDataExcel = async () => {
+
+  const fetchDataAndExportToExcel = async () => {
     try {
-      const response = await axios.get(
-        API_URL + `/transaksi_medis/export`,
-      );
-      setData(response.data.data);
-      setJumlahHargaTotal(response.data.jumlahhargaTotal);
-      console.log('excel' ,response.data);
+      const url = 'http://localhost:5000/api/transaksi_medis/export';
+      console.log(`Fetching data from ${url} with params: startDate=${startDate}&endDate=${endDate}`);
+      
+      const response = await axios.get(url, {
+        params: {
+          startDate: startDate,
+          endDate: endDate
+        }
+      });
+
+      const data = response.data.data;
+      const jumlahHargaTotal = response.data.jumlahhargaTotal;
+      console.log('excel', response.data);
+
+      // Convert JSON data to worksheet
+      const ws = XLSX.utils.json_to_sheet(data);
+
+      // Get the last row index
+      const lastRowIndex = data.length + 1;
+
+      // Add custom text at the bottom
+      XLSX.utils.sheet_add_aoa(ws, [['Jumlah Harga Total: ' + jumlahHargaTotal]], { origin: `A${lastRowIndex + 1}` });
+
+      // Create a new workbook and append the worksheet
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Data');
+
+      // Generate buffer
+      const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+      // Save to file
+      saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'data.xlsx');
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching data and exporting to Excel:', error);
     }
   };
 
-  const exportToExcel = () => {
-    // Convert JSON data to worksheet
-    const ws = XLSX.utils.json_to_sheet(data);
-
-    // Get the last row index
-    const lastRowIndex = data.length + 1;
-
-    // Add custom text at the bottom
-    XLSX.utils.sheet_add_aoa(ws, [['Jumlah Harga Total: ' + jumlahHargaTotal]], { origin: `A${lastRowIndex + 1}` });
-
-    // Create a new workbook and append the worksheet
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Data');
-
-    // Generate buffer
-    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-
-    // Save to file
-    saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'data.xlsx');
-  };
 
 
   const fetchDataByKeyword = async (keyword: string) => {
@@ -125,7 +133,7 @@ const Pasienberobat = () => {
 
   // kondisi search
   useEffect(() => {
-    fetchDataExcel();
+    // fetchDataAndExportToExcel();
     if (searchTerm !== "") {
       fetchDataByKeyword(searchTerm);
     } else {
@@ -225,7 +233,19 @@ const Pasienberobat = () => {
               </svg>
               Pasienberobat
             </button> */}
-            <button onClick={exportToExcel}>Export to Excel</button>
+            <div>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            <button onClick={fetchDataAndExportToExcel}>Export to Excel</button>
+            </div>
             <div className="mb-4 flex items-center justify-end">
               {/* search */}
               <input
