@@ -179,6 +179,9 @@ const Obat = () => {
                       Harga
                     </th>
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                      Disc Principle
+                    </th>
+                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                       Gambar
                     </th>
                     <th className="px-4 py-4 font-medium text-black dark:text-white">
@@ -215,6 +218,11 @@ const Obat = () => {
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
                               {formatNumberWithCurrency(Item.harga)}
+                            </p>
+                          </td>
+                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                            <p className="text-black dark:text-white">
+                              {Item.disc_principle + "%"}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

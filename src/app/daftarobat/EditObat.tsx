@@ -15,6 +15,7 @@ const EditObat = ({ idModal, fetchData, dataSatuan, dataObat }) => {
         harga: dataObat['harga'],
         satuan_box_id: dataObat['satuan_box_id'],
         satuan_sat_id: dataObat['satuan_sat_id'],
+        disc_principle: dataObat['disc_principle'],
         gambar_obat: "",
     });
     
@@ -29,7 +30,8 @@ const EditObat = ({ idModal, fetchData, dataSatuan, dataObat }) => {
         formDataToSendEdit.append("stok", formData.stok);
         formDataToSendEdit.append("harga", formData.harga);
         formDataToSendEdit.append("satuan_box_id", formData.satuan_box_id);
-        formDataToSendEdit.append("satuan_sat_id", formData.satuan_sat_id);
+        formDataToSendEdit.append("disc_principle", formData.disc_principle);
+
         if (formData.gambar_obat) {
             formDataToSendEdit.append("gambar_obat", formData.gambar_obat);
         }
@@ -195,6 +197,18 @@ const EditObat = ({ idModal, fetchData, dataSatuan, dataObat }) => {
                         id="harga"
                         min="0"
                         value={formData.harga}
+                        onChange={handleChange}
+                        className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+                    />
+                </div>
+                <div className="">
+                    <label htmlFor="disc_principle">Disc Principle :</label>
+                    <input
+                        type="disc_principle"
+                        name="disc_principle"
+                        id="disc_principle"
+                        min="0"
+                        value={formData.disc_principle}
                         onChange={handleChange}
                         className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
                     />
