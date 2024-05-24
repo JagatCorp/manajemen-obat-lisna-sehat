@@ -129,18 +129,19 @@ const Pasien = () => {
     // console.log('masuk');
     try {
       const response = await axios.get(
-        `https://kop-dayalisna.online/api/anggotaApi`,
+        `https://api.kop-dayalisna.online/api/anggota`,
       );
 
-      if(response.status == 200){
-        console.log('anggota', response);
-      } else{
+      if (response.status == 200) {
+
+        console.log('anggota', response.data);
+      } else {
         console.error('anggota', response);
       }
-      
-      } catch (error: any) {
-        console.log(error);
-      }
+
+    } catch (error: any) {
+      console.log(error);
+    }
   }
 
   const fetchDataByKeyword = async (keyword: string) => {
@@ -618,8 +619,8 @@ const Pasien = () => {
 
           {/* modal add */}
           {showModal && (
-            <div className="inset-0 z-50 -mt-100 flex max-h-full items-center justify-center overflow-y-auto">
-              <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
+            <div className="absolute w-full">
+              <div className="//"></div>
               <div
                 role="alert"
                 className="container mx-auto w-11/12 max-w-lg md:w-2/3"
@@ -905,7 +906,7 @@ const Pasien = () => {
           {/* modal update */}
           {showUpdateModal && (
             <div className="inset-0 z-50 -mt-[760px] flex max-h-full items-center justify-center overflow-y-auto">
-              <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
+              <div className="//"></div>
               <div
                 role="alert"
                 className="container mx-auto mb-5 mt-5 w-11/12 max-w-lg md:w-2/3"

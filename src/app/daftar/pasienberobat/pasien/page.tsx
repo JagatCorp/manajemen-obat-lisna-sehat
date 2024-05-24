@@ -244,16 +244,16 @@ const Pasienberobat = () => {
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                            {format(
-                            new Date(Item.createdAt),
-                            "dd MMMM yyyy",
-                            { locale: id },
-                          )}
+                              {format(
+                                new Date(Item.createdAt),
+                                "dd MMMM yyyy",
+                                { locale: id },
+                              )}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                            {Item.status == '3' ? "Sudah Selesai" : (Item.status == '2' ? "Sedang Berobat" : (Item.status == '1' ? "Sudah Datang" : "Belum Datang"))}
+                              {Item.status == '3' ? "Sudah Selesai" : (Item.status == '2' ? "Sedang Berobat" : (Item.status == '1' ? "Sudah Datang" : "Belum Datang"))}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -327,7 +327,7 @@ const Pasienberobat = () => {
           {/* modal update */}
           {showUpdateModal && (
             <div className="inset-0 z-50 -mt-[760px] flex max-h-full items-center justify-center overflow-y-auto">
-              <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
+              <div className="//"></div>
               <div
                 role="alert"
                 className="container mx-auto mb-5 mt-5 w-11/12 max-w-lg md:w-2/3"

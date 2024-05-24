@@ -468,8 +468,8 @@ const Barangdistributor = () => {
                           () => setCurrentPage(firstPage + index) // Memperbarui halaman berdasarkan indeks dan halaman pertama yang ditampilkan
                         }
                         className={`mx-1 rounded-md px-3 py-1 ${currentPage === firstPage + index
-                            ? "bg-blue-400 to-slate-600 text-white"
-                            : "bg-slate-200 hover:bg-slate-400"
+                          ? "bg-blue-400 to-slate-600 text-white"
+                          : "bg-slate-200 hover:bg-slate-400"
                           }`}
                       >
                         {firstPage + index}{" "}
@@ -532,8 +532,8 @@ const Barangdistributor = () => {
 
           {/* modal add */}
           {showModal && (
-            <div className="inset-0 z-50 -mt-100 flex max-h-full items-center justify-center overflow-y-auto">
-              <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
+            <div className="absolute w-full">
+              {/* <div className="fixed inset-0 bg-slate-500 opacity-75"></div> */}
               <div
                 role="alert"
                 className="container mx-auto w-11/12 max-w-lg md:w-2/3"
@@ -687,8 +687,8 @@ const Barangdistributor = () => {
 
           {/* modal update */}
           {showUpdateModal && (
-            <div className="inset-0 z-50 -mt-100 flex max-h-full items-center justify-center overflow-y-auto">
-              <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
+            <div className="absolute w-full">
+              {/* <div className="fixed inset-0 bg-slate-500 opacity-75"></div> */}
               <div
                 role="alert"
                 className="container mx-auto mb-5 mt-5 w-11/12 max-w-lg md:w-2/3"
