@@ -15,7 +15,7 @@ const DetailQr = ({ idModal, data }) => {
                 className="flex gap-1 font-semibold"
             >
                 <div>
-                    Tambah Data Satuan
+                    Hasil Scan QR
                 </div>
             </div>,
             <div key={"title2"}>

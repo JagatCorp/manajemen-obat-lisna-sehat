@@ -19,6 +19,7 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
         satuan_box_id: "",
         satuan_sat_id: "",
         gambar_obat: "",
+        disc_principle: "",
     });
 
     const handleSubmit = async (e) => {
@@ -33,6 +34,8 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
             formDataToSend.append("harga", formData.harga);
             formDataToSend.append("satuan_box_id", formData.satuan_box_id);
             formDataToSend.append("satuan_sat_id", formData.satuan_sat_id);
+            formDataToSend.append("disc_principle", formData.disc_principle);
+
             if (formData.gambar_obat) {
                 formDataToSend.append("gambar_obat", formData.gambar_obat);
             }
@@ -65,6 +68,7 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
                     satuan_box_id: "",
                     satuan_sat_id: "",
                     gambar_obat: "",
+                    disc_principle: "",
                 }));
 
                 gambar_obat_ref.current.value = "";
@@ -190,6 +194,18 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
                         id="harga"
                         min="0"
                         value={formData.harga}
+                        onChange={handleChange}
+                        className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+                    />
+                </div>
+                <div className="">
+                    <label htmlFor="harga">Disc Principle Obat :</label>
+                    <input
+                        type="number"
+                        name="disc_principle"
+                        id="disc_principle"
+                        min="0"
+                        value={formData.disc_principle}
                         onChange={handleChange}
                         className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
                     />
