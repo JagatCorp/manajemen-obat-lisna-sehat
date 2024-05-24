@@ -10,6 +10,8 @@ import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import API_URL from "@/app/config";
 import FormattedDate from "@/components/FormattedDate";
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 const Pasienberobat = () => {
   const [pasienberobat, setPasienberobat] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +27,10 @@ const Pasienberobat = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef(null);
+  const [data, setData] = useState([]);
+  const [jumlahHargaTotal, setJumlahHargaTotal] = useState(0);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   // update data
   const [updateData, setUpdateData] = useState<{
     keluhan: string;
@@ -44,7 +50,7 @@ const Pasienberobat = () => {
       const response = await axios.get(
         API_URL + `/transaksi_medis?page=${currentPage}`,
       );
-      console.log('coba',response.data.data);
+      console.log('coba', response.data.data);
       setPasienberobat(response.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
@@ -61,6 +67,47 @@ const Pasienberobat = () => {
       setLoading(false);
     }
   };
+
+  const fetchDataAndExportToExcel = async () => {
+    try {
+      const url = 'http://localhost:5000/api/transaksi_medis/export';
+      console.log(`Fetching data from ${url} with params: startDate=${startDate}&endDate=${endDate}`);
+      
+      const response = await axios.get(url, {
+        params: {
+          startDate: startDate,
+          endDate: endDate
+        }
+      });
+
+      const data = response.data.data;
+      const jumlahHargaTotal = response.data.jumlahhargaTotal;
+      console.log('excel', response.data);
+
+      // Convert JSON data to worksheet
+      const ws = XLSX.utils.json_to_sheet(data);
+
+      // Get the last row index
+      const lastRowIndex = data.length + 1;
+
+      // Add custom text at the bottom
+      XLSX.utils.sheet_add_aoa(ws, [['Jumlah Harga Total: ' + jumlahHargaTotal]], { origin: `A${lastRowIndex + 1}` });
+
+      // Create a new workbook and append the worksheet
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Data');
+
+      // Generate buffer
+      const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+      // Save to file
+      saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'data.xlsx');
+    } catch (error) {
+      console.error('Error fetching data and exporting to Excel:', error);
+    }
+  };
+
+
 
   const fetchDataByKeyword = async (keyword: string) => {
     try {
@@ -86,6 +133,7 @@ const Pasienberobat = () => {
 
   // kondisi search
   useEffect(() => {
+    // fetchDataAndExportToExcel();
     if (searchTerm !== "") {
       fetchDataByKeyword(searchTerm);
     } else {
@@ -185,7 +233,19 @@ const Pasienberobat = () => {
               </svg>
               Pasienberobat
             </button> */}
-
+            <div>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            <button onClick={fetchDataAndExportToExcel}>Export to Excel</button>
+            </div>
             <div className="mb-4 flex items-center justify-end">
               {/* search */}
               <input
@@ -206,12 +266,12 @@ const Pasienberobat = () => {
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
                       Nama Pasien
                     </th>
-                  
+
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
                       Nama Dokter
                     </th>
-                 
-                  
+
+
                     <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
                       Tanggal Daftar
                     </th>
@@ -239,21 +299,21 @@ const Pasienberobat = () => {
                               {Item.pasien.nama}
                             </p>
                           </td>
-                         
+
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
                               {Item.dokter.nama_dokter}
                             </p>
                           </td>
-                        
-                          
+
+
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                            {format(
-                            new Date(Item.createdAt),
-                            "dd MMMM yyyy",
-                            { locale: id },
-                          )}
+                              {format(
+                                new Date(Item.createdAt),
+                                "dd MMMM yyyy",
+                                { locale: id },
+                              )}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

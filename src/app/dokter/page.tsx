@@ -10,7 +10,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import API_URL from "../config";
-const Dokter = () => {
+const Dokter = ({ isLoggedIn }) => {
   const [dokter, setDokter] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -339,6 +339,7 @@ const Dokter = () => {
       console.error("Error:", error);
     }
   };
+
 
   return (
     <>
@@ -1059,7 +1060,7 @@ const Dokter = () => {
                         }
                         className="mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                         placeholder="password"
-                        />
+                      />
                       <div className="mb-3">
                         <small>
                           Kosongkan bila tidak ingin mengubah password
@@ -1117,5 +1118,6 @@ const Dokter = () => {
     </>
   );
 };
+
 
 export default Dokter;
