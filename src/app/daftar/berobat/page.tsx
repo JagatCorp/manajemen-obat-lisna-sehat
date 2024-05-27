@@ -72,8 +72,11 @@ const DaftarBerobat = () => {
             formDataToSend.append("keluhan", formData.keluhan);
 
             // kasih validasi
-            if (isAdmin ==true) {
-            formDataToSend.append("status", "1");
+            if (isAdmin == true) {
+                formDataToSend.append("status", "1");
+            }
+            else {
+                formDataToSend.append("status", "0");
             }
             // Pastikan 'gambar' adalah File, bukan string 'null' atau path file.
             if (formData.gambar !== "null" && formData.gambar) {
@@ -180,8 +183,8 @@ const DaftarBerobat = () => {
                                 <div className="flex flex-col gap-5.5 p-6.5">
                                     {/* cek adminnya disini */}
                                     {!isAdmin && isPasien && (
-                                           <input type="hidden"
-                                           onChange={handleChange} name="pasien_id" id="pasien_id" value={formData.pasien_id = localStorage.getItem("id")} />
+                                        <input type="hidden"
+                                            onChange={handleChange} name="pasien_id" id="pasien_id" value={formData.pasien_id = localStorage.getItem("id")} />
                                     )}
                                     <div>
                                         <label className="mb-3 block text-sm font-medium text-black dark:text-white">
