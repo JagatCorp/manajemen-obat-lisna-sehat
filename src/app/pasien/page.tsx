@@ -82,7 +82,7 @@ const Pasien = () => {
       ['tgl_lahir']: data.tgl_lahir,
       ['alamat']: data.alamat,
       ['id_relasi']: data.id_anggota,
-    }));
+    })); 
 
     setInputValue(data.nama_anggota);
     setSearchResults([]);
