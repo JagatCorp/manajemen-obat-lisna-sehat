@@ -71,8 +71,6 @@ const Pasien = () => {
   };
 
   const handleSelect = (data) => {
-    // setSelectedData(data);
-    console.log('selected', data);
 
     setFormData((prevData) => ({
       ...prevData,

@@ -162,9 +162,9 @@ const DaftarBerobat = () => {
                 return itemDate.toISOString().split('T')[0] === todayString;
             });
 
-            // console.log('pasienberobat hari ini', filteredData != null);
+            // console.log('pasienberobat hari ini', filteredData.length != 0);
 
-            if (filteredData != null) {
+            if (filteredData.length != 0) {
                 window.alert('Kamu Sudah Daftar Berobat Hari Ini');
                 // showToastMessage("Kamu Sudah Daftar Berobat Hari Ini");
                 window.location.href = `/daftar/pasienberobat/detail/${filteredData[0].id}`;
