@@ -25,6 +25,8 @@ const Pasienberobat = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef(null);
+  const [fecthHariIni, setFecthHariIni] = useState([]);
+  const [today, setToday] = useState<string>('');
   // update data
   const [updateData, setUpdateData] = useState<{
     keluhan: string;
@@ -39,6 +41,40 @@ const Pasienberobat = () => {
     gambar: null,
     id: "",
   });
+
+
+  const fetchHariIni = async () => {
+    try {
+      const response = await axios.get(
+        API_URL + `/transaksi_medis/pasien/${localStorage.getItem('id')}`,
+      );
+      const data = response.data.data;
+
+      // Mendapatkan tanggal hari ini
+      const today = new Date();
+      const todayString = today.toISOString().split('T')[0];
+      // Filter data untuk mengambil data yang dibuat pada hari ini
+      const filteredData = data.filter(item => {
+        const itemDate = new Date(item.createdAt);
+        return itemDate.toISOString().split('T')[0] === todayString;
+      });
+
+      console.log('pasienberobat', filteredData);
+      setFecthHariIni(filteredData);
+    } catch (error) {
+      console.error("Error fetching data pasienberobat:", error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Terjadi kesalahan saat mengambil data",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -86,6 +122,17 @@ const Pasienberobat = () => {
 
   // kondisi search
   useEffect(() => {
+    fetchHariIni();
+    // Mendapatkan tanggal hari ini
+    const currentDate = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const todayString = currentDate.toLocaleDateString('id-ID', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
+    setToday(todayString);
     if (searchTerm !== "") {
       fetchDataByKeyword(searchTerm);
     } else {
@@ -164,6 +211,131 @@ const Pasienberobat = () => {
         <div className="flex flex-col gap-10">
           <ToastContainer />
 
+          {/* Table berobat hari ini */}
+
+          <div className="flex flex-col justify-center items-center -mt-10">
+            <div
+              className="relative flex max-w-[500px] h-[180px] w-full flex-col rounded-[10px] border-[1px] border-gray-200 bg-white dark:border-strokedark dark:bg-boxdark bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none"
+            >
+              <div
+                className="flex h-fit w-full items-center justify-between rounded-t-2xl bg-white border-stroke  dark:border-strokedark dark:bg-boxdark px-4 pb-[20px] pt-4 shadow-2xl shadow-gray-100 dark:shadow-slate-20"
+              >
+                <h4 className="text-lg font-bold text-navy-700 dark:text-white">
+                  Riwayat hari ini
+                </h4>
+                <button
+                  className="linear rounded-[20px] bg-lightPrimary px-4 py-2 text-base font-medium text-brand-500 transition duration-200 hover:bg-gray-100 active:bg-gray-200 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:active:bg-white/20">
+                  {today}
+                </button>
+              </div>
+              <div className="w-full overflow-x-scroll px-4 md:overflow-x-hidden">
+                <table role="table" className="w-full min-w-[500px] overflow-x-scroll">
+                  <thead>
+                    <tr role="row">
+                      <th
+                        colSpan={1}
+                        role="columnheader"
+                        title="Toggle SortBy"
+                        className="cursor-pointer"
+                      >
+                        <div
+                          className="flex items-center justify-between pb-2 pt-4 text-start uppercase tracking-wide text-gray-600 sm:text-xs lg:text-xs">
+                          No Urut Antrian
+                        </div>
+                      </th>
+                      {/* <th
+                        colSpan={1}
+                        role="columnheader"
+                        title="Toggle SortBy"
+                        className="cursor-pointer"
+                      >
+                        <div
+                          className="flex items-center justify-between pb-2 pt-4 text-start uppercase tracking-wide text-gray-600 sm:text-xs lg:text-xs"
+                        >
+                          Keluhan
+                        </div>
+                      </th> */}
+                      <th
+                        colSpan={1}
+                        role="columnheader"
+                        title="Toggle SortBy"
+                        className="cursor-pointer"
+                      >
+                        <div
+                          className="flex items-center justify-between pb-2 pt-4 text-start uppercase tracking-wide text-gray-600 sm:text-xs lg:text-xs"
+                        >
+                          Status
+                        </div>
+                      </th>
+                      <th
+                        colSpan={1}
+                        role="columnheader"
+                        title="Toggle SortBy"
+                        className="cursor-pointer"
+                      >
+                        <div
+                          className="flex items-center justify-between pb-2 pt-4 text-start uppercase tracking-wide text-gray-600 sm:text-xs lg:text-xs"
+                        >
+                          Detail
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody role="rowgroup" className="px-4">
+                    {fecthHariIni && fecthHariIni.length > 0 ? (
+                      <>
+                        {fecthHariIni.map((Item, key) => (
+                          <>
+                            <tr role="row">
+                              <td className="py-3 text-sm" role="cell">
+                                <div className="flex items-center gap-2">
+
+                                  <p
+                                    className="text-sm font-medium text-navy-700 dark:text-white"
+                                  >
+                                    {Item.no_urut}
+                                  </p>
+                                </div>
+                              </td>
+                              {/* <td className="py-3 text-sm" role="cell">
+                                <p className="text-md font-medium text-gray-600 dark:text-white">
+                                  {Item.keluhan}
+                                </p>
+                              </td> */}
+
+                              <td className="py-3 text-sm" role="cell">
+                                <p className="text-md font-medium text-gray-600 dark:text-white">
+                                  {Item.status == '3' ? "Sudah Selesai" : (Item.status == '2' ? "Sedang Berobat" : (Item.status == '1' ? "Sudah Datang" : "Belum Datang"))}
+                                </p>
+                              </td>
+                              <td className="py-3 text-sm" role="cell">
+                                <p className="text-md font-medium text-gray-600 dark:text-white">
+                                  <a href={`/daftar/pasienberobat/detail/${Item.id}`} className="hover:text-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                    </svg>
+                                  </a>
+                                </p>
+                              </td>
+
+                            </tr>
+                          </>
+                        ))
+                        }
+                      </>
+                    ) : (
+                      <tr>
+                        <td>tidak ada</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+
           <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
             {/* <button
               onClick={toggleModal}
@@ -186,8 +358,8 @@ const Pasienberobat = () => {
               Pasienberobat
             </button> */}
 
-            <div className="mb-4 flex items-center justify-end">
-              {/* search */}
+            {/* <div className="mb-4 flex items-center justify-end">
+           
               <input
                 type="text"
                 placeholder="Cari Pasienberobat..."
@@ -195,10 +367,11 @@ const Pasienberobat = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-48 rounded-l-md border border-[#e0e0e0] bg-white px-6 py-3 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-slate-500 dark:text-white md:w-56"
               />
-            </div>
+            </div> */}
             <div className="max-w-full overflow-x-auto overflow-y-hidden">
               <table className="w-full table-auto">
                 <thead>
+
                   <tr className="bg-slate-2 text-left dark:bg-meta-4">
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white">
                       Nomor Urut
