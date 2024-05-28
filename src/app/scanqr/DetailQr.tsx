@@ -28,10 +28,12 @@ const DetailQr = ({ idModal, data }) => {
                 setError(response.data);
             } else {
                 console.error(response);
+                setError(response.data);
             }
-
+            
         } catch (error) {
             console.error(error);
+            setError(error.response.data);
         }
     }
 
