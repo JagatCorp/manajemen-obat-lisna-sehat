@@ -79,7 +79,9 @@ const Pasien = () => {
       ['nama']: data.nama_anggota,
       ['jk']: data.jenis_kelamin == 'Laki-laki' ? 'L' : 'P',
       ['no_telp']: data.telp,
-      ['no_telp']: data.telp,
+      ['tgl_lahir']: data.tgl_lahir,
+      ['alamat']: data.alamat,
+      ['id_relasi']: data.id_anggota,
     }));
 
     setInputValue(data.nama_anggota);
