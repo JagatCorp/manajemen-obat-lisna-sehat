@@ -314,12 +314,26 @@ const Detail = () => {
                                 <div className="flex justify-center items-center w-full space-y-4 flex-col border-gray-200 border-b pb-4">
                                     {dataObatKeluar && dataObatKeluar.length !== 0 ? (
                                         dataObatKeluar.map((data, index) => {
-                                            let jml_harga = data.harga * data.jml_obat;
-                                            totalHarga = totalHarga + jml_harga;
+                                            // harga asli atau (dpp / box)
+                                            let hrg_dpp = data.harga;
+                                            // hna satuan = hrg_dpp / qty_satuan
+                                            let set_hna_satuan = hrg_dpp / data.obat.qty_sat;
+                                            // dikali ppn 11%
+                                            let harga_ppn = set_hna_satuan * 0.11;
+                                            // harga setelah ppn
+                                            let set_harga_ppn = harga_ppn + set_hna_satuan;
+                                            // dikali margin 15%
+                                            let harga_margin = set_harga_ppn * 0.15;
+                                            // hna + ppn + margin 15%
+                                            let hna_ppn_margin = set_harga_ppn + harga_margin;
+                                            
+                                            let jml_harga =hna_ppn_margin * data.jml_obat;
+                                            
+                                            totalHarga += jml_harga;
                                             return (
                                                 <div className="flex justify-between items-center w-full">
                                                     <p className="text-base dark:text-white leading-4 text-gray-800">{data.obat.nama_obat}</p>
-                                                    <p className="text-base dark:text-gray-300 leading-4 text-gray-600">{formatNumberWithCurrency(data.harga)} x {data.jml_obat} = {formatNumberWithCurrency(jml_harga)}</p>
+                                                    <p className="text-base dark:text-gray-300 leading-4 text-gray-600">{formatNumberWithCurrency(hna_ppn_margin)} x {data.jml_obat} = {formatNumberWithCurrency(jml_harga)}</p>
                                                 </div>
                                             )
                                         })

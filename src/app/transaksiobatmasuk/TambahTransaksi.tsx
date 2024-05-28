@@ -7,7 +7,7 @@ import { set } from "date-fns";
 import formatNumberWithCurrency from "@/components/formatNumberWithCurrency";
 
 
-const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple }) => {
+const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDataObat }) => {
     // console.log('obat', dataObat);
 
     const [loading, setLoading] = useState(false);
@@ -23,6 +23,7 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple }) => {
         harga: "",
         principle_id: "",
         jml_obat: "",
+        disc_principle: "",
         createdAt: '',
     });
 
@@ -37,6 +38,7 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple }) => {
             formDataToSend.append("principle_id", formData.principle_id);
             formDataToSend.append("jml_obat", formData.jml_obat);
             formDataToSend.append("createdAt", formData.createdAt);
+            formDataToSend.append("disc_principle", formData.disc_principle);
 
             const response = await axios.post(
                 API_URL + "/transaksi_obat_masuk",
@@ -66,12 +68,14 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple }) => {
                     harga: "",
                     jml_obat: "",
                     createdAt: "",
+                    disc_principle: "",
                 }));
 
                 setHargaHasil(0);
                 setJumlahHasil(0);
                 setHasil(0);
 
+                fetchDataObat();
                 setLoading(false);
                 fetchData();
             } else {
@@ -125,6 +129,7 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple }) => {
                 ...prevData,
                 ['harga']: obat.harga,
                 ['obat_id']: obat.id,
+                ['disc_principle']: obat.disc_principle,
             }));
             setHargaHasil(obat.harga);
             setHasil(obat.harga * parseInt(formData.jml_obat));
@@ -185,13 +190,26 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple }) => {
                     />
                 </div>
                 <div className="">
-                    <label htmlFor="harga">Harga Satuan Box :</label>
+                    <label htmlFor="harga">Harga DPP / Box :</label>
                     <input
                         type="number"
                         name="harga"
                         id="harga"
                         min="0"
                         value={formData.harga}
+                        // value={selectedObat ? selectedObat.harga : ''}
+                        onChange={handleChange}
+                        className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+                    />
+                </div>
+                <div className="">
+                    <label htmlFor="disc_principle">Disc Principle :</label>
+                    <input
+                        type="number"
+                        name="disc_principle"
+                        id="disc_principle"
+                        min="0"
+                        value={formData.disc_principle}
                         // value={selectedObat ? selectedObat.harga : ''}
                         onChange={handleChange}
                         className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
@@ -210,10 +228,10 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple }) => {
                 </div>
             </div>,
             <hr key={'divider'} className="mt-3 mb-3" />,
-            <div key={'hasil'} id="hasil">
-                <div className="text-center">Detail Pengeluaran</div>
-                {hargaHasil ? formatNumberWithCurrency(parseInt(hargaHasil)) : 0} x {jumlahHasil ?? 0} = {hasil ? formatNumberWithCurrency(parseInt(hasil)) : 0}
-            </div>,
+            // <div key={'hasil'} id="hasil">
+            //     <div className="text-center">Detail Pengeluaran</div>
+            //     {hargaHasil ? formatNumberWithCurrency(parseInt(hargaHasil)) : 0} x {jumlahHasil ?? 0} = {hasil ? formatNumberWithCurrency(parseInt(hasil)) : 0}
+            // </div>,
         ],
         footer: [
             <>

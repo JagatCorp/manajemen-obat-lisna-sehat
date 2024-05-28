@@ -163,6 +163,7 @@ const TransaksiObatMasuk = () => {
             <TambahTransaksi
               idModal={"modalTambahTransaksiObatMasuk"}
               fetchData={fetchData}
+              fetchDataObat={fetchDataObat}
               dataObat={obat}
               dataPrinciple={principle}
             />
@@ -188,10 +189,7 @@ const TransaksiObatMasuk = () => {
                       Jumlah Obat
                     </th>
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                      Harga Satuan Obat
-                    </th>
-                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                      Jumlah Harga
+                      Harga DPP / Box
                     </th>
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                       Principle
@@ -222,11 +220,6 @@ const TransaksiObatMasuk = () => {
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
                               {formatNumberWithCurrency(Item['harga'])}
-                            </p>
-                          </td>
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <p className="text-black dark:text-white">
-                              {formatNumberWithCurrency(Item['jml_obat'] * Item['harga'])}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

@@ -13,6 +13,7 @@ import HapusObat from "./HapusObat";
 import EditObat from "./EditObat";
 import API_URL from "../config";
 import formatNumberWithCurrency from "@/components/formatNumberWithCurrency";
+import ExcelObat from "@/components/CreateStyledExcelFile";
 // import EditObat from "./EditObat";
 // import HapusObat from "./HapusObat";
 
@@ -108,6 +109,7 @@ const Obat = () => {
 
   const firstPage = Math.max(1, currentPage - 4); // Menghitung halaman pertama yang akan ditampilkan
 
+
   return (
     <>
       <DefaultLayout>
@@ -116,6 +118,10 @@ const Obat = () => {
           <ToastContainer />
 
           <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+            <div>
+              <ExcelObat/>
+            </div>
+
             <button
               className="flex items-center gap-1 rounded-md bg-white px-4  py-2 text-end text-black shadow-xl hover:bg-slate-100 focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-offset-2 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-400"
               onClick={() => {
@@ -176,7 +182,7 @@ const Obat = () => {
                       Stok Sat
                     </th>
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                      Harga
+                      Harga DPO / Box
                     </th>
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                       Disc Principle
@@ -360,11 +366,10 @@ const Obat = () => {
                         onClick={
                           () => setCurrentPage(firstPage + index) // Memperbarui halaman berdasarkan indeks dan halaman pertama yang ditampilkan
                         }
-                        className={`mx-1 rounded-md px-3 py-1 ${
-                          currentPage === firstPage + index
-                            ? "bg-blue-400 to-slate-600 text-white"
-                            : "bg-slate-200 hover:bg-slate-400"
-                        }`}
+                        className={`mx-1 rounded-md px-3 py-1 ${currentPage === firstPage + index
+                          ? "bg-blue-400 to-slate-600 text-white"
+                          : "bg-slate-200 hover:bg-slate-400"
+                          }`}
                       >
                         {firstPage + index}{" "}
                         {/* Menggunakan halaman pertama yang ditampilkan */}
