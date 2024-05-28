@@ -23,10 +23,8 @@ const DetailQr = ({ idModal, data }) => {
 
             if (response.status == 200) {
                 console.log(response);
-                window.alert(response);
             } else {
                 console.error(response);
-                window.alert(response);
             }
         } catch (error) {
             console.error(error);
