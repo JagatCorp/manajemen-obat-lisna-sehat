@@ -6,12 +6,16 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import API_URL from "@/app/config";
 import { usePathname } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const DaftarBerobat = () => {
     const [dokter, setDokter] = useState([]);
     const [pasien, setPasien] = useState([]);
     const urlGambar = localStorage.getItem("urlGambar");
     const [user, setUser] = useState({});
-
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [fecthHariIni, setFecthHariIni] = useState([]);
     // validasi admin
     const pathname = usePathname();
     const role = localStorage.getItem("role"); // Mendapatkan peran dari localStorage
@@ -142,11 +146,56 @@ const DaftarBerobat = () => {
             // setLoading(false);
         }
     };
+    const fetchHariIni = async () => {
+        try {
+            const response = await axios.get(
+                API_URL + `/transaksi_medis/pasien/${localStorage.getItem('id')}`,
+            );
+            const data = response.data.data;
+
+            // Mendapatkan tanggal hari ini
+            const today = new Date();
+            const todayString = today.toISOString().split('T')[0];
+            // Filter data untuk mengambil data yang dibuat pada hari ini
+            const filteredData = data.filter(item => {
+                const itemDate = new Date(item.createdAt);
+                return itemDate.toISOString().split('T')[0] === todayString;
+            });
+
+            console.log('pasienberobat hari ini', filteredData != null);
+
+            if (filteredData != null) {
+                window.alert('Kamu Sudah Daftar Berobat Hari Ini');
+                // showToastMessage("Kamu Sudah Daftar Berobat Hari Ini");
+                window.location.href = `/daftar/pasienberobat/detail/${filteredData[0].id}`;
+            }
+
+            setFecthHariIni(filteredData);
+        } catch (error) {
+            console.error("Error fetching data pasienberobat:", error);
+            setError(
+                error instanceof Error
+                    ? error.message
+                    : "Terjadi kesalahan saat mengambil data",
+            );
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
+        fetchHariIni();
         fetchDataPasien();
         fetchDataDokter();
         fetchDataUser();
     }, []);
+
+    //   toast
+    const showToastMessage = (message: string) => {
+        toast.success(message, {
+            position: "top-right",
+        });
+    };
 
     const fetchDataUser = async () => {
         const url = urlGambar ? "/dokter/" : "/pasien/";
