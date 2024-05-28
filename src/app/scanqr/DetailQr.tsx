@@ -7,13 +7,13 @@ import { ToastContainer, toast } from "react-toastify";
 import API_URL from "../config";
 
 const DetailQr = ({ idModal, data }) => {
-    // console.log(data);
+    console.log(data);
 
     const editStatus = async () => {
-        try{
+        try {
             const formDataToSend = new FormData();
             formDataToSend.append("status", '1');
-            
+
             const response = await axios.put(API_URL + '/transaksi_medis/selesai/' + data.id, formDataToSend, {
                 headers: {
                     "Content-Type": "application/json",
@@ -21,14 +21,14 @@ const DetailQr = ({ idModal, data }) => {
                 },
             });
 
-            if(response.status == 200){
+            if (response.status == 200) {
                 console.log(response);
                 window.alert(response);
             } else {
                 console.error(response);
                 window.alert(response);
             }
-        } catch(error){
+        } catch (error) {
             console.error(error);
         }
     }
@@ -74,6 +74,9 @@ const DetailQr = ({ idModal, data }) => {
                         </label>
                         <label>
                             No Telp: {data.pasien.no_telp}
+                        </label>
+                        <label>
+                            Keluhan: {data.keluhan}
                         </label>
                     </div>
                     <br />
