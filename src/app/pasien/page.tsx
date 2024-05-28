@@ -44,7 +44,7 @@ const Pasien = () => {
     const fetchData = async () => {
       const response = await fetch('https://api.kop-dayalisna.online/api/anggota');
       const data = await response.json();
-      setSearchResults(data);
+      // setSearchResults(data);
     };
 
     fetchData();
@@ -150,7 +150,6 @@ const Pasien = () => {
       );
 
       if (response.status == 200) {
-
         console.log('anggota', response.data);
       } else {
         console.error('anggota', response);
@@ -655,17 +654,19 @@ const Pasien = () => {
                         onChange={handleInputChange}
                         className="border rounded-md p-2 w-full"
                       />
-                      <ul>
-                        {searchResults.length > 0 && searchResults.map((data) => (
-                          <li
-                            key={data.id}
-                            onClick={() => handleSelect(data)}
-                            className="cursor-pointer"
-                          >
-                            {data.nama_anggota} - {data.nip}
-                          </li>
-                        ))}
-                      </ul>
+                      <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                        <ul>
+                          {searchResults.length > 0 && searchResults.map((data) => (
+                            <li
+                              key={data.id}
+                              onClick={() => handleSelect(data)}
+                              className="cursor-pointer"
+                            >
+                              {data.nama_anggota} - {data.nip}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                       {selectedData && (
                         <div>
                           <h2>Selected Data</h2>
