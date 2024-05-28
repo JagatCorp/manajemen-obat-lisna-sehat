@@ -63,6 +63,7 @@ const DetailQr = ({ idModal, data }) => {
                         </label>
                         <label className="font-bold text-center">
                             {error}
+                            {data}
                         </label>
                         <label>
                             Nama: {data.pasien.nama}
