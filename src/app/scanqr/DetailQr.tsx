@@ -25,15 +25,15 @@ const DetailQr = ({ idModal, data }) => {
 
             if (response.status == 200) {
                 console.log(response);
-                setError(response.data);
+                setError(response.data.message);
             } else {
                 console.error(response);
-                setError(response.data);
+                setError(response.data.message);
             }
             
         } catch (error) {
             console.error(error);
-            setError(error.response.data);
+            setError(error.response.data.message);
         }
     }
 
