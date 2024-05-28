@@ -71,7 +71,17 @@ const Pasien = () => {
   };
 
   const handleSelect = (data) => {
-    setSelectedData(data);
+    // setSelectedData(data);
+    console.log('selected', data);
+
+    setFormData((prevData) => ({
+      ...prevData,
+      ['nama']: data.nama_anggota,
+      ['jk']: data.jenis_kelamin == 'Laki-laki' ? 'L' : 'P',
+      ['no_telp']: data.telp,
+      ['no_telp']: data.telp,
+    }));
+
     setInputValue(data.nama_anggota);
     setSearchResults([]);
   };
@@ -667,13 +677,6 @@ const Pasien = () => {
                           ))}
                         </ul>
                       </div>
-                      {selectedData && (
-                        <div>
-                          <h2>Selected Data</h2>
-                          <p>Name: {selectedData.nama_anggota}</p>
-                          <p>Nip: {selectedData.nip}</p>
-                        </div>
-                      )}
                     </div>
 
                     <label
