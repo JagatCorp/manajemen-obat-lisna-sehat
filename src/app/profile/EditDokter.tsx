@@ -206,7 +206,7 @@ const EditSatuanDokter = ({ idModal, data, fetchData }) => {
                     />
                 </div>
             </div>,
-            <div>
+            <div key={"input6"}>
                 <label htmlFor="username">Username</label>
                 <input
                     type="text"
@@ -218,7 +218,7 @@ const EditSatuanDokter = ({ idModal, data, fetchData }) => {
                     placeholder="Username"
                 />
             </div>,
-            <div className="mb-3">
+            <div key={"input7"} className="mb-3">
                 <label htmlFor="password">Password :</label>
                 <input
                     type="text"

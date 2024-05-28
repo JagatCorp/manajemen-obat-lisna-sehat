@@ -543,7 +543,7 @@ const ExcelObat = () => {
                         {/* Pilihan tahun, misalnya dari 1900 hingga 2100 */}
                         <option value="">- Masukan Tahun -</option>
                         {Array.from({ length: 2101 - 1900 }, (_, i) => 1900 + i).map(year => (
-                            <option value={year}>{year}</option>
+                            <option key={year} value={year}>{year}</option>
                         ))}
                     </select>
                 </div>
