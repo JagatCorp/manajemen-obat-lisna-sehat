@@ -14,7 +14,7 @@ const DetailQr = ({ idModal, data }) => {
             const formDataToSend = new FormData();
             formDataToSend.append("status", '1');
 
-            const response = await axios.put(API_URL + '/transaksi_medis/' + data.id, formDataToSend, {
+            const response = await axios.put(API_URL + '/transaksi_medis/selesai/' + data.id, formDataToSend, {
                 headers: {
                     "Content-Type": "application/json",
                     // "Content-Type": "multipart/form-data",
