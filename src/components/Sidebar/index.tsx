@@ -145,7 +145,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
           <div>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-black">
+            <h3 className="mb-4 ml-4 text-sm font-semibold text-black dark:text-white">
               MENU
             </h3>
 
@@ -556,7 +556,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* <!-- Menu Item Satuan --> */}
 
               {/* <!-- Menu Item scanqr --> */}
-              {isDoctor &&
+              {isAdmin &&
                 <li>
                   <Link
                     href="/scanqr"

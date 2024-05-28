@@ -1,11 +1,39 @@
 
 import { ModalForm } from "@/components/modal/ModalForm";
 import axios from "axios";
-import { useState } from "react";
+import { error } from "console";
+import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import API_URL from "../config";
 
 const DetailQr = ({ idModal, data }) => {
-    console.log(data);
+    // console.log(data);
+
+    const editStatus = async () => {
+        try{
+            const formDataToSend = new FormData();
+            formDataToSend.append("status", '1');
+            
+            const response = await axios.put(API_URL + '/transaksi_medis/' + data.id, formDataToSend, {
+                headers: {
+                    "Content-Type": "application/json",
+                    // "Content-Type": "multipart/form-data",
+                },
+            });
+
+            if(response.status == 200){
+                console.log(response);
+            } else {
+                console.error(response);
+            }
+        } catch(error){
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        editStatus();
+    }, [])
 
     const dataModal = {
         idModal: idModal,
@@ -25,57 +53,57 @@ const DetailQr = ({ idModal, data }) => {
             </div>
         ],
         body: [
-            <div key={"input"} className="flex flex-col gap-3" style={{ maxHeight: '255px', overflow: 'auto' }}>
+            <div key={"input1"} className="flex flex-col gap-3" style={{ maxHeight: '255px', overflow: 'auto' }}>
                 <div>
-                    <div>
-                        <div className="font-bold text-center">
+                    <div className="flex flex-col">
+                        <label className="font-bold text-center">
                             Biodata Pasien
-                        </div>
-                        <div>
+                        </label>
+                        <label>
                             Nama: {data.pasien.nama}
-                        </div>
-                        <div>
+                        </label>
+                        <label>
                             Alamat: {data.pasien.alamat}
-                        </div>
-                        <div>
+                        </label>
+                        <label>
                             Alergi: {data.pasien.alergi}
-                        </div>
-                        <div>
+                        </label>
+                        <label>
                             Gol Darah: {data.pasien.gol_darah}
-                        </div>
-                        <div>
+                        </label>
+                        <label>
                             Jenis Kelamin: {data.pasien.jk == 'L' ? "Laki-Laki" : "Perempuan"}
-                        </div>
-                        <div>
+                        </label>
+                        <label>
                             No Telp: {data.pasien.no_telp}
-                        </div>
+                        </label>
                     </div>
                     <br />
                     <hr />
-                    <div>
-                        <div className="font-bold text-center">
+                    <div className="flex flex-col">
+                        <label className="font-bold text-center">
                             Biodata Dokter
-                        </div>
-                        <div>
+                        </label>
+                        <label>
                             <img src={data.dokter.urlGambar} alt="" className="rounded-md" />
-                        </div>
-                        <div className="text-center font-bold">
+                        </label>
+                        <label className="text-center font-bold">
                             {data.dokter.nama_dokter} {'(' + data.dokter.jk + ')'}
-                        </div>
+                        </label>
                         <hr />
-                        <div className="text-center font-bold">
+                        <label className="text-center font-bold">
                             Praktik
-                        </div>
-                        <div className="text-center">
+                        </label>
+                        <label className="text-center">
                             {data.dokter.mulai_praktik} - {data.dokter.selesai_praktik}
-                        </div>
+                        </label>
                     </div>
                 </div>
             </div>,
         ],
         footer: [
             <>
-                <button className="mt-3 inline-flex w-full justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-base font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm">
+                <button key={'button'} className="mt-3 inline-flex w-full justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-base font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm">
                     Konfirmasi
                 </button>
             </>
@@ -83,7 +111,7 @@ const DetailQr = ({ idModal, data }) => {
     };
 
     return (
-        <div>
+        <div key={'div'}>
             <ModalForm dataModal={dataModal} />
         </div>
     );
