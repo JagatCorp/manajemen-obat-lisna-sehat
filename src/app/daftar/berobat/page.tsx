@@ -162,7 +162,7 @@ const DaftarBerobat = () => {
                 return itemDate.toISOString().split('T')[0] === todayString;
             });
 
-            console.log('pasienberobat hari ini', filteredData != null);
+            // console.log('pasienberobat hari ini', filteredData != null);
 
             if (filteredData != null) {
                 window.alert('Kamu Sudah Daftar Berobat Hari Ini');
@@ -184,7 +184,9 @@ const DaftarBerobat = () => {
     };
 
     useEffect(() => {
-        fetchHariIni();
+        if (role == 'lisPa') {
+            fetchHariIni();
+        }
         fetchDataPasien();
         fetchDataDokter();
         fetchDataUser();
