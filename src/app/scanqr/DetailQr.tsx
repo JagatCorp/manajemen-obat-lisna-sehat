@@ -101,7 +101,7 @@ const DetailQr = ({ idModal, data }) => {
                     </div>
                 </div>
             </div>,
-        ],
+        ], 
         footer: [
             <>
                 <div key={'button'} onClick={editStatus} className="mt-3 inline-flex w-full justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-base font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm">
