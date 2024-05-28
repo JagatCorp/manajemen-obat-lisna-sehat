@@ -7,12 +7,15 @@ import Image from "next/image";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import { useRouter } from 'next/router';
 import { isReadable } from "stream";
+import CekLogin from "../CekLogin";
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
 }
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+  CekLogin();
+  
   const pathname = usePathname();
   const urlGambar = localStorage.getItem("urlGambar");
   const role = localStorage.getItem("role"); // Mendapatkan peran dari localStorage
