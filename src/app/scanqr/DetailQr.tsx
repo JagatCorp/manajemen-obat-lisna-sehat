@@ -9,6 +9,8 @@ import API_URL from "../config";
 const DetailQr = ({ idModal, data }) => {
     console.log(data);
 
+    const [error, setError] = useState<string | null>(null);
+
     const editStatus = async () => {
         try {
             const formDataToSend = new FormData();
@@ -23,9 +25,11 @@ const DetailQr = ({ idModal, data }) => {
 
             if (response.status == 200) {
                 console.log(response);
+                setError(response.data);
             } else {
                 console.error(response);
             }
+
         } catch (error) {
             console.error(error);
         }
@@ -53,7 +57,10 @@ const DetailQr = ({ idModal, data }) => {
                 <div>
                     <div className="flex flex-col">
                         <label className="font-bold text-center">
-                            Biodata Pasien
+                            Biodata Pasien 
+                        </label>
+                        <label className="font-bold text-center">
+                            {error}
                         </label>
                         <label>
                             Nama: {data.pasien.nama}
