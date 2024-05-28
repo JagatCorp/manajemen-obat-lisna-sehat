@@ -117,7 +117,7 @@ const TambahObat = ({ idModal, dataId, fetchDataObatKeluar, fetchDataObat, dataO
                     {dataObat && dataObat.length > 0 ? (
                         <>
                             {dataObat.map((obat, index) => (
-                                <div className={`max-w-sm rounded overflow-hidden shadow-lg bg-white w-45 h-55 mt-4 hover:cursor-pointer ${formData.obat_id === obat.id? 'border-blue-500 border-2' : ''}`}
+                                <div key={index} className={`max-w-sm rounded overflow-hidden shadow-lg bg-white w-45 h-55 mt-4 hover:cursor-pointer ${formData.obat_id === obat.id? 'border-blue-500 border-2' : ''}`}
                                 onClick={() => handleSelect(obat)}
                                 >
                                     <img className="w-full h-35" src={obat.urlGambar} alt="Card Image" />

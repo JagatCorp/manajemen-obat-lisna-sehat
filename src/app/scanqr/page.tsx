@@ -55,9 +55,9 @@ const ScanQR: React.FC = () => {
                 onError={handleError} // Handler for scanning errors
                 onScan={handleScan} // Handler for scanned data
                 // kamera depan
-                facingMode="user" // Use back camera by default
+                // facingMode="user" // Use back camera by default
               // kamera belakang
-              //  facingMode="environment" // Use front camera by default
+               facingMode="environment" // Use front camera by default
               />
             </div>
             <div className="absolute bottom-0 left-0 my-3 mt-5 flex w-full items-center justify-between space-x-3 px-2">

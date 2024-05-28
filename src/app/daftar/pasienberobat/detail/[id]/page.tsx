@@ -331,7 +331,7 @@ const Detail = () => {
                                             
                                             totalHarga += jml_harga;
                                             return (
-                                                <div className="flex justify-between items-center w-full">
+                                                <div key={'div'} className="flex justify-between items-center w-full">
                                                     <p className="text-base dark:text-white leading-4 text-gray-800">{data.obat.nama_obat}</p>
                                                     <p className="text-base dark:text-gray-300 leading-4 text-gray-600">{formatNumberWithCurrency(hna_ppn_margin)} x {data.jml_obat} = {formatNumberWithCurrency(jml_harga)}</p>
                                                 </div>
@@ -356,7 +356,7 @@ const Detail = () => {
                                 {dataObatKeluar && dataObatKeluar.length !== 0 ? (
                                     dataObatKeluar.map((obatKeluar, index) => {
                                         return (
-                                            <div className="flex justify-between items-center w-full">
+                                            <div key={'divObatKeluar'} className="flex justify-between items-center w-full">
                                                 <p className="text-base dark:text-white leading-4 text-gray-800">{obatKeluar.obat.nama_obat}</p>
                                                 <div className='flex gap-3'>
                                                     <p className="text-base dark:text-gray-300 leading-4 text-gray-600">{obatKeluar.dosis}</p>

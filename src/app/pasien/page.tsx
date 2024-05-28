@@ -44,7 +44,7 @@ const Pasien = () => {
     const fetchData = async () => {
       const response = await fetch('https://api.kop-dayalisna.online/api/anggota');
       const data = await response.json();
-      setSearchResults(data);
+      // setSearchResults(data);
     };
 
     fetchData();
@@ -71,7 +71,17 @@ const Pasien = () => {
   };
 
   const handleSelect = (data) => {
-    setSelectedData(data);
+    // setSelectedData(data);
+    console.log('selected', data);
+
+    setFormData((prevData) => ({
+      ...prevData,
+      ['nama']: data.nama_anggota,
+      ['jk']: data.jenis_kelamin == 'Laki-laki' ? 'L' : 'P',
+      ['no_telp']: data.telp,
+      ['no_telp']: data.telp,
+    }));
+
     setInputValue(data.nama_anggota);
     setSearchResults([]);
   };
@@ -150,7 +160,6 @@ const Pasien = () => {
       );
 
       if (response.status == 200) {
-
         console.log('anggota', response.data);
       } else {
         console.error('anggota', response);
@@ -655,24 +664,19 @@ const Pasien = () => {
                         onChange={handleInputChange}
                         className="border rounded-md p-2 w-full"
                       />
-                      <ul>
-                        {searchResults.length > 0 && searchResults.map((data) => (
-                          <li
-                            key={data.id}
-                            onClick={() => handleSelect(data)}
-                            className="cursor-pointer"
-                          >
-                            {data.nama_anggota} - {data.nip}
-                          </li>
-                        ))}
-                      </ul>
-                      {selectedData && (
-                        <div>
-                          <h2>Selected Data</h2>
-                          <p>Name: {selectedData.nama_anggota}</p>
-                          <p>Nip: {selectedData.nip}</p>
-                        </div>
-                      )}
+                      <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                        <ul>
+                          {searchResults.length > 0 && searchResults.map((data) => (
+                            <li
+                              key={data.id}
+                              onClick={() => handleSelect(data)}
+                              className="cursor-pointer"
+                            >
+                              {data.nama_anggota} - {data.nip}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
 
                     <label

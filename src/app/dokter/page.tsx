@@ -10,7 +10,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import API_URL from "../config";
-const Dokter = ({ isLoggedIn }) => {
+const Dokter = () => {
   const [dokter, setDokter] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
