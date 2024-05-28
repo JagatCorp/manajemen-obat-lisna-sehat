@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,6 +9,12 @@ import { ToastContainer, toast } from "react-toastify";
 import API_URL from "../config";
 
 export default function Login() {
+    useEffect(() => {
+        if(localStorage.getItem('role')){
+            window.location.href = '/';
+        }
+    }, [])
+
     const [username, setusername] = useState("");
     const [password, setPassword] = useState("");
     const [cookies, setCookie] = useCookies(["token"]);
@@ -40,7 +46,7 @@ export default function Login() {
                 localStorage.setItem("role", response.data.role);
             }
             localStorage.setItem("id", response.data.id);
-            
+
 
             // Simpan token JWT di dalam cookie dengan nama 'token'
             setCookie("token", response.data.token, { path: "/" });

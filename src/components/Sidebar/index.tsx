@@ -7,12 +7,15 @@ import Image from "next/image";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import { useRouter } from 'next/router';
 import { isReadable } from "stream";
+import CekLogin from "../CekLogin";
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
 }
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+  CekLogin();
+  
   const pathname = usePathname();
   const urlGambar = localStorage.getItem("urlGambar");
   const role = localStorage.getItem("role"); // Mendapatkan peran dari localStorage
@@ -142,7 +145,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
           <div>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-black">
+            <h3 className="mb-4 ml-4 text-sm font-semibold text-black dark:text-white">
               MENU
             </h3>
 
@@ -553,7 +556,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* <!-- Menu Item Satuan --> */}
 
               {/* <!-- Menu Item scanqr --> */}
-              {isDoctor &&
+              {isAdmin &&
                 <li>
                   <Link
                     href="/scanqr"
