@@ -11,12 +11,15 @@ import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import API_URL from "../config";
 
-const dataArray = [
-  { id: 1, name: 'John Doe', age: 30 },
-  { id: 2, name: 'Jane Doe', age: 25 },
-  { id: 3, name: 'Bob Smith', age: 40 },
-  { id: 4, name: 'Alice Johnson', age: 35 },
-];
+// const dataArray = [
+//   { id: 1, name: 'John Doe', age: 30 },
+//   { id: 2, name: 'Jane Doe', age: 25 },
+//   { id: 3, name: 'Bob Smith', age: 40 },
+//   { id: 4, name: 'Alice Johnson', age: 35 },
+// ];
+
+// const dataArray = [];
+
 
 const Pasien = () => {
   const [pasien, setPasien] = useState([]);
@@ -34,30 +37,44 @@ const Pasien = () => {
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef(null);
 
-
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedData, setSelectedData] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch('https://api.kop-dayalisna.online/api/anggota');
+      const data = await response.json();
+      setSearchResults(data);
+    };
 
-  const handleInputChange = (e) => {
+    fetchData();
+  }, []);
+
+  const handleInputChange = async (e) => {
     const searchTerm = e.target.value.toLowerCase();
-    const results = dataArray.filter((data) => {
+    setInputValue(searchTerm);
+
+    if (searchTerm === '') {
+      setSearchResults([]);
+      return;
+    }
+
+    const response = await fetch('https://api.kop-dayalisna.online/api/anggota');
+    const data = await response.json();
+    const results = data.filter((item) => {
       return (
-        data.name.toLowerCase().includes(searchTerm) ||
-        data.age.toString().includes(searchTerm)
+        item.nama_anggota.toLowerCase().includes(searchTerm) ||
+        item.nip.toString().includes(searchTerm)
       );
     });
     setSearchResults(results);
-    setInputValue(searchTerm);
   };
 
   const handleSelect = (data) => {
     setSelectedData(data);
-    setInputValue(data.name);
-    setSearchResults([]); // Optional: Clear search results after selection
+    setInputValue(data.nama_anggota);
+    setSearchResults([]);
   };
-
-
 
   // add data
   const [formData, setFormData] = useState({
@@ -129,18 +146,19 @@ const Pasien = () => {
     // console.log('masuk');
     try {
       const response = await axios.get(
-        `https://kop-dayalisna.online/api/anggotaApi`,
+        `https://api.kop-dayalisna.online/api/anggota`,
       );
 
-      if(response.status == 200){
-        console.log('anggota', response);
-      } else{
+      if (response.status == 200) {
+
+        console.log('anggota', response.data);
+      } else {
         console.error('anggota', response);
       }
-      
-      } catch (error: any) {
-        console.log(error);
-      }
+
+    } catch (error: any) {
+      console.log(error);
+    }
   }
 
   const fetchDataByKeyword = async (keyword: string) => {
@@ -618,8 +636,8 @@ const Pasien = () => {
 
           {/* modal add */}
           {showModal && (
-            <div className="inset-0 z-50 -mt-100 flex max-h-full items-center justify-center overflow-y-auto">
-              <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
+            <div className="absolute w-full">
+              <div className="//"></div>
               <div
                 role="alert"
                 className="container mx-auto w-11/12 max-w-lg md:w-2/3"
@@ -638,21 +656,21 @@ const Pasien = () => {
                         className="border rounded-md p-2 w-full"
                       />
                       <ul>
-                        {searchResults.map((data) => (
+                        {searchResults.length > 0 && searchResults.map((data) => (
                           <li
                             key={data.id}
                             onClick={() => handleSelect(data)}
                             className="cursor-pointer"
                           >
-                            {data.name} - {data.age}
+                            {data.nama_anggota} - {data.nip}
                           </li>
                         ))}
                       </ul>
                       {selectedData && (
                         <div>
                           <h2>Selected Data</h2>
-                          <p>Name: {selectedData.name}</p>
-                          <p>Age: {selectedData.age}</p>
+                          <p>Name: {selectedData.nama_anggota}</p>
+                          <p>Nip: {selectedData.nip}</p>
                         </div>
                       )}
                     </div>
@@ -905,7 +923,7 @@ const Pasien = () => {
           {/* modal update */}
           {showUpdateModal && (
             <div className="inset-0 z-50 -mt-[760px] flex max-h-full items-center justify-center overflow-y-auto">
-              <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
+              <div className="//"></div>
               <div
                 role="alert"
                 className="container mx-auto mb-5 mt-5 w-11/12 max-w-lg md:w-2/3"

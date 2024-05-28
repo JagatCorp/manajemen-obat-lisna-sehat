@@ -51,7 +51,7 @@ const Transaksibarangdistributor = () => {
             setLoading(false);
         }
     };
-// restore data
+    // restore data
     const handleRestore = async () => {
         try {
             const response = await axios.put(`${API_URL}/transaksidistributor/restore/${itemIdToRestore}`, {}, {
@@ -62,7 +62,7 @@ const Transaksibarangdistributor = () => {
 
             if (response.status === 200) {
                 showToastMessage("Data Transaksi berhasil di kembalikan!");
-                 setShowRestoreModal(false);
+                setShowRestoreModal(false);
                 // Refresh data atau update state sesuai kebutuhan Anda
                 fetchData(); // Contoh fungsi untuk me-refresh data
             } else {
@@ -222,8 +222,15 @@ const Transaksibarangdistributor = () => {
                     <ToastContainer />
 
                     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-
-
+                        <a href="/barangdistributor/transaksi">
+                        <button className="flex items-center gap-1 rounded-md bg-white px-4  py-2 text-end text-black shadow-xl hover:bg-slate-100 focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-offset-2 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-400"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
+                            </svg>
+                            Kembali
+                        </button>
+                        </a>
                         <div className="mb-4 flex items-center justify-end">
                             {/* search */}
                             <input

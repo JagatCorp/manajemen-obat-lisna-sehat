@@ -604,8 +604,8 @@ const Dokter = ({ isLoggedIn }) => {
 
           {/* modal add */}
           {showModal && (
-            <div className="inset-0 z-50 -mt-100 flex max-h-full items-center justify-center overflow-y-auto">
-              <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
+            <div className="absolute w-full">
+              <div className="//"></div>
               <div
                 role="alert"
                 className="container mx-auto w-11/12 max-w-lg md:w-2/3"
@@ -838,8 +838,8 @@ const Dokter = ({ isLoggedIn }) => {
 
           {/* modal update */}
           {showUpdateModal && (
-            <div className="inset-0 z-50 -mt-[530px] flex max-h-full items-center justify-center overflow-y-auto">
-              <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
+            <div className="absolute w-full">
+              <div className="//"></div>
               <div
                 role="alert"
                 className="container mx-auto mb-5 mt-5 w-11/12 max-w-lg md:w-2/3"

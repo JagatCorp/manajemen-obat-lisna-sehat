@@ -12,6 +12,7 @@ import API_URL from "@/app/config";
 import FormattedDate from "@/components/FormattedDate";
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import flatpickr from "flatpickr";
 const Pasienberobat = () => {
   const [pasienberobat, setPasienberobat] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -70,9 +71,9 @@ const Pasienberobat = () => {
 
   const fetchDataAndExportToExcel = async () => {
     try {
-      const url = 'http://localhost:5000/api/transaksi_medis/export';
+      const url = API_URL + '/transaksi_medis/export';
       console.log(`Fetching data from ${url} with params: startDate=${startDate}&endDate=${endDate}`);
-      
+
       const response = await axios.get(url, {
         params: {
           startDate: startDate,
@@ -87,11 +88,35 @@ const Pasienberobat = () => {
       // Convert JSON data to worksheet
       const ws = XLSX.utils.json_to_sheet(data);
 
-      // Get the last row index
-      const lastRowIndex = data.length + 1;
-
       // Add custom text at the bottom
+      const lastRowIndex = data.length + 1;
       XLSX.utils.sheet_add_aoa(ws, [['Jumlah Harga Total: ' + jumlahHargaTotal]], { origin: `A${lastRowIndex + 1}` });
+
+      // Apply some basic styles with borders
+      const range = XLSX.utils.decode_range(ws['!ref']);
+      for (let R = range.s.r; R <= range.e.r; ++R) {
+        for (let C = range.s.c; C <= range.e.c; ++C) {
+          const cell_address = { c: C, r: R };
+          const cell_ref = XLSX.utils.encode_cell(cell_address);
+          if (!ws[cell_ref]) continue;
+          ws[cell_ref].s = {
+            font: {
+              name: 'Arial',
+              sz: 12,
+              color: { rgb: "#FF000000" },
+            },
+            fill: {
+              fgColor: { rgb: "#FFFFAAAA" }
+            },
+            border: {
+              top: { style: "thin", color: { rgb: "#3D5EE1" } },
+              bottom: { style: "thin", color: { rgb: "#3D5EE1" } },
+              left: { style: "thin", color: { rgb: "#3D5EE1" } },
+              right: { style: "thin", color: { rgb: "#3D5EE1" } }
+            }
+          };
+        }
+      }
 
       // Create a new workbook and append the worksheet
       const wb = XLSX.utils.book_new();
@@ -100,14 +125,15 @@ const Pasienberobat = () => {
       // Generate buffer
       const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
 
+      // Generate filename
+      const filename = `transaksi_medis_${startDate}_sampai_${endDate}.xlsx`;
+
       // Save to file
-      saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'data.xlsx');
+      saveAs(new Blob([wbout], { type: 'application/octet-stream' }), filename);
     } catch (error) {
       console.error('Error fetching data and exporting to Excel:', error);
     }
   };
-
-
 
   const fetchDataByKeyword = async (keyword: string) => {
     try {
@@ -133,6 +159,20 @@ const Pasienberobat = () => {
 
   // kondisi search
   useEffect(() => {
+    // Init flatpickr
+    flatpickr(".form-datepicker-start", {
+      dateFormat: "Y-m-d",
+      onChange: (selectedDates, dateStr) => {
+        setStartDate(dateStr);
+      }
+    });
+
+    flatpickr(".form-datepicker-end", {
+      dateFormat: "Y-m-d",
+      onChange: (selectedDates, dateStr) => {
+        setEndDate(dateStr);
+      }
+    });
     // fetchDataAndExportToExcel();
     if (searchTerm !== "") {
       fetchDataByKeyword(searchTerm);
@@ -213,48 +253,91 @@ const Pasienberobat = () => {
           <ToastContainer />
 
           <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-            {/* <button
-              onClick={toggleModal}
-              className="flex items-center gap-1 rounded-md bg-white px-4  py-2 text-end text-black shadow-xl hover:bg-slate-100 focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-offset-2 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-400"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                className="h-6 w-6 text-black dark:text-white"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-              Pasienberobat
-            </button> */}
+
             <div>
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            <button onClick={fetchDataAndExportToExcel}>Export to Excel</button>
+
+              {/* <!-- export by tanggal --> */}
+              <div className="rounded-sm mb-3  bg-white dark:border-strokedark dark:bg-boxdark">
+
+                <div className="flex flex-col gap-5.5 p-1">
+                  <div className="flex gap-44">
+                    <label className="block text-sm font-medium text-black dark:text-white">
+                      Start Date
+                    </label>
+                    <label className="block text-sm font-medium text-black dark:text-white">
+                      End Date
+                    </label>
+
+                  </div>
+
+                  <div className="flex gap-5">
+                    <div className="relative">
+                      <input
+                        className="form-datepicker-start w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        placeholder="mm/dd/yyyy"
+                        data-class="flatpickr-right"
+                      />
+
+                      <div className="pointer-events-none absolute inset-0 left-auto right-5 flex items-center">
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 18 18"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M15.7504 2.9812H14.2879V2.36245C14.2879 2.02495 14.0066 1.71558 13.641 1.71558C13.2754 1.71558 12.9941 1.99683 12.9941 2.36245V2.9812H4.97852V2.36245C4.97852 2.02495 4.69727 1.71558 4.33164 1.71558C3.96602 1.71558 3.68477 1.99683 3.68477 2.36245V2.9812H2.25039C1.29414 2.9812 0.478516 3.7687 0.478516 4.75308V14.5406C0.478516 15.4968 1.26602 16.3125 2.25039 16.3125H15.7504C16.7066 16.3125 17.5223 15.525 17.5223 14.5406V4.72495C17.5223 3.7687 16.7066 2.9812 15.7504 2.9812ZM1.77227 8.21245H4.16289V10.9968H1.77227V8.21245ZM5.42852 8.21245H8.38164V10.9968H5.42852V8.21245ZM8.38164 12.2625V15.0187H5.42852V12.2625H8.38164V12.2625ZM9.64727 12.2625H12.6004V15.0187H9.64727V12.2625ZM9.64727 10.9968V8.21245H12.6004V10.9968H9.64727ZM13.8379 8.21245H16.2285V10.9968H13.8379V8.21245ZM2.25039 4.24683H3.71289V4.83745C3.71289 5.17495 3.99414 5.48433 4.35977 5.48433C4.72539 5.48433 5.00664 5.20308 5.00664 4.83745V4.24683H13.0504V4.83745C13.0504 5.17495 13.3316 5.48433 13.6973 5.48433C14.0629 5.48433 14.3441 5.20308 14.3441 4.83745V4.24683H15.7504C16.0316 4.24683 16.2566 4.47183 16.2566 4.75308V6.94683H1.77227V4.75308C1.77227 4.47183 1.96914 4.24683 2.25039 4.24683ZM1.77227 14.5125V12.2343H4.16289V14.9906H2.25039C1.96914 15.0187 1.77227 14.7937 1.77227 14.5125ZM15.7504 15.0187H13.8379V12.2625H16.2285V14.5406C16.2566 14.7937 16.0316 15.0187 15.7504 15.0187Z"
+                            fill="#64748B"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <input
+                        className="form-datepicker-end w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                        placeholder="mm/dd/yyyy"
+                        data-class="flatpickr-right"
+                      />
+
+                      <div className="pointer-events-none absolute inset-0 left-auto right-5 flex items-center">
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 18 18"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M15.7504 2.9812H14.2879V2.36245C14.2879 2.02495 14.0066 1.71558 13.641 1.71558C13.2754 1.71558 12.9941 1.99683 12.9941 2.36245V2.9812H4.97852V2.36245C4.97852 2.02495 4.69727 1.71558 4.33164 1.71558C3.96602 1.71558 3.68477 1.99683 3.68477 2.36245V2.9812H2.25039C1.29414 2.9812 0.478516 3.7687 0.478516 4.75308V14.5406C0.478516 15.4968 1.26602 16.3125 2.25039 16.3125H15.7504C16.7066 16.3125 17.5223 15.525 17.5223 14.5406V4.72495C17.5223 3.7687 16.7066 2.9812 15.7504 2.9812ZM1.77227 8.21245H4.16289V10.9968H1.77227V8.21245ZM5.42852 8.21245H8.38164V10.9968H5.42852V8.21245ZM8.38164 12.2625V15.0187H5.42852V12.2625H8.38164V12.2625ZM9.64727 12.2625H12.6004V15.0187H9.64727V12.2625ZM9.64727 10.9968V8.21245H12.6004V10.9968H9.64727ZM13.8379 8.21245H16.2285V10.9968H13.8379V8.21245ZM2.25039 4.24683H3.71289V4.83745C3.71289 5.17495 3.99414 5.48433 4.35977 5.48433C4.72539 5.48433 5.00664 5.20308 5.00664 4.83745V4.24683H13.0504V4.83745C13.0504 5.17495 13.3316 5.48433 13.6973 5.48433C14.0629 5.48433 14.3441 5.20308 14.3441 4.83745V4.24683H15.7504C16.0316 4.24683 16.2566 4.47183 16.2566 4.75308V6.94683H1.77227V4.75308C1.77227 4.47183 1.96914 4.24683 2.25039 4.24683ZM1.77227 14.5125V12.2343H4.16289V14.9906H2.25039C1.96914 15.0187 1.77227 14.7937 1.77227 14.5125ZM15.7504 15.0187H13.8379V12.2625H16.2285V14.5406C16.2566 14.7937 16.0316 15.0187 15.7504 15.0187Z"
+                            fill="#64748B"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="">
+                      <button onClick={fetchDataAndExportToExcel} className="rounded bg-blue-700 px-4 py-3  text-md text-white transition duration-150 ease-in-out hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2 flex gap-2">Export Excel
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                        </svg>
+                      </button>
+
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
             </div>
             <div className="mb-4 flex items-center justify-end">
               {/* search */}
-              <input
+              {/* <input
                 type="text"
                 placeholder="Cari Pasien Berobat..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-48 rounded-l-md border border-[#e0e0e0] bg-white px-6 py-3 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-slate-500 dark:text-white md:w-56"
-              />
+              /> */}
             </div>
             <div className="max-w-full overflow-x-auto overflow-y-hidden">
               <table className="w-full table-auto">
@@ -392,7 +475,7 @@ const Pasienberobat = () => {
           {/* modal update */}
           {showUpdateModal && (
             <div className="inset-0 z-50 -mt-[760px] flex max-h-full items-center justify-center overflow-y-auto">
-              <div className="fixed inset-0 bg-slate-500 opacity-75"></div>
+              <div className="//"></div>
               <div
                 role="alert"
                 className="container mx-auto mb-5 mt-5 w-11/12 max-w-lg md:w-2/3"
