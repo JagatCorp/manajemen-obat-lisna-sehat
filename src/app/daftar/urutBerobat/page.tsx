@@ -76,7 +76,7 @@ const TransaksiObatMasuk = () => {
             const formDataToSend = new FormData;
             formDataToSend.append('status', '2');
 
-            const response = await axios.post(`${API_URL}/transaksi_medis/selesai/${transaksiId}`, formDataToSend, {
+            const response = await axios.put(`${API_URL}/transaksi_medis/selesai/${transaksiId}`, formDataToSend, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -152,7 +152,7 @@ const TransaksiObatMasuk = () => {
                                                                     <span>
                                                                         <button onClick={() => handleSkipPasien(transaksi.id)}>
                                                                             <svg
-                                                                              
+
                                                                                 className="fill-current w-4 h-4 text-orange-700"
                                                                                 viewBox="0 0 18 18"
                                                                                 fill="none"
