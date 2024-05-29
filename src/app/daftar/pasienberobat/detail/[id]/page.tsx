@@ -118,7 +118,7 @@ const Detail = () => {
                 formDataToSend.append('harga_dokter', hargaDokter);
                 formDataToSend.append('status', '3');
 
-                const response = await axios.post(`${API_URL}/transaksi_medis/selesai/${id}`, formDataToSend, {
+                const response = await axios.put(`${API_URL}/transaksi_medis/selesai/${id}`, formDataToSend, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -326,9 +326,9 @@ const Detail = () => {
                                             let harga_margin = set_harga_ppn * 0.15;
                                             // hna + ppn + margin 15%
                                             let hna_ppn_margin = set_harga_ppn + harga_margin;
-                                            
-                                            let jml_harga =hna_ppn_margin * data.jml_obat;
-                                            
+
+                                            let jml_harga = hna_ppn_margin * data.jml_obat;
+
                                             totalHarga += jml_harga;
                                             return (
                                                 <div key={'div'} className="flex justify-between items-center w-full">
