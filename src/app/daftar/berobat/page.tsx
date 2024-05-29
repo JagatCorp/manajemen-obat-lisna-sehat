@@ -108,7 +108,13 @@ const DaftarBerobat = () => {
                     status: null,
                 });
                 // fetchData();
-                window.location.href = "/daftar/pasienberobat/pasien";
+                if (isAdmin == true) {
+                    window.location.href = "/daftar/pasienberobat";
+                }
+                else {
+                    window.location.href = "/daftar/pasienberobat/pasien";
+                }
+
             } else {
                 console.error("Gagal mengirim data.");
             }
