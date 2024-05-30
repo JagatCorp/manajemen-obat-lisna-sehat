@@ -519,7 +519,7 @@ const ExcelObat = () => {
                     <select id="bulan" onChange={(e) => setInputBulan(e.target.value as any)}
                         className="w-48 rounded-l-md border border-[#e0e0e0] bg-white px-6 py-3 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-slate-500 dark:text-white md:w-56"
                     >
-                        <option value="">- Masukan Tanggal -</option>
+                        <option value="">- Masukan Bulan -</option>
                         <option value="Januari">Januari</option>
                         <option value="Februari">Februari</option>
                         <option value="Maret">Maret</option>
