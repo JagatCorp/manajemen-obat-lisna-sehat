@@ -30,7 +30,7 @@ ___
 - 10+ HTML Files
 - TypeScript Support
 - Basic UI Kit Elements and Files
-- Figma Design Source - Free Sample
+- Figma Design Source - Free Samplee
 ___
 
 ### [⬇️ Download Now](https://tailadmin.com/download)
