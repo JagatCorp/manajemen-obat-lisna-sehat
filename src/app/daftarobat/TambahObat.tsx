@@ -2,7 +2,6 @@ import { ModalForm } from "@/components/modal/ModalForm";
 import axios from "axios";
 import { use, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import API_URL from "../config";
 
 
 const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
@@ -13,13 +12,12 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
 
     const [formData, setFormData] = useState({
         nama_obat: "",
+        qty_box: "",
         qty_sat: "",
         stok: "",
-        harga: "",
         satuan_box_id: "",
         satuan_sat_id: "",
         gambar_obat: "",
-        disc_principle: "",
     });
 
     const handleSubmit = async (e) => {
@@ -29,19 +27,17 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
         try {
             var formDataToSend = new FormData();
             formDataToSend.append("nama_obat", formData.nama_obat);
+            formDataToSend.append("qty_box", formData.qty_box);
             formDataToSend.append("qty_sat", formData.qty_sat);
             formDataToSend.append("stok", formData.stok);
-            formDataToSend.append("harga", formData.harga);
             formDataToSend.append("satuan_box_id", formData.satuan_box_id);
             formDataToSend.append("satuan_sat_id", formData.satuan_sat_id);
-            formDataToSend.append("disc_principle", formData.disc_principle);
-
             if (formData.gambar_obat) {
                 formDataToSend.append("gambar_obat", formData.gambar_obat);
             }
 
             const response = await axios.post(
-                API_URL + "/obat",
+                "https://api.lisnasehat.online/api/obat",
                 formDataToSend, // Kirim FormData
                 {
                     headers: {
@@ -53,24 +49,23 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
 
             if (response.status === 200) {
                 showToastMessage("Data berhasil ditambahkan!");
-
+                
                 const modalTambah = document.getElementById(idModal);
-                if (modalTambah instanceof HTMLDialogElement) {
+                if(modalTambah instanceof HTMLDialogElement){
                     modalTambah.close();
                 }
-
+                
                 setFormData(prevData => ({
                     ...prevData,
                     nama_obat: "",
+                    qty_box: "",
                     qty_sat: "",
                     stok: "",
-                    harga: "",
                     satuan_box_id: "",
                     satuan_sat_id: "",
                     gambar_obat: "",
-                    disc_principle: "",
                 }));
-
+                
                 gambar_obat_ref.current.value = "";
                 satuan_box_ref.current.value = "";
                 satuan_sat_ref.current.value = "";
@@ -139,12 +134,21 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
                     </div>
                     <div className="flex gap-3">
                         <div className="grid grid-cols-3 gap-2">
-                            <select
+                            <input
+                                type="number"
+                                name="qty_box"
+                                id="qty_box"
+                                min="0"
+                                value={formData.qty_box}
                                 onChange={handleChange}
-                                name="satuan_box_id"
-                                id="satuan_box_id"
-                                ref={satuan_box_ref}
-                                className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500">
+                                className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 col-span-2"
+                            />
+                            <select 
+                            onChange={handleChange} 
+                            name="satuan_box_id" 
+                            id="satuan_box_id" 
+                            ref={satuan_box_ref}
+                            className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500">
                                 <option value="">-</option>
                                 {dataSatuan.map((satuan, index) => (
                                     <option key={index} value={satuan.id}>{satuan.attributes.nama_satuan}</option>
@@ -161,11 +165,11 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
                                 onChange={handleChange}
                                 className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 col-span-2"
                             />
-                            <select onChange={handleChange}
-                                name="satuan_sat_id"
-                                id="satuan_sat_id"
-                                ref={satuan_sat_ref}
-                                className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500">
+                            <select onChange={handleChange} 
+                            name="satuan_sat_id" 
+                            id="satuan_sat_id"
+                            ref={satuan_sat_ref} 
+                            className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500">
                                 <option value="">-</option>
                                 {dataSatuan.map((satuan, index) => (
                                     <option key={index} value={satuan.id}>{satuan.attributes.nama_satuan}</option>
@@ -187,30 +191,6 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
                     />
                 </div>
                 <div className="">
-                    <label htmlFor="harga">Harga Obat :</label>
-                    <input
-                        type="number"
-                        name="harga"
-                        id="harga"
-                        min="0"
-                        value={formData.harga}
-                        onChange={handleChange}
-                        className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
-                    />
-                </div>
-                <div className="">
-                    <label htmlFor="harga">Disc Principle Obat :</label>
-                    <input
-                        type="number"
-                        name="disc_principle"
-                        id="disc_principle"
-                        min="0"
-                        value={formData.disc_principle}
-                        onChange={handleChange}
-                        className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
-                    />
-                </div>
-                <div className="">
                     <label htmlFor="">Gambar Obat :</label>
                     <input
                         ref={gambar_obat_ref}
@@ -227,7 +207,7 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
         footer: [
             <>
                 <button className="mt-3 inline-flex w-full justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-base font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm">
-                    Cancel
+                    Cancel    
                 </button>
                 <button
                     key="buttonSubmit"
@@ -239,7 +219,7 @@ const TambahObat = ({ idModal, fetchData, dataSatuan }) => {
                     {loading ? (
                         <span className="animate-spin">&#9696;</span>
                     ) : (
-                        ''
+                        ''                        
                     )}
                     {loading ? "Loading..." : "Submit"}
                 </button>

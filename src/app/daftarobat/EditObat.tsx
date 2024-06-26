@@ -2,7 +2,6 @@ import { ModalForm } from "@/components/modal/ModalForm";
 import axios from "axios";
 import { use, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import API_URL from "../config";
 
 
 const EditObat = ({ idModal, fetchData, dataSatuan, dataObat }) => {
@@ -10,12 +9,11 @@ const EditObat = ({ idModal, fetchData, dataSatuan, dataObat }) => {
 
     const [formData, setFormData] = useState({
         nama_obat: dataObat['nama_obat'],
+        qty_box: dataObat['qty_box'],
         qty_sat: dataObat['qty_sat'],
         stok: dataObat['stok'],
-        harga: dataObat['harga'],
         satuan_box_id: dataObat['satuan_box_id'],
         satuan_sat_id: dataObat['satuan_sat_id'],
-        disc_principle: dataObat['disc_principle'],
         gambar_obat: "",
     });
     
@@ -26,19 +24,18 @@ const EditObat = ({ idModal, fetchData, dataSatuan, dataObat }) => {
 
         var formDataToSendEdit = new FormData;
         formDataToSendEdit.append("nama_obat", formData.nama_obat);
+        formDataToSendEdit.append("qty_box", formData.qty_box);
         formDataToSendEdit.append("qty_sat", formData.qty_sat);
         formDataToSendEdit.append("stok", formData.stok);
-        formDataToSendEdit.append("harga", formData.harga);
         formDataToSendEdit.append("satuan_box_id", formData.satuan_box_id);
-        formDataToSendEdit.append("disc_principle", formData.disc_principle);
-
+        formDataToSendEdit.append("satuan_sat_id", formData.satuan_sat_id);
         if (formData.gambar_obat) {
             formDataToSendEdit.append("gambar_obat", formData.gambar_obat);
         }
 
         try {
-            const response = await axios.put(
-                API_URL + `/obat/${dataObat.id}`,
+            const response = await axios.post(
+                `https://api.lisnasehat.online/api/obat/${dataObat.id}`,
                 formDataToSendEdit,
                 {
                     headers: {
@@ -144,6 +141,15 @@ const EditObat = ({ idModal, fetchData, dataSatuan, dataObat }) => {
                     </div>
                     <div className="flex gap-3">
                         <div className="grid grid-cols-3 gap-2">
+                            <input
+                                type="number"
+                                name="qty_box"
+                                id="qty_box"
+                                min="0"
+                                value={formData.qty_box}
+                                onChange={handleChange}
+                                className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 col-span-2"
+                            />
                             <select 
                             onChange={handleChange} 
                             name="satuan_box_id" 
@@ -185,30 +191,6 @@ const EditObat = ({ idModal, fetchData, dataSatuan, dataObat }) => {
                         id="stok"
                         min="0"
                         value={formData.stok}
-                        onChange={handleChange}
-                        className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
-                    />
-                </div>
-                <div className="">
-                    <label htmlFor="harga">Harga Obat :</label>
-                    <input
-                        type="number"
-                        name="harga"
-                        id="harga"
-                        min="0"
-                        value={formData.harga}
-                        onChange={handleChange}
-                        className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
-                    />
-                </div>
-                <div className="">
-                    <label htmlFor="disc_principle">Disc Principle :</label>
-                    <input
-                        type="disc_principle"
-                        name="disc_principle"
-                        id="disc_principle"
-                        min="0"
-                        value={formData.disc_principle}
                         onChange={handleChange}
                         className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
                     />
