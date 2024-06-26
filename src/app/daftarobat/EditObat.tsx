@@ -2,6 +2,7 @@ import { ModalForm } from "@/components/modal/ModalForm";
 import axios from "axios";
 import { use, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import API_URL from "../config";
 
 
 const EditObat = ({ idModal, fetchData, dataSatuan, dataObat }) => {
@@ -35,7 +36,7 @@ const EditObat = ({ idModal, fetchData, dataSatuan, dataObat }) => {
 
         try {
             const response = await axios.post(
-                `https://api.lisnasehat.online/api/obat/${dataObat.id}`,
+                API_URL + `/obat/${dataObat.id}`,
                 formDataToSendEdit,
                 {
                     headers: {
