@@ -197,6 +197,9 @@ const TransaksiObatMasuk = () => {
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                       Tanggal
                     </th>
+                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                     Jatuh Tempo
+                    </th>
                     <th className="px-4 py-4 font-medium text-black dark:text-white">
                       Actions
                     </th>
@@ -227,6 +230,9 @@ const TransaksiObatMasuk = () => {
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                               <FormattedDate date={Item['createdAt']} />
+                          </td>
+                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                              <FormattedDate date={Item['jatuh_tempo']} />
                           </td>
 
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

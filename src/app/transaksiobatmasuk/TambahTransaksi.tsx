@@ -25,6 +25,7 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
         jml_obat: "",
         disc_principle: "",
         createdAt: '',
+        jatuh_tempo: "",
     });
 
     const handleSubmit = async (e) => {
@@ -39,6 +40,7 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
             formDataToSend.append("jml_obat", formData.jml_obat);
             formDataToSend.append("createdAt", formData.createdAt);
             formDataToSend.append("disc_principle", formData.disc_principle);
+            formDataToSend.append("jatuh_tempo", formData.jatuh_tempo);
 
             const response = await axios.post(
                 API_URL + "/transaksi_obat_masuk",
@@ -69,6 +71,7 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
                     jml_obat: "",
                     createdAt: "",
                     disc_principle: "",
+                    jatuh_tempo: "",
                 }));
 
                 setHargaHasil(0);
@@ -222,6 +225,17 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
                         name="createdAt"
                         id="createdAt"
                         value={formData.createdAt}
+                        onChange={handleChange}
+                        className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+                    />
+                </div>
+                <div className="">
+                    <label htmlFor="createdAt">Jatuh Tempo :</label>
+                    <input
+                        type="datetime-local"
+                        name="jatuh_tempo"
+                        id="jatuh_tempo"
+                        value={formData.jatuh_tempo}
                         onChange={handleChange}
                         className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
                     />
