@@ -7,6 +7,8 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import FormattedDate from "@/components/FormattedDate";
 import { Link } from "react-router-dom";
+import ChartOne from "@/components/Charts/ChartOne";
+import ChartObat from "./chartobat";
 
 const Dashboard = () => {
   const [obat, setObat] = useState([]);
@@ -235,8 +237,11 @@ const Dashboard = () => {
               </tr>
             )}
           </div>
+      
         </div>
       </div>
+      {/* chart obat masuk mingguan */}
+      <ChartObat/>
     </div>
   );
 };
