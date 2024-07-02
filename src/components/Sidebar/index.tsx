@@ -429,6 +429,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               </Link>
                             </li>
 
+                            <li>
+                              <Link
+                                href="/transaksiobatkeluar"
+                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out dark:text-slate-300 hover:text-slate-500 ${pathname === "/transaksi/obat/masuk" && "text-black dark:text-white"
+                                  }`}
+                              >
+                                Transaksi Keluar
+                              </Link>
+                            </li>
                           </ul>
                         </div>
                         {/* <!-- Dropdown Menu End --> */}
