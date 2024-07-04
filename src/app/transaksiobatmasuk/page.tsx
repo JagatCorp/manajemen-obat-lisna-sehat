@@ -71,7 +71,7 @@ const TransaksiObatMasuk = () => {
       const response = await axios.get(API_URL + "/principle");
 
       if (response.status == 200) {
-        console.log('obat',response.data.data.data);
+        console.log("obat", response.data.data.data);
         setPrinciple(response.data.data.data);
       } else {
         console.error(response);
@@ -122,7 +122,7 @@ const TransaksiObatMasuk = () => {
 
   const formatNumberWithCurrency = (number) => {
     // Memformat angka dengan dua angka desimal dan tambahkan simbol mata uang
-    return `Rp ${number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
+    return `Rp ${number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
   };
 
   return (
@@ -136,7 +136,9 @@ const TransaksiObatMasuk = () => {
             <button
               className="flex items-center gap-1 rounded-md bg-white px-4  py-2 text-end text-black shadow-xl hover:bg-slate-100 focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-offset-2 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-400"
               onClick={() => {
-                const modal = document.getElementById("modalTambahTransaksiObatMasuk");
+                const modal = document.getElementById(
+                  "modalTambahTransaksiObatMasuk",
+                );
                 if (modal instanceof HTMLDialogElement) {
                   modal.showModal();
                 }
@@ -198,7 +200,13 @@ const TransaksiObatMasuk = () => {
                       Tanggal
                     </th>
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                     Jatuh Tempo
+                      Jatuh Tempo
+                    </th>
+                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                      Expired
+                    </th>
+                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+                      Gambar Nota
                     </th>
                     <th className="px-4 py-4 font-medium text-black dark:text-white">
                       Actions
@@ -212,27 +220,38 @@ const TransaksiObatMasuk = () => {
                         <tr key={key}>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                              {Item['obat']["nama_obat"]}
+                              {Item["obat"]["nama_obat"]}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                              {Item['jml_obat']}
+                              {Item["jml_obat"]}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
-                              {formatNumberWithCurrency(Item['harga'])}
+                              {formatNumberWithCurrency(Item["harga"])}
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                              {Item['principle']['nama_instansi']}                          
+                            {Item["principle"]["nama_instansi"]}
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                              <FormattedDate date={Item['createdAt']} />
+                            <FormattedDate date={Item["createdAt"]} />
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                              <FormattedDate date={Item['jatuh_tempo']} />
+                            <FormattedDate date={Item["jatuh_tempo"]} />
+                          </td>
+                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                            <FormattedDate date={Item["expired"]} />
+                          </td>
+                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                            <img
+                              width={56}
+                              height={56}
+                              src={Item["urlGambar"]}
+                              alt=""
+                            />
                           </td>
 
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

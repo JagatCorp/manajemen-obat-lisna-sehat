@@ -141,7 +141,7 @@ const ChartObat: React.FC = () => {
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-primary">Obat Masuk</p>
+              <p className="font-semibold text-primary">Transaksi Obat Masuk</p>
               {/* <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p> */}
             </div>
           </div>

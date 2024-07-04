@@ -13,6 +13,7 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
     const [loading, setLoading] = useState(false);
     const obat_ref = useRef(null);
     const principle_ref = useRef(null);
+    const gambar_nota_ref = useRef(null);
 
     const [hargaHasil, setHargaHasil] = useState(null);
     const [jumlahHasil, setJumlahHasil] = useState(null);
@@ -26,6 +27,8 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
         disc_principle: "",
         createdAt: '',
         jatuh_tempo: "",
+        gambar_nota: "",
+        expired: "",
     });
 
     const handleSubmit = async (e) => {
@@ -41,14 +44,16 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
             formDataToSend.append("createdAt", formData.createdAt);
             formDataToSend.append("disc_principle", formData.disc_principle);
             formDataToSend.append("jatuh_tempo", formData.jatuh_tempo);
+            formDataToSend.append("gambar_nota", formData.gambar_nota);
+            formDataToSend.append("expired", formData.expired);
 
             const response = await axios.post(
                 API_URL + "/transaksi_obat_masuk",
                 formDataToSend, // Kirim FormData
                 {
                     headers: {
-                        "Content-Type": "application/json",
-                        // "Content-Type": "multipart/form-data",
+                        // "Content-Type": "application/json",
+                        "Content-Type": "multipart/form-data",
                     },
                 },
             );
@@ -63,6 +68,7 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
 
                 principle_ref.current.value = null;
                 obat_ref.current.value = null;
+                gambar_nota_ref.current.value = null;
 
                 setFormData(prevData => ({
                     ...prevData,
@@ -72,6 +78,8 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
                     createdAt: "",
                     disc_principle: "",
                     jatuh_tempo: "",
+                    gambar_nota:"",
+                    expired:"",
                 }));
 
                 setHargaHasil(0);
@@ -81,6 +89,7 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
                 fetchDataObat();
                 setLoading(false);
                 fetchData();
+
             } else {
                 console.error("Gagal mengirim data.");
             }
@@ -236,6 +245,29 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
                         name="jatuh_tempo"
                         id="jatuh_tempo"
                         value={formData.jatuh_tempo}
+                        onChange={handleChange}
+                        className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+                    />
+                </div>
+                <div className="">
+                    <label htmlFor="createdAt">Expired :</label>
+                    <input
+                        type="datetime-local"
+                        name="expired"
+                        id="expired"
+                        value={formData.expired}
+                        onChange={handleChange}
+                        className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+                    />
+                </div>
+                <div className="">
+                    <label htmlFor="">Gambar Nota :</label>
+                    <input
+                        ref={gambar_nota_ref}
+                        type="file"
+                        name="gambar_nota"
+                        id="gambar_nota"
+                        // value={formData.gambar_nota}
                         onChange={handleChange}
                         className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
                     />
