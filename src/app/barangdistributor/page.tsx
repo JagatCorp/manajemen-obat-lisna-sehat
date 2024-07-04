@@ -11,6 +11,7 @@ import API_URL from "../config";
 
 const Barangdistributor = () => {
   const [barangdistributor, setBarangdistributor] = useState([]);
+  const [principle, setPrinciple] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,47 +23,26 @@ const Barangdistributor = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [itemIdToDelete, setItemIdToDelete] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showPrincipleModal, setShowPrincipleModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const fileInputRef = useRef(null);
-  const [satuanbarang, setSatuanbarang] = useState([]);
+  const [dataPrincipleDistributor, setDataPrincipleDistributor] = useState([]);
 
-  const fetchDataSatuan = async () => {
-    try {
-      const response = await axios.get(
-        API_URL + `/satuan?page=${currentPage}`,
-      );
-      setSatuanbarang(response.data.data.data);
-      // console.log('data', response.data.data);
-      setTotalPages(response.data.totalPages);
-      setPageSize(response.data.pageSize);
-      setTotalCount(response.data.totalCount);
-    } catch (error: any) {
-      // Menggunakan `any` untuk sementara agar bisa mengakses `message`
-      console.error("Error fetching data satuanbarang:", error);
-      setError(
-        error instanceof Error
-          ? error.message
-          : "Terjadi kesalahan saat mengambil data",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+
   // add data
   const [formData, setFormData] = useState({
-    nama_barang: "",
-   
+    nama_distributor: "",
+
     gambar: null,
   });
 
   // update data
   const [updateData, setUpdateData] = useState<{
-    nama_barang: string;
-  
+    nama_distributor: string;
+
     id: string; // tambahkan properti 'id' ke tipe
   }>({
-    nama_barang: "",
-  
+    nama_distributor: "",
+
     id: "", // tambahkan nilai awal untuk properti 'id'
   });
 
@@ -71,6 +51,9 @@ const Barangdistributor = () => {
       const response = await axios.get(
         API_URL + `/barangdistributor?page=${currentPage}`,
       );
+
+      console.log('coba aja', response);
+
       setBarangdistributor(response.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
@@ -93,10 +76,12 @@ const Barangdistributor = () => {
       const response = await axios.get(
         API_URL + `/barangdistributor?keyword=${keyword}`,
       );
+
       setBarangdistributor(response.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
       setTotalCount(response.data.totalCount);
+
     } catch (error: any) {
       // Menggunakan `any` untuk sementara agar bisa mengakses `message`
       console.error("Error fetching data barangdistributor:", error);
@@ -112,11 +97,11 @@ const Barangdistributor = () => {
 
   // kondisi search
   useEffect(() => {
+    fetchDataPrinciple();
     if (searchTerm !== "") {
       fetchDataByKeyword(searchTerm);
     } else {
       fetchData();
-      fetchDataSatuan();
     }
   }, [currentPage, searchTerm]);
 
@@ -164,6 +149,28 @@ const Barangdistributor = () => {
     setShowDeleteModal(!showDeleteModal);
   };
 
+  // mengambil data dari principle
+  const fetchDataPrinciple = async () => {
+    try {
+      const response = await axios.get(
+        API_URL + `/principle?page=${currentPage}`,
+      );
+
+      setPrinciple(response.data.data.data);
+
+    } catch (error: any) {
+      // Menggunakan `any` untuk sementara agar bisa mengakses `message`
+      console.error("Error fetching data barangdistributor:", error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Terjadi kesalahan saat mengambil data",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
   //   add data
   const toggleModal = () => {
     setShowModal(!showModal);
@@ -181,8 +188,8 @@ const Barangdistributor = () => {
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("nama_barang", formData.nama_barang);
-  
+      formDataToSend.append("nama_distributor", formData.nama_distributor);
+
 
       const response = await axios.post(
         API_URL + "/barangdistributor",
@@ -200,8 +207,8 @@ const Barangdistributor = () => {
         showToastMessage("Data berhasil ditambahkan!");
         setShowModal(false);
         setFormData({
-          nama_barang: "",
-        
+          nama_distributor: "",
+
           gambar: null,
         });
         fetchData();
@@ -212,15 +219,63 @@ const Barangdistributor = () => {
       console.error("Error:", error);
     }
   };
+
+  const handleTambahPrinciple = async (e, principle_id, distributor_id) => {
+    e.preventDefault();
+
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("principle_id", principle_id);
+      formDataToSend.append("distributor_id", distributor_id);
+
+
+      const response = await axios.post(
+        API_URL + "/barangdistributor",
+        formDataToSend, // Kirim FormData
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            // Tidak perlu menentukan 'Content-Type', axios akan menanganinya
+            // karena Anda mengirimkan FormData.
+          },
+        },
+      );
+
+      if (response.status === 200) {
+        showToastMessage("Data berhasil ditambahkan!");
+        setShowModal(false);
+        setFormData({
+          nama_distributor: "",
+
+          gambar: null,
+        });
+        fetchData();
+      } else {
+        console.error("Gagal mengirim data.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   // update data
   const handleEdit = (Item) => {
     setUpdateData((prevState) => ({
       ...prevState,
       id: Item.id,
-      nama_barang: Item.nama_barang,
-     
+      nama_distributor: Item.nama_distributor,
+
     }));
+
     setShowUpdateModal(true);
+  };
+
+  const handlePrinciple = (Item) => {
+    console.log('yahahha', Item.penjualpembuat);
+
+    setDataPrincipleDistributor(Item.penjualpembuat);
+
+    setShowPrincipleModal(true);
   };
 
   const handleUpdate = async (e) => {
@@ -228,10 +283,10 @@ const Barangdistributor = () => {
 
     try {
       const formDataToUpdate = new FormData();
-      formDataToUpdate.append("nama_barang", updateData.nama_barang);
-      
+      formDataToUpdate.append("nama_distributor", updateData.nama_distributor);
 
-    
+
+
       const response = await axios.put(
         API_URL + `/barangdistributor/${updateData.id}`,
         formDataToUpdate, // Kirim FormData
@@ -280,7 +335,7 @@ const Barangdistributor = () => {
                   d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                 />
               </svg>
-           Distributor
+              Distributor
             </button>
 
             <div className="mb-4 flex items-center justify-end">
@@ -300,7 +355,7 @@ const Barangdistributor = () => {
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                       Distributor
                     </th>
-                  
+
                     <th className="px-4 py-4 font-medium text-black dark:text-white">
                       Actions
                     </th>
@@ -309,15 +364,38 @@ const Barangdistributor = () => {
                 <tbody>
                   {barangdistributor.map((Item, key) => (
                     <tr key={key}>
-                    
+
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <p className="text-black dark:text-white ml-8">
-                          {Item.nama_barang}
+                          {Item.nama_distributor}
                         </p>
                       </td>
-                     
+
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <div className="flex items-center space-x-3.5">
+
+                          {/* // SECTION - Tombol Modal Principle */}
+                          <button
+                            className="hover:text-primary"
+                            onClick={() => handlePrinciple(Item)}
+                            >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              className="h-5 w-5"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                />
+                            </svg>
+                          </button>
+                          {/* // !SECTION - Tombol Modal Principle */}
+
                           <button
                             className="hover:text-primary"
                             onClick={() => handleEdit(Item)}
@@ -337,6 +415,7 @@ const Barangdistributor = () => {
                               />
                             </svg>
                           </button>
+
                           <button
                             className="hover:text-primary"
                             onClick={() => {
@@ -371,6 +450,7 @@ const Barangdistributor = () => {
                               />
                             </svg>
                           </button>
+
                         </div>
                       </td>
                     </tr>
@@ -482,16 +562,13 @@ const Barangdistributor = () => {
                     <input
                       type="text"
                       id="namabarang"
-                      name="nama_barang"
-                      value={formData.nama_barang}
+                      name="nama_distributor"
+                      value={formData.nama_distributor}
                       onChange={handleChange}
                       className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                       placeholder="Nama Barang"
                       required
                     />
-
-               
-
 
                     <div className="flex w-full items-center justify-start">
                       <button
@@ -559,22 +636,18 @@ const Barangdistributor = () => {
                     </label>
                     <input
                       type="text"
-                      id="nama_barang"
-                      name="nama_barang"
-                      value={updateData.nama_barang}
+                      id="nama_distributor"
+                      name="nama_distributor"
+                      value={updateData.nama_distributor}
                       onChange={(e) =>
                         setUpdateData({
                           ...updateData,
-                          nama_barang: e.target.value,
+                          nama_distributor: e.target.value,
                         })
                       }
                       className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                       placeholder="Nama Barang"
                     />
-
-                    
-
-                  
 
                     <div className="flex w-full items-center justify-start">
                       <button
@@ -615,6 +688,106 @@ const Barangdistributor = () => {
                       <line x1="18" y1="6" x2="6" y2="18" />
                       <line x1="6" y1="6" x2="18" y2="18" />
                     </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* modal Principle */}
+          {showPrincipleModal && (
+            <div className="absolute w-full">
+              {/* <div className="fixed inset-0 bg-slate-500 opacity-75"></div> */}
+              <div
+                role="alert"
+                className="container mx-auto mb-5 mt-5 w-11/12 max-w-lg md:w-2/3"
+              >
+                <div className="relative rounded-3xl border border-slate-400 bg-white px-5 py-8 shadow-md dark:bg-slate-700 md:px-10">
+                  <h1 className="font-lg mb-4 font-bold leading-tight tracking-normal text-slate-800 dark:text-white">
+                    Modal Principle
+                  </h1>
+
+                  <div className="w-full">
+                    <ul className="bg-white shadow-md rounded-lg p-4">
+                      {dataPrincipleDistributor.map((data, index) => (
+                        <li key={index} className="flex justify-between items-center py-2 border-b last:border-b-0">
+                          <span className="text-gray-700">{ data.barangdistributor.nama_distributor }</span>
+                          <button className="text-red-500 hover:text-red-700">Hapus</button>
+                        </li>
+                      ))}
+
+                    </ul>
+                  </div>
+
+                  <form onSubmit={(e) => handleTambahPrinciple(e, updateData.nama_)}>
+                    <label
+                      htmlFor="nama barang"
+                      className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
+                    >
+                      Principle
+                    </label>
+                    <select
+                      id="nama_distributor"
+                      name="nama_distributor"
+                      value={updateData.nama_distributor}
+                      onChange={(e) =>
+                        setUpdateData({
+                          ...updateData,
+                          nama_distributor: e.target.value,
+                        })
+                      }
+                      className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
+                    >
+                      <option value="">Pilih Distributor</option>
+                      {principle.map((item) => (
+                        <option key={item.id} value={item.attributes.nama_instansi}>
+                          {item.attributes.nama_instansi}
+                        </option>
+                      ))}
+                    </select>
+
+                    <div className="flex w-full items-center justify-start">
+                      <button
+                        type="button"
+                        className="rounded border bg-slate-100 px-8 py-2 text-sm text-slate-600 transition duration-150 ease-in-out hover:border-slate-400 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2"
+                        onClick={() => setShowUpdateModal(false)}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="ml-3 rounded bg-blue-700 px-8 py-2 text-sm text-white transition duration-150 ease-in-out hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2"
+                      >
+                        Submit
+                      </button>
+                    </div>
+                  </form>
+
+                  <button
+                    type="button"
+                    className="absolute right-0 top-0 mr-5 mt-4 cursor-pointer rounded text-slate-400 transition duration-150 ease-in-out hover:text-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-600"
+                    onClick={() => setShowPrincipleModal(false)}
+                    aria-label="close modal"
+                    role="button"
+                  >
+
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="icon icon-tabler icon-tabler-x"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      stroke-width="2.5"
+                      stroke="currentColor"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" />
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+
                   </button>
                 </div>
               </div>

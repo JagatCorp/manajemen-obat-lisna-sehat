@@ -320,7 +320,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   "text-black dark:text-white"
                                   }`}
                               >
-                                Barang Distributor
+                                Distributor
                               </Link>
                             </li>
                             <li>

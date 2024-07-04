@@ -295,7 +295,7 @@ const Barangdistributor = () => {
   return (
     <>
       <DefaultLayout>
-        <Breadcrumb pageName="Barang Distributor" />
+        <Breadcrumb pageName="Distributor" />
         <div className="flex flex-col gap-10">
           <ToastContainer />
 
@@ -318,14 +318,14 @@ const Barangdistributor = () => {
                   d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                 />
               </svg>
-              Barang Distributor
+              Distributor
             </button>
 
             <div className="mb-4 flex items-center justify-end">
               {/* search */}
               <input
                 type="text"
-                placeholder="Cari Barang Distributor..."
+                placeholder="Cari Distributor..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-48 rounded-l-md border border-[#e0e0e0] bg-white px-6 py-3 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-slate-500 dark:text-white md:w-56"
