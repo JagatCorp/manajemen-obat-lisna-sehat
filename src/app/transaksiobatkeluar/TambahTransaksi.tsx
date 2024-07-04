@@ -13,7 +13,6 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
     const [loading, setLoading] = useState(false);
     const obat_ref = useRef(null);
     const principle_ref = useRef(null);
-    const gambar_nota_ref = useRef(null);
 
     const [hargaHasil, setHargaHasil] = useState(null);
     const [jumlahHasil, setJumlahHasil] = useState(null);
@@ -22,13 +21,11 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
     const [formData, setFormData] = useState({
         obat_id: "",
         harga: "",
-        principle_id: "",
         jml_obat: "",
         disc_principle: "",
         createdAt: '',
-        jatuh_tempo: "",
-        gambar_nota: "",
-        expired: "",
+        stok_obat_sebelum: "",
+        stok_obat_keluar: "",
     });
 
     const handleSubmit = async (e) => {
@@ -39,21 +36,18 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
             var formDataToSend = new FormData();
             formDataToSend.append("obat_id", formData.obat_id);
             formDataToSend.append("harga", formData.harga);
-            formDataToSend.append("principle_id", formData.principle_id);
             formDataToSend.append("jml_obat", formData.jml_obat);
             formDataToSend.append("createdAt", formData.createdAt);
             formDataToSend.append("disc_principle", formData.disc_principle);
-            formDataToSend.append("jatuh_tempo", formData.jatuh_tempo);
-            formDataToSend.append("gambar_nota", formData.gambar_nota);
-            formDataToSend.append("expired", formData.expired);
-
+            formDataToSend.append("stok_obat_sebelum", formData.stok_obat_sebelum);
+            formDataToSend.append("stok_obat_keluar", formData.stok_obat_keluar);
             const response = await axios.post(
-                API_URL + "/transaksi_obat_masuk",
+                API_URL + "/transaksi_obat_keluar",
                 formDataToSend, // Kirim FormData
                 {
                     headers: {
-                        // "Content-Type": "application/json",
-                        "Content-Type": "multipart/form-data",
+                        "Content-Type": "application/json",
+                        // "Content-Type": "multipart/form-data",
                     },
                 },
             );
@@ -68,7 +62,6 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
 
                 principle_ref.current.value = null;
                 obat_ref.current.value = null;
-                gambar_nota_ref.current.value = null;
 
                 setFormData(prevData => ({
                     ...prevData,
@@ -77,9 +70,8 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
                     jml_obat: "",
                     createdAt: "",
                     disc_principle: "",
-                    jatuh_tempo: "",
-                    gambar_nota:"",
-                    expired:"",
+                    stok_obat_sebelum: "",
+                    stok_obat_keluar: "",
                 }));
 
                 setHargaHasil(0);
@@ -89,7 +81,6 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
                 fetchDataObat();
                 setLoading(false);
                 fetchData();
-
             } else {
                 console.error("Gagal mengirim data.");
             }
@@ -142,6 +133,9 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
                 ['harga']: obat.harga,
                 ['obat_id']: obat.id,
                 ['disc_principle']: obat.disc_principle,
+                ['stok_obat_sebelum']: obat.stok_obat_sebelum,
+                ['stok_obat_keluar']: obat.stok_obat_keluar,
+
             }));
             setHargaHasil(obat.harga);
             setHasil(obat.harga * parseInt(formData.jml_obat));
@@ -176,19 +170,7 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
                         ))}
                     </select>
                 </div>
-                <div className="">
-                    <label htmlFor="principle_id">Principle :</label>
-                    <select name="principle_id" id="principle_id"
-                        onChange={handleChange}
-                        ref={principle_ref}
-                        className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
-                        required>
-                        <option value=''>-- Pilih Principle --</option>
-                        {dataPrinciple.map((principle, index) => (
-                            <option key={index} value={principle['id']}>{principle['attributes']['nama_instansi']}</option>
-                        ))}
-                    </select>
-                </div>
+             
                 <div className="">
                     <label htmlFor="jml_obat">Jumlah :</label>
                     <input
@@ -239,35 +221,23 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
                     />
                 </div>
                 <div className="">
-                    <label htmlFor="createdAt">Jatuh Tempo :</label>
+                    <label htmlFor="createdAt">Stok Obat Sebelum:</label>
                     <input
-                        type="datetime-local"
-                        name="jatuh_tempo"
-                        id="jatuh_tempo"
-                        value={formData.jatuh_tempo}
+                        type="number"
+                        name="stok_obat_sebelum"
+                        id="stok_obat_sebelum"
+                        value={formData.stok_obat_sebelum}
                         onChange={handleChange}
                         className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
                     />
                 </div>
                 <div className="">
-                    <label htmlFor="createdAt">Expired :</label>
+                    <label htmlFor="createdAt">Stok Obat Keluar:</label>
                     <input
-                        type="datetime-local"
-                        name="expired"
-                        id="expired"
-                        value={formData.expired}
-                        onChange={handleChange}
-                        className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
-                    />
-                </div>
-                <div className="">
-                    <label htmlFor="">Gambar Nota :</label>
-                    <input
-                        ref={gambar_nota_ref}
-                        type="file"
-                        name="gambar_nota"
-                        id="gambar_nota"
-                        // value={formData.gambar_nota}
+                        type="number"
+                        name="stok_obat_keluar"
+                        id="stok_obat_keluar"
+                        value={formData.stok_obat_keluar}
                         onChange={handleChange}
                         className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
                     />

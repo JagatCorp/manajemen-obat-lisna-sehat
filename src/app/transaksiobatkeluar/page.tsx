@@ -12,8 +12,8 @@ import TambahTransaksi from "./TambahTransaksi";
 import HapusTransaksi from "./HapusTransaksi";
 import FormattedDate from "@/components/FormattedDate";
 
-const TransaksiObatMasuk = () => {
-  const [transaksiObatMasuk, setTransaksiObatMasuk] = useState([]);
+const TransaksiObatKeluar = () => {
+  const [transaksiObatKeluar, setTransaksiObatKeluar] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -31,16 +31,16 @@ const TransaksiObatMasuk = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        API_URL + `/transaksi_obat_masuk?page=${currentPage}`,
+        API_URL + `/transaksi_obat_keluar?page=${currentPage}`,
       );
       console.log(response);
-      setTransaksiObatMasuk(response.data.data);
+      setTransaksiObatKeluar(response.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
       setTotalCount(response.data.totalCount);
     } catch (error: any) {
       // Menggunakan `any` untuk sementara agar bisa mengakses `message`
-      console.error("Error fetching data transaksi obat masuk:", error);
+      console.error("Error fetching data transaksi obat keluar:", error);
       setError(
         error instanceof Error
           ? error.message
@@ -84,15 +84,15 @@ const TransaksiObatMasuk = () => {
   const fetchDataByKeyword = async (keyword: string) => {
     try {
       const response = await axios.get(
-        API_URL + `/transaksi_obat_masuk?keyword=${keyword}`,
+        API_URL + `/transaksi_obat_keluar?keyword=${keyword}`,
       );
-      setTransaksiObatMasuk(response.data.data.data);
+      setTransaksiObatKeluar(response.data.data.data);
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
       setTotalCount(response.data.totalCount);
     } catch (error: any) {
       // Menggunakan `any` untuk sementara agar bisa mengakses `message`
-      console.error("Error fetching data transaksi obat masuk:", error);
+      console.error("Error fetching data transaksi obat keluar:", error);
       setError(
         error instanceof Error
           ? error.message
@@ -128,7 +128,7 @@ const TransaksiObatMasuk = () => {
   return (
     <>
       <DefaultLayout>
-        <Breadcrumb pageName="Transaksi Obat Masuk" />
+        <Breadcrumb pageName="Transaksi Obat Keluar" />
         <div className="flex flex-col gap-10">
           <ToastContainer />
 
@@ -137,7 +137,7 @@ const TransaksiObatMasuk = () => {
               className="flex items-center gap-1 rounded-md bg-white px-4  py-2 text-end text-black shadow-xl hover:bg-slate-100 focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-offset-2 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-400"
               onClick={() => {
                 const modal = document.getElementById(
-                  "modalTambahTransaksiObatMasuk",
+                  "modalTambahTransaksiObatKeluar",
                 );
                 if (modal instanceof HTMLDialogElement) {
                   modal.showModal();
@@ -158,12 +158,12 @@ const TransaksiObatMasuk = () => {
                   d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                 />
               </svg>
-              Tambah Transaksi Obat Masuk
+              Tambah Transaksi Obat Keluar
             </button>
 
             {/* modal tambah */}
             <TambahTransaksi
-              idModal={"modalTambahTransaksiObatMasuk"}
+              idModal={"modalTambahTransaksiObatKeluar"}
               fetchData={fetchData}
               fetchDataObat={fetchDataObat}
               dataObat={obat}
@@ -194,29 +194,21 @@ const TransaksiObatMasuk = () => {
                       Harga DPP / Box
                     </th>
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                      Principle
+                      Stok Obat Sebelum
                     </th>
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                      Tanggal
+                      Stok Obat Sesudah
                     </th>
-                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                      Jatuh Tempo
-                    </th>
-                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                      Expired
-                    </th>
-                    <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                      Gambar Nota
-                    </th>
+
                     <th className="px-4 py-4 font-medium text-black dark:text-white">
                       Actions
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {transaksiObatMasuk && transaksiObatMasuk.length > 0 ? (
+                  {transaksiObatKeluar && transaksiObatKeluar.length > 0 ? (
                     <>
-                      {transaksiObatMasuk.map((Item, key) => (
+                      {transaksiObatKeluar.map((Item, key) => (
                         <tr key={key}>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <p className="text-black dark:text-white">
@@ -234,26 +226,12 @@ const TransaksiObatMasuk = () => {
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            {Item["principle"]["nama_instansi"]}
+                            {Item["stok_obat_sebelum"]}
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <FormattedDate date={Item["createdAt"]} />
+                          {Item["stok_obat_sesudah"]}
                           </td>
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <FormattedDate date={Item["jatuh_tempo"]} />
-                          </td>
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <FormattedDate date={Item["expired"]} />
-                          </td>
-                          <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            <img
-                              width={56}
-                              height={56}
-                              src={Item["urlGambar"]}
-                              alt=""
-                            />
-                          </td>
-
+                       
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <div className="flex items-center space-x-3.5">
                               <button
@@ -364,4 +342,4 @@ const TransaksiObatMasuk = () => {
   );
 };
 
-export default TransaksiObatMasuk;
+export default TransaksiObatKeluar;
