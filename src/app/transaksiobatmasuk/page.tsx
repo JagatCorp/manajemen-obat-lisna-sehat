@@ -26,7 +26,7 @@ const TransaksiObatMasuk = () => {
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef(null);
   const [obat, setObat] = useState([]);
-  const [principle, setPrinciple] = useState([]);
+  const [barangdistributor, setDistributor] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -66,13 +66,13 @@ const TransaksiObatMasuk = () => {
     }
   };
 
-  const fetchDataPrinciple = async () => {
+  const fetchDataDistributor = async () => {
     try {
-      const response = await axios.get(API_URL + "/principle");
+      const response = await axios.get(API_URL + "/barangdistributor");
 
       if (response.status == 200) {
-        console.log("obat", response.data.data.data);
-        setPrinciple(response.data.data.data);
+        console.log("obat", response.data.data);
+        setDistributor(response.data.data);
       } else {
         console.error(response);
       }
@@ -106,7 +106,7 @@ const TransaksiObatMasuk = () => {
   // kondisi search
   useEffect(() => {
     fetchDataObat();
-    fetchDataPrinciple();
+    fetchDataDistributor();
     if (searchTerm !== "") {
       fetchDataByKeyword(searchTerm);
     } else {
@@ -167,7 +167,7 @@ const TransaksiObatMasuk = () => {
               fetchData={fetchData}
               fetchDataObat={fetchDataObat}
               dataObat={obat}
-              dataPrinciple={principle}
+              dataDistributor={barangdistributor}
             />
 
             <div className="mb-4 flex items-center justify-end">
@@ -194,7 +194,7 @@ const TransaksiObatMasuk = () => {
                       Harga DPP / Box
                     </th>
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                      Principle
+                      Distributor
                     </th>
                     <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                       Tanggal
@@ -234,7 +234,7 @@ const TransaksiObatMasuk = () => {
                             </p>
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                            {Item["principle"]["nama_instansi"]}
+                            {Item["barangdistributor"]["nama_distributor"]}
                           </td>
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <FormattedDate date={Item["createdAt"]} />
