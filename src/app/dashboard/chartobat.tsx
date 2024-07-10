@@ -1,8 +1,11 @@
 import { ApexOptions } from "apexcharts";
 import React, { useState, useEffect } from "react";
-import ReactApexChart from "react-apexcharts";
+import dynamic from "next/dynamic";
 import axios from 'axios';
 import API_URL from "../config";
+
+// Dynamically import ReactApexChart
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const options: ApexOptions = {
   legend: {
@@ -141,7 +144,7 @@ const ChartObat: React.FC = () => {
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-primary">Transaksi Obat Masuk</p>
+              <p className="font-semibold text-primary">Obat Mingguan</p>
               {/* <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p> */}
             </div>
           </div>

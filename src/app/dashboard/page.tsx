@@ -91,11 +91,11 @@ const Dashboard = () => {
                     Obat
                   </h5>
                 </div>
-                <div className="p-2.5 xl:p-5">
+                {/* <div className="p-2.5 xl:p-5">
                   <h5 className="text-sm font-medium uppercase xsm:text-base">
                     Principle
                   </h5>
-                </div>
+                </div> */}
                 <div className="p-2.5 text-center xl:p-5">
                   <h5 className="text-sm font-medium uppercase xsm:text-base">
                     Jumlah
@@ -141,12 +141,12 @@ const Dashboard = () => {
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-center p-2.5 xl:p-5">
+                    {/* <div className="flex items-center justify-center p-2.5 xl:p-5">
                       <p className="text-black dark:text-white">
                         {" "}
                         {item["principle"]["nama_instansi"]}
                       </p>
-                    </div>
+                    </div> */}
 
                     <div className="flex items-center justify-center p-2.5 xl:p-5">
                       <p className="text-black dark:text-white">
