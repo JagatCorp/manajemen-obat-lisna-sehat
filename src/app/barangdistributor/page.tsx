@@ -557,7 +557,7 @@ const Barangdistributor = () => {
                       htmlFor="namabarang"
                       className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
                     >
-                      Nama Barang
+                      Nama Distributor
                     </label>
                     <input
                       type="text"
@@ -566,7 +566,7 @@ const Barangdistributor = () => {
                       value={formData.nama_distributor}
                       onChange={handleChange}
                       className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
-                      placeholder="Nama Barang"
+                      placeholder="Nama Distributor"
                       required
                     />
 
@@ -629,10 +629,10 @@ const Barangdistributor = () => {
                   </h1>
                   <form onSubmit={handleUpdate}>
                     <label
-                      htmlFor="nama barang"
+                      htmlFor="nama distributor"
                       className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
                     >
-                      Nama Barang
+                      Nama Distributor
                     </label>
                     <input
                       type="text"
@@ -695,9 +695,9 @@ const Barangdistributor = () => {
           )}
 
           {/* modal Principle */}
-          {showPrincipleModal && (
+          {/* {showPrincipleModal && (
             <div className="absolute w-full">
-              {/* <div className="fixed inset-0 bg-slate-500 opacity-75"></div> */}
+           
               <div
                 role="alert"
                 className="container mx-auto mb-5 mt-5 w-11/12 max-w-lg md:w-2/3"
@@ -792,7 +792,7 @@ const Barangdistributor = () => {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </DefaultLayout>
     </>

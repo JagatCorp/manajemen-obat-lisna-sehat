@@ -7,12 +7,12 @@ import { set } from "date-fns";
 import formatNumberWithCurrency from "@/components/formatNumberWithCurrency";
 
 
-const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDataObat }) => {
+const TambahTransaksi = ({ idModal, fetchData, dataObat, dataDistributor, fetchDataObat }) => {
     // console.log('obat', dataObat);
 
     const [loading, setLoading] = useState(false);
     const obat_ref = useRef(null);
-    const principle_ref = useRef(null);
+    const distributor_ref = useRef(null);
     const gambar_nota_ref = useRef(null);
 
     const [hargaHasil, setHargaHasil] = useState(null);
@@ -22,9 +22,9 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
     const [formData, setFormData] = useState({
         obat_id: "",
         harga: "",
-        principle_id: "",
+        barangdistributor_id: "",
         jml_obat: "",
-        disc_principle: "",
+        disc_distributor: "",
         createdAt: '',
         jatuh_tempo: "",
         gambar_nota: "",
@@ -39,10 +39,10 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
             var formDataToSend = new FormData();
             formDataToSend.append("obat_id", formData.obat_id);
             formDataToSend.append("harga", formData.harga);
-            formDataToSend.append("principle_id", formData.principle_id);
+            formDataToSend.append("barangdistributor_id", formData.barangdistributor_id);
             formDataToSend.append("jml_obat", formData.jml_obat);
             formDataToSend.append("createdAt", formData.createdAt);
-            formDataToSend.append("disc_principle", formData.disc_principle);
+            formDataToSend.append("disc_distributor", formData.disc_distributor);
             formDataToSend.append("jatuh_tempo", formData.jatuh_tempo);
             formDataToSend.append("gambar_nota", formData.gambar_nota);
             formDataToSend.append("expired", formData.expired);
@@ -66,7 +66,7 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
                     modalTambah.close();
                 }
 
-                principle_ref.current.value = null;
+                distributor_ref.current.value = null;
                 obat_ref.current.value = null;
                 gambar_nota_ref.current.value = null;
 
@@ -76,7 +76,7 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
                     harga: "",
                     jml_obat: "",
                     createdAt: "",
-                    disc_principle: "",
+                    disc_distributor: "",
                     jatuh_tempo: "",
                     gambar_nota:"",
                     expired:"",
@@ -141,7 +141,7 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
                 ...prevData,
                 ['harga']: obat.harga,
                 ['obat_id']: obat.id,
-                ['disc_principle']: obat.disc_principle,
+                ['disc_distributor']: obat.disc_distributor,
             }));
             setHargaHasil(obat.harga);
             setHasil(obat.harga * parseInt(formData.jml_obat));
@@ -177,15 +177,15 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
                     </select>
                 </div>
                 <div className="">
-                    <label htmlFor="principle_id">Principle :</label>
-                    <select name="principle_id" id="principle_id"
+                    <label htmlFor="barangdistributor_id">Distributor :</label>
+                    <select name="barangdistributor_id" id="barangdistributor_id"
                         onChange={handleChange}
-                        ref={principle_ref}
+                        ref={distributor_ref}
                         className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
                         required>
-                        <option value=''>-- Pilih Principle --</option>
-                        {dataPrinciple.map((principle, index) => (
-                            <option key={index} value={principle['id']}>{principle['attributes']['nama_instansi']}</option>
+                        <option value=''>-- Pilih Distributor --</option>
+                        {dataDistributor.map((distributor, index) => (
+                            <option key={index} value={distributor['id']}>{distributor['nama_distributor']}</option>
                         ))}
                     </select>
                 </div>
@@ -215,13 +215,13 @@ const TambahTransaksi = ({ idModal, fetchData, dataObat, dataPrinciple, fetchDat
                     />
                 </div>
                 <div className="">
-                    <label htmlFor="disc_principle">Disc Principle :</label>
+                    <label htmlFor="disc_distributor">Disc Distributor :</label>
                     <input
                         type="number"
-                        name="disc_principle"
-                        id="disc_principle"
+                        name="disc_distributor"
+                        id="disc_distributor"
                         min="0"
-                        value={formData.disc_principle}
+                        value={formData.disc_distributor}
                         // value={selectedObat ? selectedObat.harga : ''}
                         onChange={handleChange}
                         className="border w-full rounded-md p-2 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
