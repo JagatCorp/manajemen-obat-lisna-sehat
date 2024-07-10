@@ -11,9 +11,11 @@ import TambahPrinciple from "./TambahPrinciple";
 import EditPrinciple from "./EditPrinciple";
 import HapusPrinciple from "./HapusPrinciple";
 import API_URL from "../config";
+import PenjualPembuatPrinciple from "./PenjualPembuatPrinciple";
 
 const Principle = () => {
   const [principle, setPrinciple] = useState([]);
+  const [distributor, setDistributor] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,6 +29,8 @@ const Principle = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef(null);
+
+
   // add data
   const [formData, setFormData] = useState({
     nama_instansi: "",
@@ -49,11 +53,34 @@ const Principle = () => {
       const response = await axios.get(
         API_URL + `/principle?page=${currentPage}`,
       );
-      //   console.log(response.data);
+        console.log('principle', response.data.data.data);
       setPrinciple(response.data.data.data);
+
       setTotalPages(response.data.totalPages);
       setPageSize(response.data.pageSize);
       setTotalCount(response.data.totalCount);
+    } catch (error: any) {
+      // Menggunakan `any` untuk sementara agar bisa mengakses `message`
+      console.error("Error fetching data Principle:", error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Terjadi kesalahan saat mengambil data",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const fetchDataDistributor = async () => {
+    try {
+      const response = await axios.get(
+        API_URL + `/barangdistributor?page=${currentPage}`,
+      );
+
+        console.log('distributor', response.data.data);
+      setDistributor(response.data.data);
+
     } catch (error: any) {
       // Menggunakan `any` untuk sementara agar bisa mengakses `message`
       console.error("Error fetching data Principle:", error);
@@ -91,6 +118,8 @@ const Principle = () => {
 
   // kondisi search
   useEffect(() => {
+    fetchDataDistributor();
+
     if (searchTerm !== "") {
       fetchDataByKeyword(searchTerm);
     } else {
@@ -298,7 +327,42 @@ const Principle = () => {
 
                           <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                             <div className="flex items-center space-x-3.5">
-                              {/* button modal edit */}
+
+                              {/* //SECTION button modal tambah penjualpembuat */}
+                              <button
+                                className="hover:text-primary"
+                                onClick={() => {
+                                  const modalPenjualPembuat = document.getElementById(
+                                    "modalPenjualPembuat" + key,
+                                  );
+                                  if (modalPenjualPembuat instanceof HTMLDialogElement) {
+                                    modalPenjualPembuat.showModal();
+                                  }
+                                }}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke-width="1.5"
+                                  stroke="currentColor"
+                                  className="h-5 w-5"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                  />
+                                </svg>
+                              </button>
+                              <PenjualPembuatPrinciple
+                                idModal={"modalPenjualPembuat" + key}
+                                distributor={distributor}
+                                principle={principle[key]}
+                                fetchData={fetchData}
+                              />
+
+                              {/* //SECTION button modal edit */}
                               <button
                                 className="hover:text-primary"
                                 onClick={() => {
@@ -331,6 +395,7 @@ const Principle = () => {
                                 fetchData={fetchData}
                               />
 
+                                {/* //SECTION Modal Hapus */}
                               <button
                                 className="hover:text-primary"
                                 onClick={() => {

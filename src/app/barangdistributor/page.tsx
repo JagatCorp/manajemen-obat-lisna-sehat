@@ -46,13 +46,26 @@ const Barangdistributor = () => {
     id: "", // tambahkan nilai awal untuk properti 'id'
   });
 
+  // submit data principle
+  const [principleData, setPrincipleData] = useState<{
+    principle_id: string;
+
+    id: string; // tambahkan properti 'id' ke tipe
+  }>({
+    principle_id: "",
+
+    id: "", // tambahkan nilai awal untuk properti 'id'
+  });
+
   const fetchData = async () => {
     try {
       const response = await axios.get(
         API_URL + `/barangdistributor?page=${currentPage}`,
       );
 
-      console.log('coba aja', response);
+      // setDataPrincipleDistributor(Item.penjualpembuat)
+
+      // console.log('coba',response.data.data);
 
       setBarangdistributor(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -145,6 +158,37 @@ const Barangdistributor = () => {
       setShowDeleteModal(false);
     }
   };
+
+
+  //   delete
+  const handleDeletePembuat = async (itemIdToDelete, index) => {
+    const id = itemIdToDelete;
+
+    try {
+      const response = await axios.delete(
+        API_URL + `/penjualpembuat/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (response.status === 201) {
+        throw new Error("Gagal menghapus data");
+      }
+
+      setDataPrincipleDistributor((prevItems) => prevItems.filter((_, i) => i !== index))
+      showToastMessage("Data berhasil dihapus!");
+
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      setShowDeleteModal(false);
+    }
+  };
+
+
   const toggleModalDelete = () => {
     setShowDeleteModal(!showDeleteModal);
   };
@@ -220,35 +264,36 @@ const Barangdistributor = () => {
     }
   };
 
-  const handleTambahPrinciple = async (e, principle_id, distributor_id) => {
+  const handleTambahPrinciple = async (e) => {
     e.preventDefault();
 
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("principle_id", principle_id);
-      formDataToSend.append("distributor_id", distributor_id);
+      const formDataToSendPrinciple = new FormData();
+      formDataToSendPrinciple.append("principle_id", principleData.principle_id);
+      formDataToSendPrinciple.append("distributor_id", principleData.id);
 
 
       const response = await axios.post(
-        API_URL + "/barangdistributor",
-        formDataToSend, // Kirim FormData
+        API_URL + "/penjualpembuat",
+        formDataToSendPrinciple, // Kirim FormData
         {
           headers: {
-            "Content-Type": "multipart/form-data",
-            // Tidak perlu menentukan 'Content-Type', axios akan menanganinya
-            // karena Anda mengirimkan FormData.
+            "Content-Type": "application/json",
           },
         },
       );
 
+      console.log(response);
+
       if (response.status === 200) {
         showToastMessage("Data berhasil ditambahkan!");
         setShowModal(false);
-        setFormData({
-          nama_distributor: "",
+        setPrincipleData({
+          principle_id: "",
 
-          gambar: null,
+          id: '',
         });
+
         fetchData();
       } else {
         console.error("Gagal mengirim data.");
@@ -271,9 +316,16 @@ const Barangdistributor = () => {
   };
 
   const handlePrinciple = (Item) => {
-    console.log('yahahha', Item.penjualpembuat);
+    // console.log('yahahha', Item);
+
+    setPrincipleData((prevState) => ({
+      ...prevState,
+      id: Item.id,
+
+    }));
 
     setDataPrincipleDistributor(Item.penjualpembuat);
+    // console.log(Item.penjualpembuat);
 
     setShowPrincipleModal(true);
   };
@@ -378,7 +430,7 @@ const Barangdistributor = () => {
                           <button
                             className="hover:text-primary"
                             onClick={() => handlePrinciple(Item)}
-                            >
+                          >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -391,7 +443,7 @@ const Barangdistributor = () => {
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
                                 d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                                />
+                              />
                             </svg>
                           </button>
                           {/* // !SECTION - Tombol Modal Principle */}
@@ -711,15 +763,15 @@ const Barangdistributor = () => {
                     <ul className="bg-white shadow-md rounded-lg p-4">
                       {dataPrincipleDistributor.map((data, index) => (
                         <li key={index} className="flex justify-between items-center py-2 border-b last:border-b-0">
-                          <span className="text-gray-700">{ data.barangdistributor.nama_distributor }</span>
-                          <button className="text-red-500 hover:text-red-700">Hapus</button>
+                          <span className="text-gray-700">{data.principle.nama_instansi}</span>
+                          <button onClick={() => handleDeletePembuat(data.id, index)} className="text-red-500 hover:text-red-700">Hapus</button>
                         </li>
                       ))}
 
                     </ul>
                   </div>
 
-                  <form onSubmit={(e) => handleTambahPrinciple(e, updateData.nama_)}>
+                  <form onSubmit={(e) => handleTambahPrinciple(e)}>
                     <label
                       htmlFor="nama barang"
                       className="text-sm font-bold leading-tight tracking-normal text-slate-800 dark:text-white"
@@ -727,20 +779,20 @@ const Barangdistributor = () => {
                       Principle
                     </label>
                     <select
-                      id="nama_distributor"
-                      name="nama_distributor"
-                      value={updateData.nama_distributor}
+                      id="principle_id"
+                      name="principle_id"
+                      value={principleData.principle_id}
                       onChange={(e) =>
-                        setUpdateData({
-                          ...updateData,
-                          nama_distributor: e.target.value,
+                        setPrincipleData({
+                          ...principleData,
+                          principle_id: e.target.value,
                         })
                       }
                       className="mb-3 mt-2 flex h-10 w-full items-center rounded border border-slate-300 pl-3 text-sm font-normal text-slate-600 focus:border focus:border-indigo-700 focus:outline-none dark:border-slate-100 dark:bg-slate-600 dark:text-white"
                     >
-                      <option value="">Pilih Distributor</option>
+                      <option value="">Pilih Principle</option>
                       {principle.map((item) => (
-                        <option key={item.id} value={item.attributes.nama_instansi}>
+                        <option key={item.id} value={item.id}>
                           {item.attributes.nama_instansi}
                         </option>
                       ))}
@@ -750,7 +802,7 @@ const Barangdistributor = () => {
                       <button
                         type="button"
                         className="rounded border bg-slate-100 px-8 py-2 text-sm text-slate-600 transition duration-150 ease-in-out hover:border-slate-400 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2"
-                        onClick={() => setShowUpdateModal(false)}
+                        onClick={() => setShowPrincipleModal(false)}
                       >
                         Cancel
                       </button>
